@@ -57,7 +57,7 @@ namespace AnkiBot
 
             await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text:   "You said:\n" + update.Message.Text
+                text:   "НЕ УЧИ УЧЁНОГО, УЧИ ДМ!"
             );
         }
     }
