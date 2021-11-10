@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnkiBot", "AnkiBot\AnkiBot.csproj", "{DE5A2C84-E6C3-4236-B3FD-D776529BF88D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE5A2C84-E6C3-4236-B3FD-D776529BF88D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE5A2C84-E6C3-4236-B3FD-D776529BF88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE5A2C84-E6C3-4236-B3FD-D776529BF88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE5A2C84-E6C3-4236-B3FD-D776529BF88D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
