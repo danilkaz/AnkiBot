@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AnkiBot.UI.Commands
+﻿namespace AnkiBot.UI.Commands
 {
-    interface ICommand
+    internal interface ICommand
     {
         string Name { get; set; }
 

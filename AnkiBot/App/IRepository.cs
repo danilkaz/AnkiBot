@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AnkiBot.App
+﻿namespace AnkiBot.App
 {
-    interface IRepository
+    internal interface IRepository
     {
-
     }
 }

@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace AnkiBot.Domain
 {
     public record Deck : IEnumerable<Card>
     {
-        public string Name { get; }
-        public int Count => cards.Count;
-        private List<Card> cards;
-        
+        private readonly List<Card> cards;
+
         public Deck(string name)
         {
             Name = name;
             cards = new List<Card>();
         }
 
-        public void AddCard(Card card) => cards.Add(card);
+        public string Name { get; }
+        public int Count => cards.Count;
 
         public Card this[int index] => cards[index];
 
@@ -26,6 +24,14 @@ namespace AnkiBot.Domain
                 yield return card;
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void AddCard(Card card)
+        {
+            cards.Add(card);
+        }
     }
 }
