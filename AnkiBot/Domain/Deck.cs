@@ -3,35 +3,17 @@ using System.Collections.Generic;
 
 namespace AnkiBot.Domain
 {
-    public record Deck : IEnumerable<Card>
+    public sealed class Deck
     {
-        private readonly List<Card> cards;
-
-        public Deck(string name)
+        public Deck(string userId, string name)
         {
             Name = name;
-            cards = new List<Card>();
+            UserId = userId;
+            Id = GetHashCode().ToString();
         }
 
+        public string Id { get; }
+        public string UserId { get; }
         public string Name { get; }
-        public int Count => cards.Count;
-
-        public Card this[int index] => cards[index];
-
-        public IEnumerator<Card> GetEnumerator()
-        {
-            foreach (var card in cards)
-                yield return card;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void AddCard(Card card)
-        {
-            cards.Add(card);
-        }
     }
 }
