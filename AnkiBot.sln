@@ -2,6 +2,14 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnkiBot", "AnkiBot\AnkiBot.csproj", "{DE5A2C84-E6C3-4236-B3FD-D776529BF88D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{F76873AC-E8D0-47FC-82FA-0DD743AC41A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "App\App.csproj", "{91FDB681-1BC6-4B1A-B22E-0E912D07BA95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{E278E46D-DEB4-4B43-8AE2-FFF546374795}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{57107BD8-CC7B-469A-BCDB-5E217135C12F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +20,21 @@ Global
 		{DE5A2C84-E6C3-4236-B3FD-D776529BF88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE5A2C84-E6C3-4236-B3FD-D776529BF88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE5A2C84-E6C3-4236-B3FD-D776529BF88D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F76873AC-E8D0-47FC-82FA-0DD743AC41A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F76873AC-E8D0-47FC-82FA-0DD743AC41A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F76873AC-E8D0-47FC-82FA-0DD743AC41A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F76873AC-E8D0-47FC-82FA-0DD743AC41A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91FDB681-1BC6-4B1A-B22E-0E912D07BA95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91FDB681-1BC6-4B1A-B22E-0E912D07BA95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91FDB681-1BC6-4B1A-B22E-0E912D07BA95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91FDB681-1BC6-4B1A-B22E-0E912D07BA95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E278E46D-DEB4-4B43-8AE2-FFF546374795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E278E46D-DEB4-4B43-8AE2-FFF546374795}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E278E46D-DEB4-4B43-8AE2-FFF546374795}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E278E46D-DEB4-4B43-8AE2-FFF546374795}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57107BD8-CC7B-469A-BCDB-5E217135C12F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57107BD8-CC7B-469A-BCDB-5E217135C12F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57107BD8-CC7B-469A-BCDB-5E217135C12F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57107BD8-CC7B-469A-BCDB-5E217135C12F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

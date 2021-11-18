@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace AnkiBot.Domain
@@ -9,10 +10,10 @@ namespace AnkiBot.Domain
         {
             Name = name;
             UserId = userId;
-            Id = GetHashCode().ToString();
+            Id = Guid.NewGuid();
         }
 
-        public string Id { get; }
+        public Guid Id { get; }
         public string UserId { get; }
         public string Name { get; }
     }

@@ -1,22 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-      <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Ninject" Version="4.0.0-beta-0134" />
-      <PackageReference Include="ninject.extensions.conventions" Version="3.3.0" />
       <PackageReference Include="Telegram.Bot" Version="17.0.0" />
+      <PackageReference Include="Telegram.Bot.Extensions" Version="1.0.0" />
       <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\App\App.csproj" />
-      <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-      <ProjectReference Include="..\UI\UI.csproj" />
     </ItemGroup>
 
 </Project>
