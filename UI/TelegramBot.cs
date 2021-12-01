@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AnkiBot.UI.Commands;
@@ -9,6 +10,7 @@ using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 
 namespace AnkiBot.UI
@@ -19,9 +21,9 @@ namespace AnkiBot.UI
         private readonly ICommand[] commands;
         private readonly Dictionary<long, ICommand> usersCommands;
 
-        public TelegramBot(TelegramBotClient bot, ICommand[] commands)
+        public TelegramBot(string token, ICommand[] commands)
         {
-            this.bot = bot;
+            this.bot = new TelegramBotClient(token);
             this.commands = commands;
             usersCommands = new Dictionary<long, ICommand>();
         }
@@ -34,11 +36,17 @@ namespace AnkiBot.UI
             cts.Cancel();
         }
 
-        public async Task SendMessage(long chatId, string text)
+        public async Task SendMessage(long chatId, string text, IEnumerable<IEnumerable<string>> buttons = null)
         {
-            await bot.SendTextMessageAsync(chatId, text);
+            ReplyMarkupBase reply = new ReplyKeyboardRemove();
+            if (buttons is not null)
+            {
+                var keyboard = 
+                    buttons.Select(x => x.Select(y => new KeyboardButton(y)));
+                reply = new ReplyKeyboardMarkup(keyboard);
+            }
+            await bot.SendTextMessageAsync(chatId, text, replyMarkup: reply);
         }
-
 
         private Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception,
             CancellationToken cancellationToken)
