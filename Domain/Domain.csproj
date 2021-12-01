@@ -8,4 +8,8 @@
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="VkNet" Version="1.67.0" />
+    </ItemGroup>
+
 </Project>

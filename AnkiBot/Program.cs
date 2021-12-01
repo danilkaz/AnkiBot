@@ -3,7 +3,7 @@ using AnkiBot.UI;
 using AnkiBot.UI.Commands;
 using Telegram.Bot;
 using Ninject;
-using Ninject.Extensions.Conventions;
+using VkNet;
 
 
 namespace AnkiBot
