@@ -10,7 +10,6 @@ namespace AnkiBot.UI.Commands
     public interface ICommand
     {
         string Name { get; }
-
-        public Task Execute(Message message, TelegramBotClient bot);
+        Task<ICommand> Execute(long userId, string message, IBot bot);
     }
 }

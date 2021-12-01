@@ -8,13 +8,11 @@ namespace AnkiBot.UI.Commands
     public class GreetingCommand : ICommand
     {
         public string Name => "/start";
-        public async Task Execute(Message message, TelegramBotClient bot)
+        public async Task<ICommand> Execute(long userId, string message, IBot bot)
         {
-            var chatId = message.Chat.Id;
-
             var greetingMessage = "Ку я чат бот!"; //TODO: написать нормальное приветственное сообщение!
-           
-            await bot.SendTextMessageAsync(chatId, greetingMessage);
+            await bot.SendMessage(userId, greetingMessage);
+            return null;
         }
     }
 }
