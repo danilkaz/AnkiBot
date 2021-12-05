@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AnkiBot.UI.Commands;
 using VkNet;
@@ -20,7 +21,7 @@ namespace UI
             throw new NotImplementedException();
         }
 
-        public async Task SendMessage(long chatId, string text)
+        public async Task SendMessage(long chatId, string text, IEnumerable<IEnumerable<string>> buttons = null)
         {
             await api.Messages.SendAsync(new MessagesSendParams
             {

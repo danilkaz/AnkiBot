@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using AnkiBot.App;
 using AnkiBot.UI.Commands;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
-using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
+using UI.Dialogs;
 
 
 namespace AnkiBot.UI
@@ -19,13 +21,15 @@ namespace AnkiBot.UI
     {
         private readonly TelegramBotClient bot;
         private readonly ICommand[] commands;
-        private readonly Dictionary<long, ICommand> usersCommands;
+        private readonly Dictionary<long, IDialog> usersStates;
+        private readonly IRepository repository;
 
-        public TelegramBot(string token, ICommand[] commands)
+        public TelegramBot(TelegramBotClient bot, ICommand[] commands, IRepository repository)
         {
-            this.bot = new TelegramBotClient(token);
+            this.bot = bot;
             this.commands = commands;
-            usersCommands = new Dictionary<long, ICommand>();
+            this.repository = repository;
+            usersStates = new Dictionary<long, IDialog>();
         }
 
         public void Start()
@@ -41,10 +45,11 @@ namespace AnkiBot.UI
             ReplyMarkupBase reply = new ReplyKeyboardRemove();
             if (buttons is not null)
             {
-                var keyboard = 
+                var keyboard =
                     buttons.Select(x => x.Select(y => new KeyboardButton(y)));
                 reply = new ReplyKeyboardMarkup(keyboard);
             }
+
             await bot.SendTextMessageAsync(chatId, text, replyMarkup: reply);
         }
 
@@ -73,16 +78,12 @@ namespace AnkiBot.UI
             var message = update.Message;
             var userId = message.Chat.Id;
 
-            if (!usersCommands.ContainsKey(userId) || usersCommands[userId] == null)
-                foreach (var command in commands)
-                {
-                    if (command.Name.Equals(message.Text))
-                    {
-                        usersCommands[userId] = await command.Execute(userId, message.Text, this);
-                    }
-                }
+            if (usersStates.ContainsKey(userId) && usersStates[userId] != null)
+                usersStates[userId] = await usersStates[userId].Execute(userId, message.Text, this);
             else
-                usersCommands[userId] = await usersCommands[userId].Execute(userId, message.Text, this);
+                foreach (var command in commands)
+                    if (command.Name.Equals(message.Text))
+                        usersStates[userId] = await command.Execute(userId, message.Text, this);
         }
     }
 }

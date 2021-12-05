@@ -6,7 +6,7 @@ using AnkiBot.Domain;
 
 namespace AnkiBot.App
 {
-    public interface IRepository<T>
+    public interface IRepository
     {
         void SaveCard(Card card);
         Card GetCard(string cardId);
