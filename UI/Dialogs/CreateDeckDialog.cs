@@ -1,33 +1,31 @@
-using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
+using AnkiBot.Domain.LearnMethods;
 using AnkiBot.UI.Commands;
-using Telegram.Bot.Requests;
 
 namespace UI.Dialogs
 {
     public class CreateDeckDialog : IDialog
     {
-        private State state = State.InputDeckName;
-        // тут должен быть список методов изучения
-
+        private State state = State.ChooseDeck;
+        private readonly ILearnMethod[] learnMethods;
         private readonly IRepository repository;
 
         private string deckName;
-        private string deckMethod;
+        private ILearnMethod deckMethod;
 
-        public CreateDeckDialog(IRepository repository)
+        public CreateDeckDialog(IRepository repository, ILearnMethod[] learnMethods)
         {
             this.repository = repository;
+            this.learnMethods = learnMethods;
         }
 
         public async Task<IDialog> Execute(long userId, string message, IBot bot)
         {
-            var availableMethods = new[] {"Метод 1", "Метод 2"};
-
-            var keyboard = new[] {new[] {"Метод 1"}, new[] {"Метод 2"}, new[] {"Подробности"}};
-            if (state == State.InputDeckName)
+            var keyboard = learnMethods.Select(m => new[] {m.Name}).Append(new[] {"Подробности"}).ToArray();
+            if (state == State.ChooseDeck)
             {
                 deckName = message;
                 state = State.ChooseLearningMethod;
@@ -43,18 +41,15 @@ namespace UI.Dialogs
                     return this;
                 }
 
-                if (message is "Метод 1" or "Метод 2") // проверка на выбор метода
-                {
-                    deckMethod = message;
-                }
-                else
+                deckMethod = learnMethods.FirstOrDefault(m => m.Name.Equals(message));
+                if (deckMethod is null)
                 {
                     await bot.SendMessageWithKeyboard(userId, "Выберите метод", keyboard);
                     return this;
                 }
             }
 
-            var deck = new Deck(userId.ToString(), deckName);
+            var deck = new Deck(userId.ToString(), deckName, deckMethod);
             repository.SaveDeck(deck);
             await bot.SendMessage(userId, $"Колода успешно создана!");
             return null;
@@ -62,7 +57,7 @@ namespace UI.Dialogs
 
         private enum State
         {
-            InputDeckName,
+            ChooseDeck,
             ChooseLearningMethod
         }
     }

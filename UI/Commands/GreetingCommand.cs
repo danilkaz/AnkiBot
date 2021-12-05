@@ -17,18 +17,7 @@ namespace AnkiBot.UI.Commands
         public async Task<IDialog> Execute(long userId, string message, IBot bot)
         {
             var greetingMessage = "Ку я чат бот!"; //TODO: написать нормальное приветственное сообщение!
-            var keyboard = new[]
-            {
-                new[]
-                {
-                    "Учить колоду", "Создать колоду"
-                },
-                new[]
-                {
-                    "Добавить карточку", "бла бла"
-                }
-            };
-            await bot.SendMessageWithKeyboard(userId, greetingMessage, keyboard);
+            await bot.SendMessage(userId, greetingMessage);
             return null;
         }
     }

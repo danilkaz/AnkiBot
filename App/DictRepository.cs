@@ -8,9 +8,13 @@ namespace AnkiBot.App
     public class DictRepository : IRepository
     {
         private Dictionary<Deck, List<Card>> decks = new Dictionary<Deck, List<Card>>();
+
         public void SaveCard(Card card)
         {
-            decks[GetDeck(card.DeckId)].Add(card);
+            var deck = GetDeck(card.DeckId);
+            var index = decks[deck].FindIndex(c => c == card);
+            if (index == -1) decks[deck].Add(card);
+            else decks[deck][index] = card;
         }
 
         public Card GetCard(string cardId)
@@ -40,7 +44,8 @@ namespace AnkiBot.App
 
         public IEnumerable<Card> GetCardsToLearn(string deckId)
         {
-            throw new System.NotImplementedException();
+            return decks[GetDeck(deckId)].Where(c => c.LastLearnTime + c.TimeBeforeLearn < DateTime.Now)
+                .OrderBy(c => c.LastLearnTime + c.TimeBeforeLearn);
         }
     }
 }

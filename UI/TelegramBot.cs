@@ -24,12 +24,30 @@ namespace AnkiBot.UI
         private readonly Dictionary<long, IDialog> usersStates;
         private readonly IRepository repository;
 
+        private string[][] defaultKeyboard;
+
         public TelegramBot(TelegramBotClient bot, ICommand[] commands, IRepository repository)
         {
             this.bot = bot;
             this.commands = commands;
             this.repository = repository;
             usersStates = new Dictionary<long, IDialog>();
+
+            defaultKeyboard = new[]
+            {
+                new[]
+                {
+                    "Создать колоду", "Удалить колоду"
+                },
+                new[]
+                {
+                    "Добавить карточку", "Удалить карточку"
+                },
+                new[]
+                {
+                    "Учить колоду"
+                }
+            };
         }
 
         public void Start()
@@ -51,7 +69,7 @@ namespace AnkiBot.UI
         public async Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> buttons)
         {
             var keyboard =
-                    buttons.Select(x => x.Select(y => new KeyboardButton(y)));
+                buttons.Select(x => x.Select(y => new KeyboardButton(y)));
             await bot.SendTextMessageAsync(chatId, text, replyMarkup: new ReplyKeyboardMarkup(keyboard));
         }
 
@@ -86,6 +104,8 @@ namespace AnkiBot.UI
                 foreach (var command in commands)
                     if (command.Name.Equals(message.Text))
                         usersStates[userId] = await command.Execute(userId, message.Text, this);
+            if (usersStates.ContainsKey(userId) && usersStates[userId] is null)
+                await SendMessageWithKeyboard(userId, "Выберите команду:", defaultKeyboard);
         }
     }
 }

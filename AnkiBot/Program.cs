@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AnkiBot.App;
+using AnkiBot.Domain.LearnMethods;
 using AnkiBot.UI;
 using AnkiBot.UI.Commands;
 using Telegram.Bot;
@@ -39,9 +40,13 @@ namespace AnkiBot
             container.Bind<ICommand>().To<GreetingCommand>();
             container.Bind<ICommand>().To<CreateDeckCommand>();
             container.Bind<ICommand>().To<CreateCardCommand>();
+            container.Bind<ICommand>().To<LearnDeckCommand>();
             
             container.Bind<IDialog>().To<CreateDeckDialog>();
             container.Bind<IDialog>().To<CreateCardDialog>();
+            container.Bind<IDialog>().To<LearnDeckDialog>();
+
+            container.Bind<ILearnMethod>().To<LineLearnMethod>().InSingletonScope();
             
             return container.Get<TelegramBot>();
         }
