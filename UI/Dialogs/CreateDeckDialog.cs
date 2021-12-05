@@ -31,7 +31,7 @@ namespace UI.Dialogs
             {
                 deckName = message;
                 state = State.ChooseLearningMethod;
-                await bot.SendMessage(userId, "Выберите метод для запоминания", keyboard);
+                await bot.SendMessageWithKeyboard(userId, "Выберите метод для запоминания", keyboard);
                 return this;
             }
 
@@ -39,7 +39,7 @@ namespace UI.Dialogs
             {
                 if (message == "Подробности")
                 {
-                    await bot.SendMessage(userId, "Подробости о методах", keyboard);
+                    await bot.SendMessageWithKeyboard(userId, "Подробости о методах", keyboard);
                     return this;
                 }
 
@@ -49,7 +49,7 @@ namespace UI.Dialogs
                 }
                 else
                 {
-                    await bot.SendMessage(userId, "Выберите метод", keyboard);
+                    await bot.SendMessageWithKeyboard(userId, "Выберите метод", keyboard);
                     return this;
                 }
             }

@@ -11,7 +11,7 @@ namespace AnkiBot.Domain
             Front = front;
             Back = back;
             Id = Guid.NewGuid();
-            DaysBeforeLearn = new DateTime(0, 0, 1);
+            DaysBeforeLearn = new TimeSpan(1, 0, 0, 0, 0);
             LastLearnTime = new DateTime(0);
         }
 
@@ -20,7 +20,7 @@ namespace AnkiBot.Domain
         public string Back { get; }
         public string UserId { get; }
         public string DeckId { get; }
-        public DateTime DaysBeforeLearn { get; }
+        public TimeSpan DaysBeforeLearn { get; }
         public DateTime LastLearnTime { get; }
     }
 }

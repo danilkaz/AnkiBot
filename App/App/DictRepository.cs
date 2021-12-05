@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AnkiBot.Domain;
@@ -29,7 +30,7 @@ namespace AnkiBot.App
 
         public IEnumerable<Deck> GetDecksByUserId(string userId)
         {
-            throw new System.NotImplementedException();
+            return decks.Keys.Where(deck => deck.UserId == userId);
         }
 
         public IEnumerable<Card> GetCardsByDeckId(string deckId)

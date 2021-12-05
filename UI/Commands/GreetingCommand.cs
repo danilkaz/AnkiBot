@@ -28,7 +28,7 @@ namespace AnkiBot.UI.Commands
                     "Добавить карточку", "бла бла"
                 }
             };
-            await bot.SendMessage(userId, greetingMessage, keyboard);
+            await bot.SendMessageWithKeyboard(userId, greetingMessage, keyboard);
             return null;
         }
     }

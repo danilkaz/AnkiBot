@@ -40,17 +40,19 @@ namespace AnkiBot.UI
             cts.Cancel();
         }
 
-        public async Task SendMessage(long chatId, string text, IEnumerable<IEnumerable<string>> buttons = null)
+        public async Task SendMessage(long chatId, string text, bool clearKeyboard = false)
         {
             ReplyMarkupBase reply = new ReplyKeyboardRemove();
-            if (buttons is not null)
-            {
-                var keyboard =
-                    buttons.Select(x => x.Select(y => new KeyboardButton(y)));
-                reply = new ReplyKeyboardMarkup(keyboard);
-            }
-
+            if (!clearKeyboard)
+                reply = null;
             await bot.SendTextMessageAsync(chatId, text, replyMarkup: reply);
+        }
+
+        public async Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> buttons)
+        {
+            var keyboard =
+                    buttons.Select(x => x.Select(y => new KeyboardButton(y)));
+            await bot.SendTextMessageAsync(chatId, text, replyMarkup: new ReplyKeyboardMarkup(keyboard));
         }
 
         private Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception,

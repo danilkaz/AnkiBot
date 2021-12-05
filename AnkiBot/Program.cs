@@ -38,9 +38,10 @@ namespace AnkiBot
             
             container.Bind<ICommand>().To<GreetingCommand>();
             container.Bind<ICommand>().To<CreateDeckCommand>();
+            container.Bind<ICommand>().To<CreateCardCommand>();
             
             container.Bind<IDialog>().To<CreateDeckDialog>();
-
+            container.Bind<IDialog>().To<CreateCardDialog>();
             
             return container.Get<TelegramBot>();
         }
