@@ -22,6 +22,6 @@ namespace AnkiBot.Domain
         public string DeckId { get; }
         public TimeSpan TimeBeforeLearn { get; set; }
         public DateTime LastLearnTime { get; set; }
-        public DateTime NexLearnTime => LastLearnTime + TimeBeforeLearn;
+        public DateTime NextLearnTime => LastLearnTime + TimeBeforeLearn;
     }
 }

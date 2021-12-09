@@ -6,7 +6,7 @@ using AnkiBot.Domain.LearnMethods;
 
 namespace AnkiBot.Domain
 {
-    public sealed class Deck
+    public class Deck
     {
         public Deck(string userId, string name, ILearnMethod learnMethod)
         {

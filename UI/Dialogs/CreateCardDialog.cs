@@ -54,7 +54,6 @@ namespace UI.Dialogs
                     var card = new Card(userId.ToString(), deckId, front, back);
                     repository.SaveCard(card);
                     await bot.SendMessage(userId, "Карточка успешно сохранена");
-                    Console.WriteLine(repository.GetCard(card.Id.ToString()).Front);
                     return null;
                 }
                 default: return null;

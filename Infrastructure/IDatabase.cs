@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace AnkiBot.Infrastructure
@@ -9,5 +10,6 @@ namespace AnkiBot.Infrastructure
         T Get(string id);
         IEnumerable<T> Where(Func<T, bool> filter);
 
+        IEnumerable<T> GetAll();
     }
 }

@@ -5,23 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
+using AnkiBot.Domain.LearnMethods;
 using AnkiBot.Infrastructure;
+using App.SerializedClasses;
 
 namespace App
 {
     public class DbRepository : IRepository
     {
-        private readonly IDatabase<Card> _cardDatabase;
-        private readonly IDatabase<Deck> _deckDatabase;
+        private readonly IDatabase<DbCard> _cardDatabase;
+        private readonly IDatabase<DbDeck> _deckDatabase;
+        private readonly ILearnMethod[] _learnMethods;
 
-        public DbRepository(IDatabase<Card> cardDatabase, IDatabase<Deck> deckDatabase)
+        public DbRepository(IDatabase<DbCard> cardDatabase, IDatabase<DbDeck> deckDatabase, ILearnMethod[] learnMethods)
         {
             _cardDatabase = cardDatabase;
             _deckDatabase = deckDatabase;
+            _learnMethods = learnMethods;
         }
         public void SaveCard(Card card)
         {
-            _cardDatabase.Save(card);
+            _cardDatabase.Save(new DbCard(card));
         }
 
         public Card GetCard(string cardId)
@@ -31,17 +35,20 @@ namespace App
 
         public void SaveDeck(Deck deck)
         {
-            _deckDatabase.Save(deck);
+            _deckDatabase.Save(new DbDeck(deck));
         }
 
         public Deck GetDeck(string deckId)
         {
-            throw new NotImplementedException();
+            var dbDeck = _deckDatabase.Get(deckId);
+            return ConvertDbDeckToDeck(dbDeck);
         }
 
         public IEnumerable<Deck> GetDecksByUserId(string userId)
         {
-            throw new NotImplementedException();
+            return _deckDatabase.GetAll()
+                .Where(d => d.UserId == userId)
+                .Select(ConvertDbDeckToDeck);
         }
 
         public IEnumerable<Card> GetCardsByDeckId(string deckId)
@@ -52,6 +59,12 @@ namespace App
         public IEnumerable<Card> GetCardsToLearn(string deckId)
         {
             throw new NotImplementedException();
+        }
+
+        private Deck ConvertDbDeckToDeck(DbDeck dbDeck)
+        {
+            var method = _learnMethods.FirstOrDefault(m => m.Name == dbDeck.LearnMethod);
+            return new Deck(dbDeck.Id, dbDeck.Name, method);
         }
     }
 }

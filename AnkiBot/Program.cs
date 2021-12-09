@@ -8,6 +8,7 @@ using AnkiBot.Infrastructure;
 using AnkiBot.UI;
 using AnkiBot.UI.Commands;
 using App;
+using App.SerializedClasses;
 using Infrastructure;
 using Microsoft.Data.Sqlite;
 using Telegram.Bot;
@@ -40,8 +41,8 @@ namespace AnkiBot
             container.Bind<IBot>().To<VKBot>();
             
             container.Bind<TelegramBotClient>().ToConstant(new TelegramBotClient(TelegramToken));
-            container.Bind<IDatabase<Card>>().ToConstant(new SQLiteDatabase<Card>("Data Source=db2.db")).InSingletonScope();
-            container.Bind<IDatabase<Deck>>().ToConstant(new SQLiteDatabase<Deck>("Data Source=db2.db")).InSingletonScope();
+            container.Bind<IDatabase<DbCard>>().ToConstant(new SqLiteDatabase<DbCard>("Data Source=cards.db")).InSingletonScope();
+            container.Bind<IDatabase<DbDeck>>().ToConstant(new SqLiteDatabase<DbDeck>("Data Source=decks.db")).InSingletonScope();
             container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
             
             container.Bind<ICommand>().To<GreetingCommand>();
