@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using AnkiBot.App;
+using AnkiBot.Domain;
 using AnkiBot.Domain.LearnMethods;
+using AnkiBot.Infrastructure;
 using AnkiBot.UI;
 using AnkiBot.UI.Commands;
+using App;
+using Infrastructure;
+using Microsoft.Data.Sqlite;
 using Telegram.Bot;
 using Ninject;
 using UI;
@@ -34,8 +40,9 @@ namespace AnkiBot
             container.Bind<IBot>().To<VKBot>();
             
             container.Bind<TelegramBotClient>().ToConstant(new TelegramBotClient(TelegramToken));
-            
-            container.Bind<IRepository>().To<DictRepository>().InSingletonScope();
+            container.Bind<IDatabase<Card>>().ToConstant(new SQLiteDatabase<Card>("Data Source=db2.db")).InSingletonScope();
+            container.Bind<IDatabase<Deck>>().ToConstant(new SQLiteDatabase<Deck>("Data Source=db2.db")).InSingletonScope();
+            container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
             
             container.Bind<ICommand>().To<GreetingCommand>();
             container.Bind<ICommand>().To<CreateDeckCommand>();

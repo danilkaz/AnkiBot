@@ -1,7 +1,13 @@
-﻿namespace AnkiBot.Infrastructure
+﻿using System;
+using System.Collections.Generic;
+
+namespace AnkiBot.Infrastructure
 {
-    internal interface IDatabase
+    public interface IDatabase<T>
     {
-        
+        void Save(T item);
+        T Get(string id);
+        IEnumerable<T> Where(Func<T, bool> filter);
+
     }
 }
