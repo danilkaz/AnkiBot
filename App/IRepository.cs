@@ -7,8 +7,11 @@ namespace AnkiBot.App
     {
         void SaveCard(Card card);
         Card GetCard(string cardId);
+        void UpdateCard(Card card);
+        void DeleteCard(string cardId);
         void SaveDeck(Deck deck);
         Deck GetDeck(string deckId);
+        void DeleteDeck(string deckId);
         IEnumerable<Deck> GetDecksByUserId(string userId);
         IEnumerable<Card> GetCardsByDeckId(string deckId);
         IEnumerable<Card> GetCardsToLearn(string deckId);

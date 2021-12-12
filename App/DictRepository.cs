@@ -22,6 +22,16 @@ namespace AnkiBot.App
             return decks.Values.SelectMany(list => list.Where(card => card.Id.ToString() == cardId)).FirstOrDefault();
         }
 
+        public void UpdateCard(Card card)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteCard(string cardId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SaveDeck(Deck deck)
         {
             decks[deck] = new List<Card>();
@@ -30,6 +40,11 @@ namespace AnkiBot.App
         public Deck GetDeck(string deckId)
         {
             return decks.Keys.FirstOrDefault(deck => deck.Id.ToString() == deckId);
+        }
+
+        public void DeleteDeck(string deckId)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Deck> GetDecksByUserId(string userId)

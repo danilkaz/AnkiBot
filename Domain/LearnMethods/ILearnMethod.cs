@@ -1,4 +1,5 @@
 using System;
+using AnkiBot.Domain.Parameters;
 
 namespace AnkiBot.Domain.LearnMethods
 {
@@ -6,5 +7,7 @@ namespace AnkiBot.Domain.LearnMethods
     {
         string Name { get; }
         TimeSpan GetNextRepetition(Card card, int answer);
+
+        IParameters GetParameters();
     }
 }

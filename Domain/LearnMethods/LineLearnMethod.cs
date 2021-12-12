@@ -1,4 +1,5 @@
 using System;
+using AnkiBot.Domain.Parameters;
 
 namespace AnkiBot.Domain.LearnMethods
 {
@@ -10,6 +11,11 @@ namespace AnkiBot.Domain.LearnMethods
         {
             var currentRepetition = card.TimeBeforeLearn;
             return currentRepetition * 2;
+        }
+
+        public IParameters GetParameters()
+        {
+            return new EmptyParameters();
         }
     }
 }
