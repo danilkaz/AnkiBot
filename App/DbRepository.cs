@@ -8,6 +8,8 @@ using AnkiBot.Domain;
 using AnkiBot.Domain.LearnMethods;
 using AnkiBot.Infrastructure;
 using App.SerializedClasses;
+using AnkiBot.Domain.Parameters;
+using Newtonsoft.Json;
 
 namespace App
 {
@@ -92,8 +94,9 @@ namespace App
 
         private Card ConvertDbCardToDeck(DbCard dbCard)
         {
+            var parameters = JsonConvert.DeserializeObject<IParameters>(dbCard.Parameters);
             return new Card(dbCard.Id, dbCard.UserId, dbCard.DeckId, dbCard.Front, dbCard.Back,
-                TimeSpan.Parse(dbCard.TimeBeforeLearn), DateTime.Parse(dbCard.LastLearnTime));
+                TimeSpan.Parse(dbCard.TimeBeforeLearn), DateTime.Parse(dbCard.LastLearnTime), parameters);
         }
     }
 }

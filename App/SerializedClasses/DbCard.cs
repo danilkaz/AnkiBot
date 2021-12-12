@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using AnkiBot.Domain;
 using Infrastructure.Attributes;
+using Newtonsoft.Json;
 
 namespace App.SerializedClasses
 {
@@ -17,6 +18,8 @@ namespace App.SerializedClasses
         [Field("timeBeforeLearn")] public string TimeBeforeLearn { get; }
         [Field("lastLearnTime")] public string LastLearnTime { get; }
         
+        [Field("parameters")] public string Parameters { get; }
+
         public DbCard(Card card)
         {
             Id = card.Id.ToString();
@@ -26,11 +29,12 @@ namespace App.SerializedClasses
             DeckId = card.DeckId;
             TimeBeforeLearn = card.TimeBeforeLearn.ToString();
             LastLearnTime = card.LastLearnTime.ToString(CultureInfo.InvariantCulture);
+            Parameters = JsonConvert.SerializeObject(card.Parameters);
         }
 
         [Constructor]
         public DbCard(string id, string front, string back, string userId, string deckId, string timeBeforeLearn,
-            string lastLearnTime)
+            string lastLearnTime, string parameters)
         {
             Id = id;
             Front = front;
@@ -39,6 +43,7 @@ namespace App.SerializedClasses
             DeckId = deckId;
             TimeBeforeLearn = timeBeforeLearn;
             LastLearnTime = lastLearnTime;
+            Parameters = parameters;
         }
     }
 }

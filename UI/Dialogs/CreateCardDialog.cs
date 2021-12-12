@@ -15,7 +15,7 @@ namespace UI.Dialogs
         private State state = State.ChooseDeck;
         private readonly IRepository repository;
 
-        private string deckId;
+        private Deck deck;
         private string front;
         private string back;
 
@@ -36,7 +36,7 @@ namespace UI.Dialogs
                         await bot.SendMessage(userId, "Выберите колоду:", false);
                         return this;
                     }
-                    deckId = findDeck.Id.ToString();
+                    deck = findDeck;
                     state = State.InputFront;
                     await bot.SendMessage(userId, "Введите переднюю сторону карточки");
                     return this;
@@ -51,7 +51,7 @@ namespace UI.Dialogs
                 case State.InputBack:
                 {
                     back = message;
-                    var card = new Card(userId.ToString(), deckId, front, back);
+                    var card = new Card(userId.ToString(), deck.Id.ToString(), front, back, deck.LearnMethod.GetParameters());
                     repository.SaveCard(card);
                     await bot.SendMessage(userId, "Карточка успешно сохранена");
                     return null;

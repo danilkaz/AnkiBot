@@ -36,7 +36,7 @@ namespace Infrastructure
                 Connection = connection,
                 CommandText =
                     $"INSERT INTO {tableName} VALUES (" +
-                    $"{string.Join(", ", propertyInfos.Select(p => $"\"{p.GetValue(item)}\""))})"
+                    $"{string.Join(", ", propertyInfos.Select(p => $"'{p.GetValue(item)}'"))})"
             };
             command.ExecuteNonQuery();
         }
