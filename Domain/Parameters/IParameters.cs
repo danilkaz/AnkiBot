@@ -1,4 +1,3 @@
-
 using JsonKnownTypes;
 using Newtonsoft.Json;
 

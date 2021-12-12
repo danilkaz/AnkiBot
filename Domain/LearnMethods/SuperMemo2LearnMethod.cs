@@ -6,6 +6,7 @@ namespace AnkiBot.Domain.LearnMethods
     public class SuperMemo2LearnMethod : ILearnMethod
     {
         public string Name => "Алгоритм SuperMemo 2";
+
         public TimeSpan GetNextRepetition(Card card, int answer)
         {
             throw new NotImplementedException();

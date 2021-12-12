@@ -9,7 +9,7 @@ namespace Infrastructure.Attributes
             Name = name;
             IsUnique = isUnique;
         }
-        
+
         public string Name { get; }
         public bool IsUnique { get; }
     }

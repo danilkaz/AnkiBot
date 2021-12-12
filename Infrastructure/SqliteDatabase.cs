@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,10 +11,10 @@ namespace Infrastructure
     public class SqLiteDatabase<T> : IDatabase<T>, IDisposable
     {
         private readonly SqliteConnection connection;
-
-        private readonly string tableName;
         private readonly IEnumerable<FieldAttribute> fields;
         private readonly IEnumerable<PropertyInfo> propertyInfos;
+
+        private readonly string tableName;
 
         public SqLiteDatabase(string connectionString)
         {
@@ -43,7 +42,7 @@ namespace Infrastructure
 
         public T Get(string id)
         {
-            var command = new SqliteCommand()
+            var command = new SqliteCommand
             {
                 Connection = connection,
                 CommandText = $"SELECT * FROM {tableName} WHERE id == \"{id}\""
@@ -61,14 +60,14 @@ namespace Infrastructure
 
         public void Delete(string id)
         {
-            var command = new SqliteCommand()
+            var command = new SqliteCommand
             {
                 Connection = connection,
                 CommandText = $"DELETE FROM {tableName} WHERE id == \"{id}\""
             };
             command.ExecuteNonQuery();
         }
-        
+
         public IEnumerable<T> Where(Func<T, bool> filter)
         {
             throw new NotImplementedException();
@@ -76,7 +75,7 @@ namespace Infrastructure
 
         public IEnumerable<T> GetAll()
         {
-            var command = new SqliteCommand()
+            var command = new SqliteCommand
             {
                 Connection = connection,
                 CommandText = $"SELECT * FROM {tableName}"
@@ -89,6 +88,12 @@ namespace Infrastructure
                 throw new ArgumentException();
             while (reader.Read())
                 yield return (T) constructor.Invoke(fields.Select(f => reader[f.Name]).ToArray());
+        }
+
+        public void Dispose()
+        {
+            connection.Close();
+            connection.Dispose();
         }
 
         private void CreateTable()
@@ -104,12 +109,9 @@ namespace Infrastructure
             command.ExecuteNonQuery();
         }
 
-        ~SqLiteDatabase() => Dispose();
-
-        public void Dispose()
+        ~SqLiteDatabase()
         {
-            connection.Close();
-            connection.Dispose();
+            Dispose();
         }
     }
 }

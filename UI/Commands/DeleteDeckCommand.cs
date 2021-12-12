@@ -8,14 +8,15 @@ namespace AnkiBot.UI.Commands
 {
     public class DeleteDeckCommand : ICommand
     {
-        public string Name => "Удалить колоду";
         private readonly IRepository repository;
 
         public DeleteDeckCommand(IRepository repository, ILearnMethod[] learnMethods)
         {
             this.repository = repository;
         }
-        
+
+        public string Name => "Удалить колоду";
+
         public async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var decks = repository.GetDecksByUserId(userId.ToString());
@@ -24,6 +25,7 @@ namespace AnkiBot.UI.Commands
                 await bot.SendMessage(userId, "У вас нет ни одной колоды. Сначала создайте ее", false);
                 return null;
             }
+
             var decksKeyboard = decks
                 .Select(deck => new[] {deck.Name})
                 .ToArray();

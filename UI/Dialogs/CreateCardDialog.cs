@@ -1,28 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
 using AnkiBot.UI.Commands;
-using VkNet.Model;
 
 namespace UI.Dialogs
 {
     public class CreateCardDialog : IDialog
     {
-        private State state = State.ChooseDeck;
         private readonly IRepository repository;
+        private string back;
 
         private Deck deck;
         private string front;
-        private string back;
+        private State state = State.ChooseDeck;
 
         public CreateCardDialog(IRepository repository)
         {
             this.repository = repository;
         }
+
         public async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             switch (state)
@@ -36,6 +33,7 @@ namespace UI.Dialogs
                         await bot.SendMessage(userId, "Выберите колоду:", false);
                         return this;
                     }
+
                     deck = findDeck;
                     state = State.InputFront;
                     await bot.SendMessage(userId, "Введите переднюю сторону карточки");
@@ -51,7 +49,8 @@ namespace UI.Dialogs
                 case State.InputBack:
                 {
                     back = message;
-                    var card = new Card(userId.ToString(), deck.Id.ToString(), front, back, deck.LearnMethod.GetParameters());
+                    var card = new Card(userId.ToString(), deck.Id.ToString(), front, back,
+                        deck.LearnMethod.GetParameters());
                     repository.SaveCard(card);
                     await bot.SendMessage(userId, "Карточка успешно сохранена");
                     return null;
@@ -59,7 +58,7 @@ namespace UI.Dialogs
                 default: return null;
             }
         }
-        
+
         private enum State
         {
             ChooseDeck,

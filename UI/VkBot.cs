@@ -31,7 +31,7 @@ namespace UI
                     continue;
                 foreach (var update in poll.Updates.Where(u => u.Type == GroupUpdateType.MessageNew))
                 {
-                    var userMessage = update.Message.Text.ToLower();
+                    var userMessage = update.Message.Text;
                     var userId = update.Message.FromId;
 
                     await api.Messages.MarkAsReadAsync(userId.Value.ToString());

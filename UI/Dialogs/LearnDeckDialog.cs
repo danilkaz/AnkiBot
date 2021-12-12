@@ -1,26 +1,23 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
 using AnkiBot.Domain.LearnMethods;
 using AnkiBot.UI.Commands;
-using Infrastructure.Attributes;
 
 namespace UI.Dialogs
 {
     public class LearnDeckDialog : IDialog
     {
-        private State state = State.ChooseDeck;
         private readonly IRepository repository;
-        private ILearnMethod learnMethod;
-        
+
         private string deckId;
         private Card learnCard;
+        private ILearnMethod learnMethod;
 
-        private string[] learnStates;
+        private readonly string[] learnStates;
+        private State state = State.ChooseDeck;
 
         public LearnDeckDialog(IRepository repository)
         {
@@ -53,6 +50,7 @@ namespace UI.Dialogs
                     await bot.SendMessage(userId, "Все карточки изучены, молодец!");
                     return null;
                 }
+
                 await bot.SendMessageWithKeyboard(userId, learnCard.Front, new[] {new[] {"Показать ответ"}});
                 return this;
             }
@@ -87,18 +85,18 @@ namespace UI.Dialogs
                 }
 
                 var answer = Array.FindIndex(learnStates, s => s == learnState);
-                
+
                 learnCard.TimeBeforeLearn = learnMethod.GetNextRepetition(learnCard, answer);
                 learnCard.LastLearnTime = DateTime.Now;
-                
+
                 repository.UpdateCard(learnCard);
                 learnCard = repository.GetCardsToLearn(deckId).FirstOrDefault();
-                Console.WriteLine(learnCard.NextLearnTime);
                 if (learnCard is null)
                 {
                     await bot.SendMessage(userId, "Все карточки изучены, молодец!");
                     return null;
                 }
+
                 state = State.ViewFront;
                 await bot.SendMessageWithKeyboard(userId, learnCard.Front, new[] {new[] {"Показать ответ"}});
                 return this;

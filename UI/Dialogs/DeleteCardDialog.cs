@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,11 +9,11 @@ namespace UI.Dialogs
 {
     public class DeleteCardDialog : IDialog
     {
-        private State state = State.ChooseDeck;
         private readonly IRepository repository;
+        private IEnumerable<Card> cards;
 
         private string deckId;
-        private IEnumerable<Card> cards; 
+        private State state = State.ChooseDeck;
 
         public DeleteCardDialog(IRepository repository)
         {
@@ -34,6 +33,7 @@ namespace UI.Dialogs
                         await bot.SendMessage(userId, "Выберите колоду:", false);
                         return this;
                     }
+
                     deckId = findDeck.Id.ToString();
                     cards = repository.GetCardsByDeckId(deckId);
                     if (!cards.Any())
@@ -41,6 +41,7 @@ namespace UI.Dialogs
                         await bot.SendMessage(userId, "Колода пуста", false);
                         return null;
                     }
+
                     var cardsKeyboard = cards.Select(c => new[] {c.Front + "\n" + c.Id});
                     state = State.ChooseCard;
                     await bot.SendMessageWithKeyboard(userId, "Выберите карту:", cardsKeyboard);
@@ -55,6 +56,7 @@ namespace UI.Dialogs
                         await bot.SendMessage(userId, "Выберите карту:", false);
                         return this;
                     }
+
                     repository.DeleteCard(card.Id.ToString());
                     await bot.SendMessage(userId, "Карта успешно удалена", false);
                     return null;

@@ -7,8 +7,7 @@ namespace AnkiBot.UI.Commands
     public abstract class Bot
     {
         private readonly ICommand[] commands;
-        private readonly Dictionary<long, IDialog> usersStates = new Dictionary<long, IDialog>();
-        
+
         private readonly string[][] defaultKeyboard =
         {
             new[]
@@ -25,11 +24,13 @@ namespace AnkiBot.UI.Commands
             }
         };
 
+        private readonly Dictionary<long, IDialog> usersStates = new();
+
         protected Bot(ICommand[] commands)
         {
             this.commands = commands;
         }
-        
+
         public abstract void Start();
         public abstract Task SendMessage(long chatId, string text, bool clearKeyboard = true);
         public abstract Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> labels);

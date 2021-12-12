@@ -8,7 +8,7 @@ namespace UI.Dialogs
     public class DeleteDeckDialog : IDialog
     {
         private readonly IRepository repository;
-        
+
         public DeleteDeckDialog(IRepository repository)
         {
             this.repository = repository;
@@ -23,6 +23,7 @@ namespace UI.Dialogs
                 await bot.SendMessage(userId, "Выберите колоду:", false);
                 return this;
             }
+
             repository.DeleteDeck(findDeck.Id.ToString());
             await bot.SendMessage(userId, "Колода успешно удалена!");
             return null;

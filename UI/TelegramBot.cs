@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AnkiBot.App;
 using AnkiBot.UI.Commands;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -11,14 +10,13 @@ using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
-using UI.Dialogs;
 
 namespace AnkiBot.UI
 {
     public class TelegramBot : Bot
     {
         private readonly TelegramBotClient bot;
-        
+
         public TelegramBot(TelegramBotClient bot, ICommand[] commands) : base(commands)
         {
             this.bot = bot;
@@ -67,8 +65,8 @@ namespace AnkiBot.UI
         {
             if (update.Type != UpdateType.Message || update.Message.Type != MessageType.Text)
                 return;
-            
-            await HandleTextMessage(update.Message.Chat.Id, update.Message.Text); 
+
+            await HandleTextMessage(update.Message.Chat.Id, update.Message.Text);
         }
     }
 }

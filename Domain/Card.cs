@@ -39,7 +39,7 @@ namespace AnkiBot.Domain
         public TimeSpan TimeBeforeLearn { get; set; }
         public DateTime LastLearnTime { get; set; }
         public IParameters Parameters { get; }
-        
+
         public DateTime NextLearnTime => LastLearnTime + TimeBeforeLearn;
     }
 }

@@ -7,7 +7,7 @@ namespace AnkiBot.App
 {
     public class DictRepository : IRepository
     {
-        private readonly Dictionary<Deck, List<Card>> decks = new Dictionary<Deck, List<Card>>();
+        private readonly Dictionary<Deck, List<Card>> decks = new();
 
         public void SaveCard(Card card)
         {
