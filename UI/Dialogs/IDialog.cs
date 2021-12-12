@@ -5,6 +5,6 @@ namespace UI.Dialogs
 {
     public interface IDialog
     {
-        Task<IDialog> Execute(long userId, string message, IBot bot);
+        Task<IDialog> Execute(long userId, string message, Bot bot);
     }
 }

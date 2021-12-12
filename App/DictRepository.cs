@@ -7,7 +7,7 @@ namespace AnkiBot.App
 {
     public class DictRepository : IRepository
     {
-        private Dictionary<Deck, List<Card>> decks = new Dictionary<Deck, List<Card>>();
+        private readonly Dictionary<Deck, List<Card>> decks = new Dictionary<Deck, List<Card>>();
 
         public void SaveCard(Card card)
         {
@@ -39,7 +39,7 @@ namespace AnkiBot.App
 
         public IEnumerable<Card> GetCardsByDeckId(string deckId)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Card> GetCardsToLearn(string deckId)

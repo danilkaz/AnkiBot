@@ -6,7 +6,6 @@ namespace AnkiBot.UI.Commands
 {
     public class GreetingCommand : ICommand
     {
-        public string Name => "/start";
         private readonly IRepository repository;
 
         public GreetingCommand(IRepository repository)
@@ -14,7 +13,9 @@ namespace AnkiBot.UI.Commands
             this.repository = repository;
         }
 
-        public async Task<IDialog> Execute(long userId, string message, IBot bot)
+        public string Name => "/start";
+
+        public async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var greetingMessage = "Ку я чат бот!"; //TODO: написать нормальное приветственное сообщение!
             await bot.SendMessage(userId, greetingMessage);

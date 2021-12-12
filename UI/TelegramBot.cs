@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using AnkiBot.App;
@@ -14,43 +13,18 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using UI.Dialogs;
 
-
 namespace AnkiBot.UI
 {
-    public class TelegramBot : IBot
+    public class TelegramBot : Bot
     {
         private readonly TelegramBotClient bot;
-        private readonly ICommand[] commands;
-        private readonly Dictionary<long, IDialog> usersStates;
-        private readonly IRepository repository;
-
-        private string[][] defaultKeyboard;
-
-        public TelegramBot(TelegramBotClient bot, ICommand[] commands, IRepository repository)
+        
+        public TelegramBot(TelegramBotClient bot, ICommand[] commands) : base(commands)
         {
             this.bot = bot;
-            this.commands = commands;
-            this.repository = repository;
-            usersStates = new Dictionary<long, IDialog>();
-
-            defaultKeyboard = new[]
-            {
-                new[]
-                {
-                    "Создать колоду", "Удалить колоду"
-                },
-                new[]
-                {
-                    "Добавить карточку", "Удалить карточку"
-                },
-                new[]
-                {
-                    "Учить колоду"
-                }
-            };
         }
 
-        public void Start()
+        public override void Start()
         {
             using var cts = new CancellationTokenSource();
             bot.StartReceiving(new DefaultUpdateHandler(HandleUpdateAsync, HandleErrorAsync), null, cts.Token);
@@ -58,7 +32,7 @@ namespace AnkiBot.UI
             cts.Cancel();
         }
 
-        public async Task SendMessage(long chatId, string text, bool clearKeyboard = false)
+        public override async Task SendMessage(long chatId, string text, bool clearKeyboard = true)
         {
             ReplyMarkupBase reply = new ReplyKeyboardRemove();
             if (!clearKeyboard)
@@ -66,7 +40,8 @@ namespace AnkiBot.UI
             await bot.SendTextMessageAsync(chatId, text, replyMarkup: reply);
         }
 
-        public async Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> labels)
+        public override async Task SendMessageWithKeyboard(long chatId, string text,
+            IEnumerable<IEnumerable<string>> labels)
         {
             var keyboard =
                 labels.Select(x => x.Select(y => new KeyboardButton(y)));
@@ -90,22 +65,10 @@ namespace AnkiBot.UI
         private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
             CancellationToken cancellationToken)
         {
-            if (update.Type != UpdateType.Message)
+            if (update.Type != UpdateType.Message || update.Message.Type != MessageType.Text)
                 return;
-            if (update.Message.Type != MessageType.Text)
-                return;
-
-            var message = update.Message;
-            var userId = message.Chat.Id;
-
-            if (usersStates.ContainsKey(userId) && usersStates[userId] != null)
-                usersStates[userId] = await usersStates[userId].Execute(userId, message.Text, this);
-            else
-                foreach (var command in commands)
-                    if (command.Name.Equals(message.Text))
-                        usersStates[userId] = await command.Execute(userId, message.Text, this);
-            if (usersStates.ContainsKey(userId) && usersStates[userId] is null)
-                await SendMessageWithKeyboard(userId, "Выберите команду:", defaultKeyboard);
+            
+            await HandleTextMessage(update.Message.Chat.Id, update.Message.Text); 
         }
     }
 }

@@ -9,12 +9,12 @@ namespace UI.Dialogs
 {
     public class CreateDeckDialog : IDialog
     {
-        private State state = State.ChooseDeck;
         private readonly ILearnMethod[] learnMethods;
         private readonly IRepository repository;
+        private ILearnMethod deckMethod;
 
         private string deckName;
-        private ILearnMethod deckMethod;
+        private State state = State.ChooseDeck;
 
         public CreateDeckDialog(IRepository repository, ILearnMethod[] learnMethods)
         {
@@ -22,7 +22,7 @@ namespace UI.Dialogs
             this.learnMethods = learnMethods;
         }
 
-        public async Task<IDialog> Execute(long userId, string message, IBot bot)
+        public async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var keyboard = learnMethods.Select(m => new[] {m.Name}).Append(new[] {"Подробности"}).ToArray();
             if (state == State.ChooseDeck)
@@ -51,7 +51,7 @@ namespace UI.Dialogs
 
             var deck = new Deck(userId.ToString(), deckName, deckMethod);
             repository.SaveDeck(deck);
-            await bot.SendMessage(userId, $"Колода успешно создана!");
+            await bot.SendMessage(userId, "Колода успешно создана!");
             return null;
         }
 

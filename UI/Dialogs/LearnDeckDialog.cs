@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
@@ -12,14 +10,14 @@ namespace UI.Dialogs
 {
     public class LearnDeckDialog : IDialog
     {
-        private State state = State.ChooseDeck;
         private readonly IRepository repository;
-        private ILearnMethod learnMethod;
-        
+
         private string deckId;
         private Card learnCard;
+        private ILearnMethod learnMethod;
 
-        private string[] learnStates;
+        private readonly string[] learnStates;
+        private State state = State.ChooseDeck;
 
         public LearnDeckDialog(IRepository repository)
         {
@@ -28,7 +26,7 @@ namespace UI.Dialogs
             learnStates = new[] {"🤡\nЗабыл", "😶\nвавкнвы", "😜\nавава", "👑\nИзи"};
         }
 
-        public async Task<IDialog> Execute(long userId, string message, IBot bot)
+        public async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var learnKeyboard = new[] {learnStates, new[] {"Закончил учить"}};
 
@@ -52,6 +50,7 @@ namespace UI.Dialogs
                     await bot.SendMessage(userId, "Все карточки изучены, молодец!");
                     return null;
                 }
+
                 await bot.SendMessageWithKeyboard(userId, learnCard.Front, new[] {new[] {"Показать ответ"}});
                 return this;
             }
@@ -86,10 +85,10 @@ namespace UI.Dialogs
                 }
 
                 var answer = Array.FindIndex(learnStates, s => s == learnState);
-                
+
                 learnCard.LastLearnTime = DateTime.Now;
                 learnCard.TimeBeforeLearn = learnMethod.GetNextRepetition(learnCard, answer);
-                
+
                 repository.SaveCard(learnCard);
                 learnCard = repository.GetCardsToLearn(deckId).FirstOrDefault();
                 if (learnCard is null)
@@ -97,6 +96,7 @@ namespace UI.Dialogs
                     await bot.SendMessage(userId, "Все карточки изучены, молодец!");
                     return null;
                 }
+
                 state = State.ViewFront;
                 await bot.SendMessageWithKeyboard(userId, learnCard.Front, new[] {new[] {"Показать ответ"}});
                 return this;

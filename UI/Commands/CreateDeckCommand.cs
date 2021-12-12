@@ -7,16 +7,18 @@ namespace AnkiBot.UI.Commands
 {
     public class CreateDeckCommand : ICommand
     {
-        public string Name => "Создать колоду";
-        private readonly IRepository repository;
         private readonly ILearnMethod[] learnMethods;
+        private readonly IRepository repository;
 
         public CreateDeckCommand(IRepository repository, ILearnMethod[] learnMethods)
         {
             this.repository = repository;
             this.learnMethods = learnMethods;
         }
-        public async Task<IDialog> Execute(long userId, string message, IBot bot)
+
+        public string Name => "Создать колоду";
+
+        public async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             await bot.SendMessage(userId, "Введите имя колоды");
             return new CreateDeckDialog(repository, learnMethods);

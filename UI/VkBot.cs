@@ -10,21 +10,37 @@ using VkNet.Model.RequestParams;
 
 namespace UI
 {
-    public class VKBot : IBot
+    public class VkBot : Bot
     {
         private readonly VkApi api;
 
-        public VKBot(VkApi api)
+        public VkBot(VkApi api, ICommand[] commands) : base(commands)
         {
             this.api = api;
         }
-        
-        public void Start()
+
+        public override async void Start()
         {
-            throw new NotImplementedException();
+            while (true)
+            {
+                var s = await api.Groups.GetLongPollServerAsync(184492586);
+                var poll = await api.Groups.GetBotsLongPollHistoryAsync(
+                    new BotsLongPollHistoryParams
+                        {Server = s.Server, Ts = s.Ts, Key = s.Key, Wait = 25});
+                if (poll?.Updates == null)
+                    continue;
+                foreach (var update in poll.Updates.Where(u => u.Type == GroupUpdateType.MessageNew))
+                {
+                    var userMessage = update.Message.Text.ToLower();
+                    var userId = update.Message.FromId;
+
+                    await api.Messages.MarkAsReadAsync(userId.Value.ToString());
+                    await HandleTextMessage(userId.Value, userMessage);
+                }
+            }
         }
 
-        public async Task SendMessage(long chatId, string text, bool clearKeyboard = true)
+        public override async Task SendMessage(long chatId, string text, bool clearKeyboard = true)
         {
             var keyboard = new KeyboardBuilder().Build();
             if (!clearKeyboard)
@@ -38,7 +54,8 @@ namespace UI
             });
         }
 
-        public async Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> labels = null)
+        public override async Task SendMessageWithKeyboard(long chatId, string text,
+            IEnumerable<IEnumerable<string>> labels)
         {
             var keyboard = MakeKeyboard(labels);
             await api.Messages.SendAsync(new MessagesSendParams

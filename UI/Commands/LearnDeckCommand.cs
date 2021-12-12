@@ -8,15 +8,16 @@ namespace AnkiBot.UI.Commands
 {
     public class LearnDeckCommand : ICommand
     {
-        public string Name => "Учить колоду";
         private readonly IRepository repository;
-        
+
         public LearnDeckCommand(IRepository repository, ILearnMethod[] learnMethods)
         {
             this.repository = repository;
         }
 
-        public async Task<IDialog> Execute(long userId, string message, IBot bot)
+        public string Name => "Учить колоду";
+
+        public async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var decks = repository.GetDecksByUserId(userId.ToString());
             if (!decks.Any())
@@ -24,6 +25,7 @@ namespace AnkiBot.UI.Commands
                 await bot.SendMessage(userId, "У вас нет ни одной колоды. Сначала создайте ее", false);
                 return null;
             }
+
             var decksKeyboard = decks
                 .Select(deck => new[] {deck.Name})
                 .ToArray();
