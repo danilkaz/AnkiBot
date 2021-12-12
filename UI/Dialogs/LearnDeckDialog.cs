@@ -29,7 +29,7 @@ namespace UI.Dialogs
             learnStates = new[] {"🤡\nЗабыл", "😶\nвавкнвы", "😜\nавава", "👑\nИзи"};
         }
 
-        public async Task<IDialog> Execute(long userId, string message, IBot bot)
+        public async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var learnKeyboard = new[] {learnStates, new[] {"Закончил учить"}};
 

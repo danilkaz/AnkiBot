@@ -16,7 +16,7 @@ namespace AnkiBot.UI.Commands
             this.repository = repository;
         }
         
-        public async Task<IDialog> Execute(long userId, string message, IBot bot)
+        public async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var decks = repository.GetDecksByUserId(userId.ToString());
             if (!decks.Any())

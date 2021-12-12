@@ -21,7 +21,7 @@ namespace UI.Dialogs
             this.repository = repository;
         }
 
-        public async Task<IDialog> Execute(long userId, string message, IBot bot)
+        public async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             switch (state)
             {
