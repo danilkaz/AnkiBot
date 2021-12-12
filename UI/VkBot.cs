@@ -26,12 +26,12 @@ namespace UI
             throw new NotImplementedException();
         }
 
-        public Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> buttons = null)
+        public Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> buttons)
         {
             throw new NotImplementedException();
         }
 
-        public async Task SendMessage(long chatId, string text, IEnumerable<IEnumerable<string>> buttons = null)
+        public async Task SendMessage(long chatId, string text, IEnumerable<IEnumerable<string>> buttons)
         {
             await api.Messages.SendAsync(new MessagesSendParams
             {

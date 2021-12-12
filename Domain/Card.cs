@@ -14,6 +14,18 @@ namespace AnkiBot.Domain
             TimeBeforeLearn = new TimeSpan(1, 0, 0, 0, 0);
             LastLearnTime = new DateTime(0);
         }
+        
+        
+        public Card(string id, string userId, string deckId, string front, string back, TimeSpan timeBeforeLearn, DateTime lastLearnTime)
+        {
+            Id = Guid.Parse(id);
+            UserId = userId;
+            DeckId = deckId;
+            Front = front;
+            Back = back;
+            TimeBeforeLearn = timeBeforeLearn;
+            LastLearnTime = lastLearnTime;
+        }
 
         public Guid Id { get; }
         public string Front { get; }

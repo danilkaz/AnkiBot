@@ -43,7 +43,6 @@ namespace Infrastructure
 
         public T Get(string id)
         {
-            connection.Open();
             var command = new SqliteCommand()
             {
                 Connection = connection,
@@ -60,6 +59,16 @@ namespace Infrastructure
             throw new ArgumentException();
         }
 
+        public void Delete(string id)
+        {
+            var command = new SqliteCommand()
+            {
+                Connection = connection,
+                CommandText = $"DELETE FROM {tableName} WHERE id == \"{id}\""
+            };
+            command.ExecuteNonQuery();
+        }
+        
         public IEnumerable<T> Where(Func<T, bool> filter)
         {
             throw new NotImplementedException();

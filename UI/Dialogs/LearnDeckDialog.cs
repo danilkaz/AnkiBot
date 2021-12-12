@@ -7,6 +7,7 @@ using AnkiBot.App;
 using AnkiBot.Domain;
 using AnkiBot.Domain.LearnMethods;
 using AnkiBot.UI.Commands;
+using Infrastructure.Attributes;
 
 namespace UI.Dialogs
 {
@@ -87,11 +88,12 @@ namespace UI.Dialogs
 
                 var answer = Array.FindIndex(learnStates, s => s == learnState);
                 
-                learnCard.LastLearnTime = DateTime.Now;
                 learnCard.TimeBeforeLearn = learnMethod.GetNextRepetition(learnCard, answer);
+                learnCard.LastLearnTime = DateTime.Now;
                 
-                repository.SaveCard(learnCard);
+                repository.UpdateCard(learnCard);
                 learnCard = repository.GetCardsToLearn(deckId).FirstOrDefault();
+                Console.WriteLine(learnCard.NextLearnTime);
                 if (learnCard is null)
                 {
                     await bot.SendMessage(userId, "Все карточки изучены, молодец!");

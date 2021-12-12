@@ -23,6 +23,7 @@ namespace App
             _deckDatabase = deckDatabase;
             _learnMethods = learnMethods;
         }
+
         public void SaveCard(Card card)
         {
             _cardDatabase.Save(new DbCard(card));
@@ -31,6 +32,17 @@ namespace App
         public Card GetCard(string cardId)
         {
             throw new NotImplementedException();
+        }
+
+        public void UpdateCard(Card card)
+        {
+            DeleteCard(card.Id.ToString());
+            SaveCard(card);
+        }
+
+        public void DeleteCard(string cardId)
+        {
+            _cardDatabase.Delete(cardId);
         }
 
         public void SaveDeck(Deck deck)
@@ -44,6 +56,13 @@ namespace App
             return ConvertDbDeckToDeck(dbDeck);
         }
 
+        public void DeleteDeck(string deckId)
+        {
+            foreach (var card in GetCardsByDeckId(deckId))
+                _cardDatabase.Delete(card.Id.ToString());
+            _deckDatabase.Delete(deckId);
+        }
+
         public IEnumerable<Deck> GetDecksByUserId(string userId)
         {
             return _deckDatabase.GetAll()
@@ -53,18 +72,28 @@ namespace App
 
         public IEnumerable<Card> GetCardsByDeckId(string deckId)
         {
-            throw new NotImplementedException();
+            return _cardDatabase.GetAll()
+                .Where(c => c.DeckId.ToString() == deckId)
+                .Select(ConvertDbCardToDeck);
         }
 
         public IEnumerable<Card> GetCardsToLearn(string deckId)
         {
-            throw new NotImplementedException();
+            return GetCardsByDeckId(deckId)
+                .Where(c => c.NextLearnTime < DateTime.Now)
+                .OrderBy(c => c.NextLearnTime);
         }
 
         private Deck ConvertDbDeckToDeck(DbDeck dbDeck)
         {
             var method = _learnMethods.FirstOrDefault(m => m.Name == dbDeck.LearnMethod);
-            return new Deck(dbDeck.Id, dbDeck.Name, method);
+            return new Deck(dbDeck.Id, dbDeck.UserId, dbDeck.Name, method);
+        }
+
+        private Card ConvertDbCardToDeck(DbCard dbCard)
+        {
+            return new Card(dbCard.Id, dbCard.UserId, dbCard.DeckId, dbCard.Front, dbCard.Back,
+                TimeSpan.Parse(dbCard.TimeBeforeLearn), DateTime.Parse(dbCard.LastLearnTime));
         }
     }
 }

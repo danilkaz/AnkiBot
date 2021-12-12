@@ -8,8 +8,8 @@ namespace AnkiBot.Infrastructure
     {
         void Save(T item);
         T Get(string id);
+        void Delete(string id);
         IEnumerable<T> Where(Func<T, bool> filter);
-
         IEnumerable<T> GetAll();
     }
 }

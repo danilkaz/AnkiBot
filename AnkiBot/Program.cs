@@ -49,10 +49,14 @@ namespace AnkiBot
             container.Bind<ICommand>().To<CreateDeckCommand>();
             container.Bind<ICommand>().To<CreateCardCommand>();
             container.Bind<ICommand>().To<LearnDeckCommand>();
+            container.Bind<ICommand>().To<DeleteDeckCommand>();
+            container.Bind<ICommand>().To<DeleteCardCommand>();
             
             container.Bind<IDialog>().To<CreateDeckDialog>();
             container.Bind<IDialog>().To<CreateCardDialog>();
             container.Bind<IDialog>().To<LearnDeckDialog>();
+            container.Bind<IDialog>().To<DeleteDeckDialog>();
+            container.Bind<IDialog>().To<DeleteCardDialog>();
 
             container.Bind<ILearnMethod>().To<LineLearnMethod>().InSingletonScope();
             
