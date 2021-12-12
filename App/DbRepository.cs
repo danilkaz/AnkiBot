@@ -13,20 +13,20 @@ namespace App
 {
     public class DbRepository : IRepository
     {
-        private readonly IDatabase<DbCard> _cardDatabase;
-        private readonly IDatabase<DbDeck> _deckDatabase;
-        private readonly ILearnMethod[] _learnMethods;
+        private readonly IDatabase<DbCard> cardDatabase;
+        private readonly IDatabase<DbDeck> deckDatabase;
+        private readonly ILearnMethod[] learnMethods;
 
         public DbRepository(IDatabase<DbCard> cardDatabase, IDatabase<DbDeck> deckDatabase, ILearnMethod[] learnMethods)
         {
-            _cardDatabase = cardDatabase;
-            _deckDatabase = deckDatabase;
-            _learnMethods = learnMethods;
+            this.cardDatabase = cardDatabase;
+            this.deckDatabase = deckDatabase;
+            this.learnMethods = learnMethods;
         }
 
         public void SaveCard(Card card)
         {
-            _cardDatabase.Save(new DbCard(card));
+            cardDatabase.Save(new DbCard(card));
         }
 
         public Card GetCard(string cardId)
@@ -42,37 +42,37 @@ namespace App
 
         public void DeleteCard(string cardId)
         {
-            _cardDatabase.Delete(cardId);
+            cardDatabase.Delete(cardId);
         }
 
         public void SaveDeck(Deck deck)
         {
-            _deckDatabase.Save(new DbDeck(deck));
+            deckDatabase.Save(new DbDeck(deck));
         }
 
         public Deck GetDeck(string deckId)
         {
-            var dbDeck = _deckDatabase.Get(deckId);
+            var dbDeck = deckDatabase.Get(deckId);
             return ConvertDbDeckToDeck(dbDeck);
         }
 
         public void DeleteDeck(string deckId)
         {
             foreach (var card in GetCardsByDeckId(deckId))
-                _cardDatabase.Delete(card.Id.ToString());
-            _deckDatabase.Delete(deckId);
+                cardDatabase.Delete(card.Id.ToString());
+            deckDatabase.Delete(deckId);
         }
 
         public IEnumerable<Deck> GetDecksByUserId(string userId)
         {
-            return _deckDatabase.GetAll()
+            return deckDatabase.GetAll()
                 .Where(d => d.UserId == userId)
                 .Select(ConvertDbDeckToDeck);
         }
 
         public IEnumerable<Card> GetCardsByDeckId(string deckId)
         {
-            return _cardDatabase.GetAll()
+            return cardDatabase.GetAll()
                 .Where(c => c.DeckId.ToString() == deckId)
                 .Select(ConvertDbCardToDeck);
         }
@@ -86,11 +86,11 @@ namespace App
 
         private Deck ConvertDbDeckToDeck(DbDeck dbDeck)
         {
-            var method = _learnMethods.FirstOrDefault(m => m.Name == dbDeck.LearnMethod);
+            var method = learnMethods.FirstOrDefault(m => m.Name == dbDeck.LearnMethod);
             return new Deck(dbDeck.Id, dbDeck.UserId, dbDeck.Name, method);
         }
 
-        private Card ConvertDbCardToDeck(DbCard dbCard)
+        private static Card ConvertDbCardToDeck(DbCard dbCard)
         {
             var parameters = JsonConvert.DeserializeObject<IParameters>(dbCard.Parameters);
             return new Card(dbCard.Id, dbCard.UserId, dbCard.DeckId, dbCard.Front, dbCard.Back,

@@ -24,7 +24,11 @@ namespace AnkiBot
 
         private static readonly string VkToken =
             Environment.GetEnvironmentVariable("VK_TOKEN", EnvironmentVariableTarget.User);
-
+    
+        private const string SqLiteConnectionString = "Data source=anki.db";
+        
+        private const string PostgresConnectionString = "Host=localhost;Username=postgres;Password=postgres;" +
+                                                        "Database=postgres;Port=5433";
         public static void Main()
         {
             var container = CreateContainer();
@@ -41,9 +45,13 @@ namespace AnkiBot
             container.Bind<VkApi>().ToConstant(CreateVkApi().Result);
 
             container.Bind<TelegramBotClient>().ToConstant(new TelegramBotClient(TelegramToken));
-            container.Bind<IDatabase<DbCard>>().ToConstant(new SqLiteDatabase<DbCard>("Data Source=cards.db"))
+            // container.Bind<IDatabase<DbCard>>().ToConstant(new SqLiteDatabase<DbCard>(SqLiteConnectionString))
+            //     .InSingletonScope();
+            // container.Bind<IDatabase<DbDeck>>().ToConstant(new SqLiteDatabase<DbDeck>(SqLiteConnectionString))
+            //     .InSingletonScope();
+            container.Bind<IDatabase<DbCard>>().ToConstant(new PostgresDatabase<DbCard>(PostgresConnectionString))
                 .InSingletonScope();
-            container.Bind<IDatabase<DbDeck>>().ToConstant(new SqLiteDatabase<DbDeck>("Data Source=decks.db"))
+            container.Bind<IDatabase<DbDeck>>().ToConstant(new PostgresDatabase<DbDeck>(PostgresConnectionString))
                 .InSingletonScope();
             container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
 

@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <PackageReference Include="JsonKnownTypes" Version="0.5.4" />
+      <PackageReference Include="Npgsql" Version="6.0.1" />
       <PackageReference Include="VkNet" Version="1.67.0" />
     </ItemGroup>
 
