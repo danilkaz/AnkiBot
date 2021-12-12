@@ -66,10 +66,10 @@ namespace AnkiBot.UI
             await bot.SendTextMessageAsync(chatId, text, replyMarkup: reply);
         }
 
-        public async Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> buttons)
+        public async Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> labels)
         {
             var keyboard =
-                buttons.Select(x => x.Select(y => new KeyboardButton(y)));
+                labels.Select(x => x.Select(y => new KeyboardButton(y)));
             await bot.SendTextMessageAsync(chatId, text, replyMarkup: new ReplyKeyboardMarkup(keyboard));
         }
 

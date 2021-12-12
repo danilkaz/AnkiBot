@@ -7,6 +7,6 @@ namespace AnkiBot.UI.Commands
     {
         void Start();
         Task SendMessage(long chatId, string text, bool clearKeyboard = true);
-        Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> buttons = null);
+        Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> labels = null);
     }
 }
