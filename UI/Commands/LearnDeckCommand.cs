@@ -6,18 +6,18 @@ using UI.Dialogs;
 
 namespace AnkiBot.UI.Commands
 {
-    public class LearnDeckCommand : ICommand
+    public class LearnDeckCommand : Command
     {
         private readonly IRepository repository;
 
-        public LearnDeckCommand(IRepository repository, ILearnMethod[] learnMethods)
+        public LearnDeckCommand(IRepository repository)
         {
             this.repository = repository;
         }
 
-        public string Name => "Учить колоду";
+        public override string Name => "Учить колоду";
 
-        public async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public override async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var decks = repository.GetDecksByUserId(userId.ToString());
             if (!decks.Any())

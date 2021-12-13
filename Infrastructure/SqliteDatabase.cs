@@ -14,11 +14,12 @@ namespace Infrastructure
         private readonly IEnumerable<PropertyInfo> propertyInfos;
 
         private readonly string tableName;
-        private readonly string connectionString;
+        private readonly SqliteConnection connection;
 
         public SqLiteDatabase(string connectionString)
         {
-            this.connectionString = connectionString;
+            connection = new SqliteConnection(connectionString);
+            connection.Open();
             tableName = typeof(T).GetCustomAttributes<TableAttribute>().FirstOrDefault()?.Name;
             if (tableName is null) throw new ArgumentException("Attribute Table must be "); // TODO поправить
             fields = typeof(T).GetProperties().SelectMany(p => p.GetCustomAttributes<FieldAttribute>());
@@ -29,22 +30,18 @@ namespace Infrastructure
 
         public void Save(T item)
         {
-            using var connection = new SqliteConnection(connectionString);
-            connection.Open();
             var command = new SqliteCommand
             {
                 Connection = connection,
                 CommandText =
                     $"INSERT INTO {tableName} VALUES (" +
-                    $"{string.Join(", ", propertyInfos.Select(p => $"'{p.GetValue(item)}'"))})"
+                    $"{string.Join(", ", propertyInfos.Select(p => $"'{p.GetValue(item).ToString().Replace("'", "")}'"))})"
             };
             command.ExecuteNonQuery();
         }
 
         public T Get(string id)
         {
-            using var connection = new SqliteConnection(connectionString);
-            connection.Open();
             var command = new SqliteCommand
             {
                 Connection = connection,
@@ -63,8 +60,6 @@ namespace Infrastructure
 
         public void Delete(string id)
         {
-            using var connection = new SqliteConnection(connectionString);
-            connection.Open();
             var command = new SqliteCommand
             {
                 Connection = connection,
@@ -80,8 +75,6 @@ namespace Infrastructure
 
         public IEnumerable<T> GetAll()
         {
-            using var connection = new SqliteConnection(connectionString);
-            connection.Open();
             var command = new SqliteCommand
             {
                 Connection = connection,
@@ -96,11 +89,9 @@ namespace Infrastructure
             while (reader.Read())
                 yield return (T) constructor.Invoke(fields.Select(f => reader[f.Name]).ToArray());
         }
-        
+
         private void CreateTable()
         {
-            using var connection = new SqliteConnection(connectionString);
-            connection.Open();
             var createFields = fields
                 .Select(f => f.IsUnique ? $"\"{f.Name}\" TEXT UNIQUE" : $"\"{f.Name}\" TEXT");
             var command = new SqliteCommand

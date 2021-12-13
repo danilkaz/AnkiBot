@@ -6,18 +6,18 @@ using UI.Dialogs;
 
 namespace AnkiBot.UI.Commands
 {
-    public class DeleteCardCommand : ICommand
+    public class DeleteCardCommand : Command
     {
         private readonly IRepository repository;
 
-        public DeleteCardCommand(IRepository repository, ILearnMethod[] learnMethods)
+        public DeleteCardCommand(IRepository repository)
         {
             this.repository = repository;
         }
 
-        public string Name => "Удалить карточку";
+        public override string Name => "Удалить карточку";
 
-        public async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public override async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var decks = repository.GetDecksByUserId(userId.ToString());
             if (!decks.Any())

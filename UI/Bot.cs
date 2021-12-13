@@ -6,7 +6,7 @@ namespace AnkiBot.UI.Commands
 {
     public abstract class Bot
     {
-        private readonly ICommand[] commands;
+        private readonly Command[] commands;
 
         private readonly string[][] defaultKeyboard =
         {
@@ -26,7 +26,7 @@ namespace AnkiBot.UI.Commands
 
         private readonly Dictionary<long, IDialog> usersStates = new();
 
-        protected Bot(ICommand[] commands)
+        protected Bot(Command[] commands)
         {
             this.commands = commands;
         }

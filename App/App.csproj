@@ -10,6 +10,8 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.0" />
+      <PackageReference Include="Ninject" Version="4.0.0-beta-0134" />
+      <PackageReference Include="ninject.extensions.conventions" Version="3.3.0" />
       <PackageReference Include="Npgsql" Version="6.0.1" />
       <PackageReference Include="VkNet" Version="1.67.0" />
     </ItemGroup>

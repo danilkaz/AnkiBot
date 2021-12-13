@@ -17,7 +17,7 @@ namespace AnkiBot.UI
     {
         private readonly TelegramBotClient bot;
 
-        public TelegramBot(TelegramBotClient bot, ICommand[] commands) : base(commands)
+        public TelegramBot(TelegramBotClient bot, Command[] commands) : base(commands)
         {
             this.bot = bot;
         }

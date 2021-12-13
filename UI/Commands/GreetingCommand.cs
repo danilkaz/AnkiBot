@@ -4,7 +4,7 @@ using UI.Dialogs;
 
 namespace AnkiBot.UI.Commands
 {
-    public class GreetingCommand : ICommand
+    public class GreetingCommand : Command
     {
         private readonly IRepository repository;
 
@@ -13,13 +13,15 @@ namespace AnkiBot.UI.Commands
             this.repository = repository;
         }
 
-        public string Name => "/start";
+        public override string Name => "/start";
 
-        public async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public override async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var greetingMessage = "Ку я чат бот!"; //TODO: написать нормальное приветственное сообщение!
             await bot.SendMessage(userId, greetingMessage);
             return null;
         }
+
+        
     }
 }

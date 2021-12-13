@@ -5,7 +5,7 @@ using UI.Dialogs;
 
 namespace AnkiBot.UI.Commands
 {
-    public class CreateDeckCommand : ICommand
+    public class CreateDeckCommand : Command
     {
         private readonly ILearnMethod[] learnMethods;
         private readonly IRepository repository;
@@ -16,9 +16,9 @@ namespace AnkiBot.UI.Commands
             this.learnMethods = learnMethods;
         }
 
-        public string Name => "Создать колоду";
+        public override string Name => "Создать колоду";
 
-        public async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public override async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             await bot.SendMessage(userId, "Введите имя колоды");
             return new CreateDeckDialog(repository, learnMethods);

@@ -5,7 +5,7 @@ using UI.Dialogs;
 
 namespace AnkiBot.UI.Commands
 {
-    public class CreateCardCommand : ICommand
+    public class CreateCardCommand : Command
     {
         private readonly IRepository repository;
 
@@ -14,9 +14,9 @@ namespace AnkiBot.UI.Commands
             this.repository = repository;
         }
 
-        public string Name => "Добавить карточку";
+        public override string Name => "Добавить карточку";
 
-        public async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public override async Task<IDialog> Execute(long userId, string message, Bot bot)
         {
             var decks = repository.GetDecksByUserId(userId.ToString());
             if (!decks.Any())

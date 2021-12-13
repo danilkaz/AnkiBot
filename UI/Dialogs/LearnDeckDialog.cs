@@ -23,7 +23,7 @@ namespace UI.Dialogs
         {
             this.repository = repository;
 
-            learnStates = new[] {"🤡\nЗабыл", "😶\nвавкнвы", "😜\nавава", "👑\nИзи"};
+            learnStates = new[] {"🤡\nЗабыл", "😶\nсложно", "😜\nабоба", "👑\nИзи"}; // TODO придумать как сделать красивее и практичнее
         }
 
         public async Task<IDialog> Execute(long userId, string message, Bot bot)
@@ -84,7 +84,7 @@ namespace UI.Dialogs
                     return this;
                 }
 
-                var answer = Array.FindIndex(learnStates, s => s == learnState);
+                var answer = Array.FindIndex(learnStates, s => s == learnState) + 2;
 
                 learnCard.TimeBeforeLearn = learnMethod.GetNextRepetition(learnCard, answer);
                 learnCard.LastLearnTime = DateTime.Now;

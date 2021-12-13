@@ -38,7 +38,7 @@ namespace AnkiBot.Domain
         public string DeckId { get; }
         public TimeSpan TimeBeforeLearn { get; set; }
         public DateTime LastLearnTime { get; set; }
-        public IParameters Parameters { get; }
+        public IParameters Parameters { get; set; }
 
         public DateTime NextLearnTime => LastLearnTime + TimeBeforeLearn;
     }

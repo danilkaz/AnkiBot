@@ -9,7 +9,16 @@ namespace AnkiBot.Domain.LearnMethods
 
         public TimeSpan GetNextRepetition(Card card, int answer)
         {
-            throw new NotImplementedException();
+            var currentRepetition = card.TimeBeforeLearn;
+            var EF = ((SuperMemo2Parameters) card.Parameters).EF;
+            currentRepetition *= EF;
+            var newEF = EF + (0.1 - (5 - answer) * (0.08 + (5 - answer) * 0.02));
+            if (newEF < 1.3)
+                newEF = 1.3;
+            if (answer <= 3)
+                return new TimeSpan(1, 0, 0, 0);
+            card.Parameters = new SuperMemo2Parameters(newEF);
+            return currentRepetition;
         }
 
         public IParameters GetParameters()

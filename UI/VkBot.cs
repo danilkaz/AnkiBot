@@ -14,7 +14,7 @@ namespace UI
     {
         private readonly VkApi api;
 
-        public VkBot(VkApi api, ICommand[] commands) : base(commands)
+        public VkBot(VkApi api, Command[] commands) : base(commands)
         {
             this.api = api;
         }
