@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.UI.Commands;
+using UI.Config;
 using VkNet;
 using VkNet.Enums.SafetyEnums;
+using VkNet.Model;
 using VkNet.Model.Keyboard;
 using VkNet.Model.RequestParams;
 
@@ -12,18 +14,21 @@ namespace UI
 {
     public class VkBot : Bot
     {
+        private readonly VkConfig config;
         private readonly VkApi api;
 
-        public VkBot(VkApi api, Command[] commands) : base(commands)
+        public VkBot(VkConfig config, Command[] commands) : base(commands)
         {
-            this.api = api;
+            this.config = config;
+            api = new VkApi();
         }
-
+        
         public override async void Start()
         {
+            await api.AuthorizeAsync(new ApiAuthParams {AccessToken = config.Token});
             while (true)
             {
-                var s = await api.Groups.GetLongPollServerAsync(184492586);
+                var s = await api.Groups.GetLongPollServerAsync(ulong.Parse(config.GroupId));
                 var poll = await api.Groups.GetBotsLongPollHistoryAsync(
                     new BotsLongPollHistoryParams
                         {Server = s.Server, Ts = s.Ts, Key = s.Key, Wait = 25});
