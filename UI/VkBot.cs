@@ -38,8 +38,10 @@ namespace UI
                 {
                     var userMessage = update.Message.Text;
                     var userId = update.Message.FromId;
-
+                    
                     await api.Messages.MarkAsReadAsync(userId.Value.ToString());
+                    if (userMessage == "")
+                        continue;
                     await HandleTextMessage(userId.Value, userMessage);
                 }
             }
