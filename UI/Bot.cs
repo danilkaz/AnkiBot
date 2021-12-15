@@ -35,7 +35,7 @@ namespace AnkiBot.UI.Commands
         public abstract Task SendMessage(long chatId, string text, bool clearKeyboard = true);
         public abstract Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> labels);
 
-        public async Task HandleTextMessage(long userId, string message)
+        protected async Task HandleTextMessage(long userId, string message)
         {
             if (usersStates.ContainsKey(userId) && usersStates[userId] != null)
                 usersStates[userId] = await usersStates[userId].Execute(userId, message, this);

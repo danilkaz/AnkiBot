@@ -10,16 +10,17 @@ using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
+using UI.Config;
 
-namespace AnkiBot.UI
+namespace UI
 {
     public class TelegramBot : Bot
     {
         private readonly TelegramBotClient bot;
 
-        public TelegramBot(TelegramBotClient bot, Command[] commands) : base(commands)
+        public TelegramBot(TelegramConfig config, Command[] commands) : base(commands)
         {
-            this.bot = bot;
+            bot = new TelegramBotClient(config.Token);
         }
 
         public override void Start()

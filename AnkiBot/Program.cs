@@ -12,6 +12,7 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using Telegram.Bot;
 using UI;
+using UI.Config;
 using UI.Dialogs;
 using VkNet;
 using VkNet.Model;
@@ -34,7 +35,7 @@ namespace AnkiBot
         public static void Main()
         {
             var container = CreateContainer();
-            var bot = container.Get<VkBot>();
+            var bot = container.Get<TelegramBot>();
             bot.Start();
             Console.ReadLine();
         }
@@ -44,7 +45,8 @@ namespace AnkiBot
             var container = new StandardKernel();
             container.Bind<Bot>().To<TelegramBot>();
             container.Bind<Bot>().To<VkBot>();
-            container.Bind<VkApi>().ToConstant(CreateVkApi().Result);
+            container.Bind<VkConfig>().ToSelf();
+            container.Bind<TelegramConfig>().ToSelf();
 
             container.Bind<TelegramBotClient>().ToConstant(new TelegramBotClient(TelegramToken));
             container.Bind<IDatabase<DbCard>>().ToConstant(new SqLiteDatabase<DbCard>("Data source=cards.db"))
@@ -74,17 +76,6 @@ namespace AnkiBot
             container.Bind<ILearnMethod>().To<SuperMemo2LearnMethod>().InSingletonScope();
 
             return container;
-        }
-
-        private static async Task<VkApi> CreateVkApi()
-        {
-            var api = new VkApi();
-            var p = new ApiAuthParams
-            {
-                AccessToken = VkToken
-            };
-            await api.AuthorizeAsync(p);
-            return api;
         }
     }
 }
