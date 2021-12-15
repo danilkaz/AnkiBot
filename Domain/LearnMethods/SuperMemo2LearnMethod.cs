@@ -7,6 +7,10 @@ namespace AnkiBot.Domain.LearnMethods
     {
         public string Name => "Алгоритм SuperMemo 2";
 
+        public string Description => "Алгоритм SuperMemo 2\n" +
+                                     "Один из популярных способов для вычисления интервалов запоминания:" +
+                                     "следующий интервал вычисляется на основе предыдущего интервала и ответа пользователя";
+
         public TimeSpan GetNextRepetition(Card card, int answer)
         {
             var currentRepetition = card.TimeBeforeLearn;

@@ -7,6 +7,10 @@ namespace AnkiBot.Domain.LearnMethods
     {
         public string Name => "Линейный алгоритм запоминания";
 
+        public string Description => "Линейный алгоритм запоминания\n" +
+                                     "Самый простой и глупый способ для вычисления интервалов запоминания:\n" +
+                                     "при изучении карточки интервал повторения увеличивается в два раза";
+
         public TimeSpan GetNextRepetition(Card card, int answer)
         {
             var currentRepetition = card.TimeBeforeLearn;

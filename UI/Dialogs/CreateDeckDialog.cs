@@ -37,7 +37,8 @@ namespace UI.Dialogs
             {
                 if (message == "Подробности")
                 {
-                    await bot.SendMessageWithKeyboard(userId, "Подробости о методах", keyboard);
+                    foreach (var method in learnMethods)
+                        await bot.SendMessageWithKeyboard(userId, method.Description, keyboard);
                     return this;
                 }
 
