@@ -5,24 +5,24 @@ namespace AnkiBot.Domain
 {
     public class Deck
     {
-        public Deck(string userId, string name, ILearnMethod learnMethod)
+        public Deck(User user, string name, ILearnMethod learnMethod)
         {
             Name = name;
-            UserId = userId;
+            User = user;
             Id = Guid.NewGuid();
             LearnMethod = learnMethod;
         }
 
-        public Deck(string id, string userId, string name, ILearnMethod learnMethod)
+        public Deck(string id, User user, string name, ILearnMethod learnMethod)
         {
             Id = Guid.Parse(id);
             Name = name;
-            UserId = userId;
+            User = user;
             LearnMethod = learnMethod;
         }
 
         public Guid Id { get; }
-        public string UserId { get; }
+        public User User { get; }
         public string Name { get; }
         public ILearnMethod LearnMethod { get; }
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
@@ -15,6 +16,7 @@ namespace UI.Dialogs
 
         private string deckName;
         private State state = State.ChooseDeck;
+        private IEnumerable<Deck> userDecks;
 
         public CreateDeckDialog(IRepository repository, ILearnMethod[] learnMethods)
         {
@@ -22,14 +24,21 @@ namespace UI.Dialogs
             this.learnMethods = learnMethods;
         }
 
-        public async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public async Task<IDialog> Execute(User user, string message, Bot bot)
         {
+            userDecks ??= repository.GetDecksByUser(user);
             var keyboard = learnMethods.Select(m => new[] {m.Name}).Append(new[] {"Подробности"}).ToArray();
             if (state == State.ChooseDeck)
             {
+                if (userDecks.FirstOrDefault(d => d.Name == message) is not null)
+                {
+                    await bot.SendMessage(user, "Колода с таким именем уже создана");
+                    await bot.SendMessage(user, "Введите имя колоды");
+                    return this;
+                }
                 deckName = message;
                 state = State.ChooseLearningMethod;
-                await bot.SendMessageWithKeyboard(userId, "Выберите метод для запоминания", keyboard);
+                await bot.SendMessageWithKeyboard(user, "Выберите метод для запоминания", keyboard);
                 return this;
             }
 
@@ -38,21 +47,21 @@ namespace UI.Dialogs
                 if (message == "Подробности")
                 {
                     foreach (var method in learnMethods)
-                        await bot.SendMessageWithKeyboard(userId, method.Description, keyboard);
+                        await bot.SendMessageWithKeyboard(user, method.Description, keyboard);
                     return this;
                 }
 
                 deckMethod = learnMethods.FirstOrDefault(m => m.Name.Equals(message));
                 if (deckMethod is null)
                 {
-                    await bot.SendMessageWithKeyboard(userId, "Выберите метод", keyboard);
+                    await bot.SendMessageWithKeyboard(user, "Выберите метод", keyboard);
                     return this;
                 }
             }
 
-            var deck = new Deck(userId.ToString(), deckName, deckMethod);
+            var deck = new Deck(user, deckName, deckMethod);
             repository.SaveDeck(deck);
-            await bot.SendMessage(userId, "Колода успешно создана!");
+            await bot.SendMessage(user, "Колода успешно создана!");
             return null;
         }
 

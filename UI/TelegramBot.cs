@@ -7,10 +7,11 @@ using AnkiBot.UI.Commands;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using UI.Config;
+using User = AnkiBot.Domain.User;
 
 namespace UI
 {
@@ -31,20 +32,20 @@ namespace UI
             cts.Cancel();
         }
 
-        public override async Task SendMessage(long chatId, string text, bool clearKeyboard = true)
+        public override async Task SendMessage(User user, string text, bool clearKeyboard = true)
         {
             ReplyMarkupBase reply = new ReplyKeyboardRemove();
             if (!clearKeyboard)
                 reply = null;
-            await bot.SendTextMessageAsync(chatId, text, replyMarkup: reply);
+            await bot.SendTextMessageAsync(user.Id, text, replyMarkup: reply);
         }
 
-        public override async Task SendMessageWithKeyboard(long chatId, string text,
+        public override async Task SendMessageWithKeyboard(User user, string text,
             IEnumerable<IEnumerable<string>> labels)
         {
             var keyboard =
                 labels.Select(x => x.Select(y => new KeyboardButton(y)));
-            await bot.SendTextMessageAsync(chatId, text, replyMarkup: new ReplyKeyboardMarkup(keyboard));
+            await bot.SendTextMessageAsync(user.Id, text, replyMarkup: new ReplyKeyboardMarkup(keyboard));
         }
 
         private Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception,
@@ -67,7 +68,8 @@ namespace UI
             if (update.Type != UpdateType.Message || update.Message.Type != MessageType.Text)
                 return;
 
-            await HandleTextMessage(update.Message.Chat.Id, update.Message.Text);
+            var user = new User(update.Message.Chat.Id.ToString());
+            await HandleTextMessage(user, update.Message.Text);
         }
     }
 }

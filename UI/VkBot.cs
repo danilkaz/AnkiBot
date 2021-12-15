@@ -9,6 +9,7 @@ using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
 using VkNet.Model.Keyboard;
 using VkNet.Model.RequestParams;
+using User = AnkiBot.Domain.User;
 
 namespace UI
 {
@@ -39,33 +40,34 @@ namespace UI
                     var userMessage = update.Message.Text;
                     var userId = update.Message.FromId;
 
+                    var user = new User(userId.Value.ToString());
                     await api.Messages.MarkAsReadAsync(userId.Value.ToString());
-                    await HandleTextMessage(userId.Value, userMessage);
+                    await HandleTextMessage(user, userMessage);
                 }
             }
         }
 
-        public override async Task SendMessage(long chatId, string text, bool clearKeyboard = true)
+        public override async Task SendMessage(User user, string text, bool clearKeyboard = true)
         {
             var keyboard = new KeyboardBuilder().Build();
             if (!clearKeyboard)
                 keyboard = null;
             await api.Messages.SendAsync(new MessagesSendParams
             {
-                PeerId = chatId,
+                PeerId = long.Parse(user.Id),
                 Message = text,
                 Keyboard = keyboard,
                 RandomId = new Random().Next()
             });
         }
 
-        public override async Task SendMessageWithKeyboard(long chatId, string text,
+        public override async Task SendMessageWithKeyboard(User user, string text,
             IEnumerable<IEnumerable<string>> labels)
         {
             var keyboard = MakeKeyboard(labels);
             await api.Messages.SendAsync(new MessagesSendParams
             {
-                PeerId = chatId,
+                PeerId = long.Parse(user.Id),
                 Message = text,
                 Keyboard = keyboard,
                 RandomId = new Random().Next()

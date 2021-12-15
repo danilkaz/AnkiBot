@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AnkiBot.Domain;
 using UI.Dialogs;
 
 namespace AnkiBot.UI.Commands
@@ -24,7 +25,7 @@ namespace AnkiBot.UI.Commands
             }
         };
 
-        private readonly Dictionary<long, IDialog> usersStates = new();
+        private readonly Dictionary<User, IDialog> usersStates = new();
 
         protected Bot(Command[] commands)
         {
@@ -32,19 +33,19 @@ namespace AnkiBot.UI.Commands
         }
 
         public abstract void Start();
-        public abstract Task SendMessage(long chatId, string text, bool clearKeyboard = true);
-        public abstract Task SendMessageWithKeyboard(long chatId, string text, IEnumerable<IEnumerable<string>> labels);
+        public abstract Task SendMessage(User user, string text, bool clearKeyboard = true);
+        public abstract Task SendMessageWithKeyboard(User user, string text, IEnumerable<IEnumerable<string>> labels);
 
-        protected async Task HandleTextMessage(long userId, string message)
+        protected async Task HandleTextMessage(User user, string message)
         {
-            if (usersStates.ContainsKey(userId) && usersStates[userId] != null)
-                usersStates[userId] = await usersStates[userId].Execute(userId, message, this);
+            if (usersStates.ContainsKey(user) && usersStates[user] != null)
+                usersStates[user] = await usersStates[user].Execute(user, message, this);
             else
                 foreach (var command in commands)
                     if (command.Name.Equals(message))
-                        usersStates[userId] = await command.Execute(userId, message, this);
-            if (usersStates.ContainsKey(userId) && usersStates[userId] is null)
-                await SendMessageWithKeyboard(userId, "Выберите команду:", defaultKeyboard);
+                        usersStates[user] = await command.Execute(user, message, this);
+            if (usersStates.ContainsKey(user) && usersStates[user] is null)
+                await SendMessageWithKeyboard(user, "Выберите команду:", defaultKeyboard);
         }
     }
 }

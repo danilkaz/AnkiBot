@@ -12,7 +12,7 @@ namespace AnkiBot.App
         void SaveDeck(Deck deck);
         Deck GetDeck(string deckId);
         void DeleteDeck(string deckId);
-        IEnumerable<Deck> GetDecksByUserId(string userId);
+        IEnumerable<Deck> GetDecksByUser(User user);
         IEnumerable<Card> GetCardsByDeckId(string deckId);
         IEnumerable<Card> GetCardsToLearn(string deckId);
     }

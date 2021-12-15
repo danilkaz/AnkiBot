@@ -21,7 +21,7 @@ namespace UI.Dialogs
         private string back;
         private string[][] finishKeyboard = new[] {new[] {"В главное меню"}};
 
-        public async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public async Task<IDialog> Execute(User user, string message, Bot bot)
         {
             if (message == finishKeyboard[0][0])
                 return null;
@@ -29,36 +29,36 @@ namespace UI.Dialogs
             {
                 case State.ChooseDeck:
                 {
-                    var decks = repository.GetDecksByUserId(userId.ToString());
+                    var decks = repository.GetDecksByUser(user);
                     var findDeck = decks.FirstOrDefault(d => d.Name == message);
                     if (findDeck is null)
                     {
-                        await bot.SendMessage(userId, "Выберите колоду:", false);
+                        await bot.SendMessage(user, "Выберите колоду:", false);
                         return this;
                     }
 
                     deck = findDeck;
                     state = State.InputFront;
-                    await bot.SendMessageWithKeyboard(userId, "Введите переднюю сторону карточки", finishKeyboard);
+                    await bot.SendMessageWithKeyboard(user, "Введите переднюю сторону карточки", finishKeyboard);
                     return this;
                 }
                 case State.InputFront:
                 {
                     front = message;
                     state = State.InputBack;
-                    await bot.SendMessageWithKeyboard(userId, "Введите заднюю сторону карточки", finishKeyboard);
+                    await bot.SendMessageWithKeyboard(user, "Введите заднюю сторону карточки", finishKeyboard);
                     return this;
                 }
                 case State.InputBack:
                 {
                     back = message;
-                    var card = new Card(userId.ToString(), deck.Id.ToString(), front, back,
+                    var card = new Card(user, deck.Id.ToString(), front, back,
                         deck.LearnMethod.GetParameters());
                     repository.SaveCard(card);
 
                     state = State.InputFront;
-                    await bot.SendMessage(userId, "Карточка успешно сохранена");
-                    await bot.SendMessageWithKeyboard(userId, "Введите переднюю сторону карточки", finishKeyboard);
+                    await bot.SendMessage(user, "Карточка успешно сохранена");
+                    await bot.SendMessageWithKeyboard(user, "Введите переднюю сторону карточки", finishKeyboard);
                     return this;
                 }
                 default: return null;

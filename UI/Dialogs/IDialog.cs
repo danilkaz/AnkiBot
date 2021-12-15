@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
+using AnkiBot.Domain;
 using AnkiBot.UI.Commands;
 
 namespace UI.Dialogs
 {
     public interface IDialog
     {
-        Task<IDialog> Execute(long userId, string message, Bot bot);
+        Task<IDialog> Execute(User user, string message, Bot bot);
     }
 }

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using AnkiBot.App;
+using AnkiBot.Domain;
 using AnkiBot.Domain.LearnMethods;
 using UI.Dialogs;
 
@@ -18,9 +19,9 @@ namespace AnkiBot.UI.Commands
 
         public override string Name => "Создать колоду";
 
-        public override async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public override async Task<IDialog> Execute(User user, string message, Bot bot)
         {
-            await bot.SendMessage(userId, "Введите имя колоды");
+            await bot.SendMessage(user, "Введите имя колоды");
             return new CreateDeckDialog(repository, learnMethods);
         }
     }

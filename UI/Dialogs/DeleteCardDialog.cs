@@ -20,17 +20,17 @@ namespace UI.Dialogs
             this.repository = repository;
         }
 
-        public async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public async Task<IDialog> Execute(User user, string message, Bot bot)
         {
             switch (state)
             {
                 case State.ChooseDeck:
                 {
-                    var decks = repository.GetDecksByUserId(userId.ToString());
+                    var decks = repository.GetDecksByUser(user);
                     var findDeck = decks.FirstOrDefault(deck => deck.Name == message);
                     if (findDeck is null)
                     {
-                        await bot.SendMessage(userId, "Выберите колоду:", false);
+                        await bot.SendMessage(user, "Выберите колоду:", false);
                         return this;
                     }
 
@@ -38,13 +38,13 @@ namespace UI.Dialogs
                     cards = repository.GetCardsByDeckId(deckId);
                     if (!cards.Any())
                     {
-                        await bot.SendMessage(userId, "Колода пуста", false);
+                        await bot.SendMessage(user, "Колода пуста", false);
                         return null;
                     }
 
                     var cardsKeyboard = cards.Select(c => new[] {c.Front + "\n" + c.Id});
                     state = State.ChooseCard;
-                    await bot.SendMessageWithKeyboard(userId, "Выберите карту:", cardsKeyboard);
+                    await bot.SendMessageWithKeyboard(user, "Выберите карту:", cardsKeyboard);
                     return this;
                 }
                 case State.ChooseCard:
@@ -53,12 +53,12 @@ namespace UI.Dialogs
                     var card = cards.FirstOrDefault(c => c.Id.ToString() == splitMessage.Last());
                     if (card is null)
                     {
-                        await bot.SendMessage(userId, "Выберите карту:", false);
+                        await bot.SendMessage(user, "Выберите карту:", false);
                         return this;
                     }
 
                     repository.DeleteCard(card.Id.ToString());
-                    await bot.SendMessage(userId, "Карта успешно удалена", false);
+                    await bot.SendMessage(user, "Карта успешно удалена", false);
                     return null;
                 }
                 default:

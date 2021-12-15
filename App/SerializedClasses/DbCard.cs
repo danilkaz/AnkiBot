@@ -13,7 +13,7 @@ namespace App.SerializedClasses
             Id = card.Id.ToString();
             Front = card.Front;
             Back = card.Back;
-            UserId = card.UserId;
+            UserId = card.User.Id;
             DeckId = card.DeckId;
             TimeBeforeLearn = card.TimeBeforeLearn.ToString();
             LastLearnTime = card.LastLearnTime.ToString(CultureInfo.InvariantCulture);

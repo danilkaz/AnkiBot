@@ -18,7 +18,7 @@ namespace App.SerializedClasses
         public DbDeck(Deck deck)
         {
             Id = deck.Id.ToString();
-            UserId = deck.UserId;
+            UserId = deck.User.Id;
             Name = deck.Name;
             LearnMethod = deck.LearnMethod.Name;
         }

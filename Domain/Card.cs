@@ -5,9 +5,9 @@ namespace AnkiBot.Domain
 {
     public class Card
     {
-        public Card(string userId, string deckId, string front, string back, IParameters parameters)
+        public Card(User user, string deckId, string front, string back, IParameters parameters)
         {
-            UserId = userId;
+            User = user;
             DeckId = deckId;
             Front = front;
             Back = back;
@@ -18,11 +18,11 @@ namespace AnkiBot.Domain
         }
 
 
-        public Card(string id, string userId, string deckId, string front, string back, TimeSpan timeBeforeLearn,
+        public Card(string id, User user, string deckId, string front, string back, TimeSpan timeBeforeLearn,
             DateTime lastLearnTime, IParameters parameters)
         {
             Id = Guid.Parse(id);
-            UserId = userId;
+            User = user;
             DeckId = deckId;
             Front = front;
             Back = back;
@@ -34,7 +34,7 @@ namespace AnkiBot.Domain
         public Guid Id { get; }
         public string Front { get; }
         public string Back { get; }
-        public string UserId { get; }
+        public User User { get; }
         public string DeckId { get; }
         public TimeSpan TimeBeforeLearn { get; set; }
         public DateTime LastLearnTime { get; set; }

@@ -26,17 +26,17 @@ namespace UI.Dialogs
             learnStates = new[] {"🤡\nЗабыл", "😶\nсложно", "😜\nабоба", "👑\nИзи"}; // TODO придумать как сделать красивее и практичнее
         }
 
-        public async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public async Task<IDialog> Execute(User user, string message, Bot bot)
         {
             var learnKeyboard = new[] {learnStates, new[] {"Закончил учить"}};
 
             if (state == State.ChooseDeck)
             {
-                var decks = repository.GetDecksByUserId(userId.ToString());
+                var decks = repository.GetDecksByUser(user);
                 var findDeck = decks.FirstOrDefault(deck => deck.Name == message);
                 if (findDeck is null)
                 {
-                    await bot.SendMessage(userId, "Выберите колоду:", false);
+                    await bot.SendMessage(user, "Выберите колоду:", false);
                     return this;
                 }
 
@@ -47,11 +47,11 @@ namespace UI.Dialogs
                 learnCard = repository.GetCardsToLearn(deckId).FirstOrDefault();
                 if (learnCard is null)
                 {
-                    await bot.SendMessage(userId, "Все карточки изучены, молодец!");
+                    await bot.SendMessage(user, "Все карточки изучены, молодец!");
                     return null;
                 }
 
-                await bot.SendMessageWithKeyboard(userId, learnCard.Front, new[] {new[] {"Показать ответ"}});
+                await bot.SendMessageWithKeyboard(user, learnCard.Front, new[] {new[] {"Показать ответ"}});
                 return this;
             }
 
@@ -59,12 +59,12 @@ namespace UI.Dialogs
             {
                 if (message == "Показать ответ")
                 {
-                    await bot.SendMessageWithKeyboard(userId, learnCard.Back, learnKeyboard);
+                    await bot.SendMessageWithKeyboard(user, learnCard.Back, learnKeyboard);
                     state = State.ViewBack;
                     return this;
                 }
 
-                await bot.SendMessageWithKeyboard(userId, "Нажните \"Показать ответ\" когда будете готовы!",
+                await bot.SendMessageWithKeyboard(user, "Нажните \"Показать ответ\" когда будете готовы!",
                     new[] {new[] {"Показать ответ"}});
                 return this;
             }
@@ -73,14 +73,14 @@ namespace UI.Dialogs
             {
                 if (message == "Закончил учить")
                 {
-                    await bot.SendMessage(userId, "Возвращайся снова");
+                    await bot.SendMessage(user, "Возвращайся снова");
                     return null;
                 }
 
                 var learnState = learnStates.FirstOrDefault(s => s == message);
                 if (learnState is null)
                 {
-                    await bot.SendMessageWithKeyboard(userId, "Я жду ответа", learnKeyboard);
+                    await bot.SendMessageWithKeyboard(user, "Я жду ответа", learnKeyboard);
                     return this;
                 }
 
@@ -93,12 +93,12 @@ namespace UI.Dialogs
                 learnCard = repository.GetCardsToLearn(deckId).FirstOrDefault();
                 if (learnCard is null)
                 {
-                    await bot.SendMessage(userId, "Все карточки изучены, молодец!");
+                    await bot.SendMessage(user, "Все карточки изучены, молодец!");
                     return null;
                 }
 
                 state = State.ViewFront;
-                await bot.SendMessageWithKeyboard(userId, learnCard.Front, new[] {new[] {"Показать ответ"}});
+                await bot.SendMessageWithKeyboard(user, learnCard.Front, new[] {new[] {"Показать ответ"}});
                 return this;
             }
 

@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
+using AnkiBot.Domain;
 using AnkiBot.UI.Commands;
 
 namespace UI.Dialogs
@@ -14,18 +15,18 @@ namespace UI.Dialogs
             this.repository = repository;
         }
 
-        public async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public async Task<IDialog> Execute(User user, string message, Bot bot)
         {
-            var decks = repository.GetDecksByUserId(userId.ToString());
+            var decks = repository.GetDecksByUser(user);
             var findDeck = decks.FirstOrDefault(deck => deck.Name == message);
             if (findDeck is null)
             {
-                await bot.SendMessage(userId, "Выберите колоду:", false);
+                await bot.SendMessage(user, "Выберите колоду:", false);
                 return this;
             }
 
             repository.DeleteDeck(findDeck.Id.ToString());
-            await bot.SendMessage(userId, "Колода успешно удалена!");
+            await bot.SendMessage(user, "Колода успешно удалена!");
             return null;
         }
     }

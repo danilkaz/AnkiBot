@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AnkiBot.App;
+using AnkiBot.Domain;
 using UI.Dialogs;
 
 namespace AnkiBot.UI.Commands
@@ -15,10 +16,10 @@ namespace AnkiBot.UI.Commands
 
         public override string Name => "/start";
 
-        public override async Task<IDialog> Execute(long userId, string message, Bot bot)
+        public override async Task<IDialog> Execute(User user, string message, Bot bot)
         {
             var greetingMessage = "Ку я чат бот!"; //TODO: написать нормальное приветственное сообщение!
-            await bot.SendMessage(userId, greetingMessage);
+            await bot.SendMessage(user, greetingMessage);
             return null;
         }
 
