@@ -10,11 +10,11 @@ namespace Infrastructure
 {
     public class PostgresDatabase<T> : IDatabase<T>
     {
+        private readonly string connectionString;
         private readonly IEnumerable<FieldAttribute> fields;
         private readonly IEnumerable<PropertyInfo> propertyInfos;
 
         private readonly string tableName;
-        private readonly string connectionString;
 
         public PostgresDatabase(string connectionString)
         {
@@ -96,7 +96,7 @@ namespace Infrastructure
             while (reader.Read())
                 yield return (T) constructor.Invoke(fields.Select(f => reader[f.Name]).ToArray());
         }
-        
+
         private void CreateTable()
         {
             using var connection = new NpgsqlConnection(connectionString);

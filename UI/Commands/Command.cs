@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AnkiBot.App;
 using AnkiBot.Domain;
 using UI.Dialogs;
 

@@ -9,17 +9,17 @@ namespace UI.Dialogs
     public class CreateCardDialog : IDialog
     {
         private readonly IRepository repository;
+        private string back;
+
+        private Deck deck;
+        private readonly string[][] finishKeyboard = {new[] {"В главное меню"}};
+        private string front;
         private State state = State.ChooseDeck;
 
         public CreateCardDialog(IRepository repository)
         {
             this.repository = repository;
         }
-
-        private Deck deck;
-        private string front;
-        private string back;
-        private string[][] finishKeyboard = new[] {new[] {"В главное меню"}};
 
         public async Task<IDialog> Execute(User user, string message, Bot bot)
         {
@@ -52,7 +52,7 @@ namespace UI.Dialogs
                 case State.InputBack:
                 {
                     back = message;
-                    var card = new Card(user, deck.Id.ToString(), front, back,
+                    var card = new Card(user, deck.Id, front, back,
                         deck.LearnMethod.GetParameters());
                     repository.SaveCard(card);
 

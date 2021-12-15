@@ -15,15 +15,15 @@ namespace UI
 {
     public class VkBot : Bot
     {
-        private readonly VkConfig config;
         private readonly VkApi api;
+        private readonly VkConfig config;
 
         public VkBot(VkConfig config, Command[] commands) : base(commands)
         {
             this.config = config;
             api = new VkApi();
         }
-        
+
         public override async void Start()
         {
             await api.AuthorizeAsync(new ApiAuthParams {AccessToken = config.Token});
@@ -39,7 +39,7 @@ namespace UI
                 {
                     var userMessage = update.Message.Text;
                     var userId = update.Message.FromId;
-                    
+
                     await api.Messages.MarkAsReadAsync(userId.Value.ToString());
                     if (userMessage == "")
                         continue;

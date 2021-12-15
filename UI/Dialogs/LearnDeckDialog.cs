@@ -10,20 +10,20 @@ namespace UI.Dialogs
 {
     public class LearnDeckDialog : IDialog
     {
+        private readonly string[] learnStates;
         private readonly IRepository repository;
 
         private string deckId;
         private Card learnCard;
         private ILearnMethod learnMethod;
-
-        private readonly string[] learnStates;
         private State state = State.ChooseDeck;
 
         public LearnDeckDialog(IRepository repository)
         {
             this.repository = repository;
 
-            learnStates = new[] {"🤡\nЗабыл", "😶\nсложно", "😜\nабоба", "👑\nИзи"}; // TODO придумать как сделать красивее и практичнее
+            learnStates = new[]
+                {"🤡\nЗабыл", "😶\nсложно", "😜\nабоба", "👑\nИзи"};
         }
 
         public async Task<IDialog> Execute(User user, string message, Bot bot)

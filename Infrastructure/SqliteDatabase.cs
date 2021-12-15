@@ -10,11 +10,11 @@ namespace Infrastructure
 {
     public class SqLiteDatabase<T> : IDatabase<T>
     {
+        private readonly SqliteConnection connection;
         private readonly IEnumerable<FieldAttribute> fields;
         private readonly IEnumerable<PropertyInfo> propertyInfos;
 
         private readonly string tableName;
-        private readonly SqliteConnection connection;
 
         public SqLiteDatabase(string connectionString)
         {

@@ -1,34 +1,20 @@
 ﻿using System;
-using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain.LearnMethods;
 using AnkiBot.Infrastructure;
-using AnkiBot.UI;
 using AnkiBot.UI.Commands;
 using App;
 using App.SerializedClasses;
 using Infrastructure;
 using Ninject;
-using Ninject.Extensions.Conventions;
-using Telegram.Bot;
 using UI;
 using UI.Config;
 using UI.Dialogs;
-using VkNet;
-using VkNet.Model;
 
 namespace AnkiBot
 {
     public static class Program
     {
-        private static readonly string TelegramToken =
-            Environment.GetEnvironmentVariable("TELEGRAM_TOKEN", EnvironmentVariableTarget.User);
-
-        private static readonly string VkToken =
-            Environment.GetEnvironmentVariable("VK_TOKEN", EnvironmentVariableTarget.User);
-
-        private const string SqLiteConnectionString = "Data source=anki.db";
-
         private const string PostgresConnectionString = "Host=localhost;Username=postgres;Password=postgres;" +
                                                         "Database=postgres;Port=5433";
 
@@ -48,7 +34,6 @@ namespace AnkiBot
             container.Bind<VkConfig>().ToSelf();
             container.Bind<TelegramConfig>().ToSelf();
 
-            container.Bind<TelegramBotClient>().ToConstant(new TelegramBotClient(TelegramToken));
             container.Bind<IDatabase<DbCard>>().ToConstant(new SqLiteDatabase<DbCard>("Data source=cards.db"))
                 .InSingletonScope();
             container.Bind<IDatabase<DbDeck>>().ToConstant(new SqLiteDatabase<DbDeck>("Data source=decks.db"))
@@ -58,7 +43,7 @@ namespace AnkiBot
             // container.Bind<IDatabase<DbDeck>>().ToConstant(new PostgresDatabase<DbDeck>(PostgresConnectionString))
             //     .InSingletonScope();
             container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
-            
+
             container.Bind<Command>().To<GreetingCommand>();
             container.Bind<Command>().To<CreateDeckCommand>();
             container.Bind<Command>().To<CreateCardCommand>();

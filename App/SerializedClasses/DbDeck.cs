@@ -24,11 +24,8 @@ namespace App.SerializedClasses
         }
 
         [Field("id", true)] public string Id { get; }
-
         [Field("userId")] public string UserId { get; }
-
         [Field("name")] public string Name { get; }
-
         [Field("learnMethod")] public string LearnMethod { get; }
     }
 }

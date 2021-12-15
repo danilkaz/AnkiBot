@@ -18,11 +18,9 @@ namespace AnkiBot.UI.Commands
 
         public override async Task<IDialog> Execute(User user, string message, Bot bot)
         {
-            var greetingMessage = "Ку я чат бот!"; //TODO: написать нормальное приветственное сообщение!
+            var greetingMessage = "Привет, я anki бот. Создай колоду и начни учить!";
             await bot.SendMessage(user, greetingMessage);
             return null;
         }
-
-        
     }
 }

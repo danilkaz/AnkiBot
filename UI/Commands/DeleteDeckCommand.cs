@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
-using AnkiBot.Domain.LearnMethods;
 using UI.Dialogs;
 
 namespace AnkiBot.UI.Commands

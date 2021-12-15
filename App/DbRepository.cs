@@ -87,13 +87,14 @@ namespace App
         private Deck ConvertDbDeckToDeck(DbDeck dbDeck)
         {
             var method = learnMethods.FirstOrDefault(m => m.Name == dbDeck.LearnMethod);
-            return new Deck(dbDeck.Id, new User(dbDeck.UserId), dbDeck.Name, method);
+            return new Deck(Guid.Parse(dbDeck.Id), new User(dbDeck.UserId), dbDeck.Name, method);
         }
 
         private static Card ConvertDbCardToDeck(DbCard dbCard)
         {
             var parameters = JsonConvert.DeserializeObject<IParameters>(dbCard.Parameters);
-            return new Card(dbCard.Id, new User(dbCard.UserId), dbCard.DeckId, dbCard.Front, dbCard.Back,
+            return new Card(Guid.Parse(dbCard.Id), new User(dbCard.UserId), Guid.Parse(dbCard.DeckId), dbCard.Front,
+                dbCard.Back,
                 TimeSpan.Parse(dbCard.TimeBeforeLearn), DateTime.Parse(dbCard.LastLearnTime), parameters);
         }
     }

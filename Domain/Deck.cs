@@ -13,9 +13,9 @@ namespace AnkiBot.Domain
             LearnMethod = learnMethod;
         }
 
-        public Deck(string id, User user, string name, ILearnMethod learnMethod)
+        public Deck(Guid id, User user, string name, ILearnMethod learnMethod)
         {
-            Id = Guid.Parse(id);
+            Id = id;
             Name = name;
             User = user;
             LearnMethod = learnMethod;

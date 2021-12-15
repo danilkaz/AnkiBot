@@ -45,7 +45,7 @@ namespace AnkiBot.UI.Commands
                     if (command.Name.Equals(message))
                         usersStates[user] = await command.Execute(user, message, this);
             if (usersStates.ContainsKey(user) && usersStates[user] is null)
-                await SendMessageWithKeyboard(user, "Выберите команду:", defaultKeyboard);
+                await SendMessageWithKeyboard(user, "Вот что я умею:", defaultKeyboard);
         }
     }
 }

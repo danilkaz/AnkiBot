@@ -14,7 +14,7 @@ namespace App.SerializedClasses
             Front = card.Front;
             Back = card.Back;
             UserId = card.User.Id;
-            DeckId = card.DeckId;
+            DeckId = card.DeckId.ToString();
             TimeBeforeLearn = card.TimeBeforeLearn.ToString();
             LastLearnTime = card.LastLearnTime.ToString(CultureInfo.InvariantCulture);
             Parameters = JsonConvert.SerializeObject(card.Parameters);
@@ -41,7 +41,6 @@ namespace App.SerializedClasses
         [Field("deckId")] public string DeckId { get; }
         [Field("timeBeforeLearn")] public string TimeBeforeLearn { get; }
         [Field("lastLearnTime")] public string LastLearnTime { get; }
-
         [Field("parameters")] public string Parameters { get; }
     }
 }

@@ -36,6 +36,7 @@ namespace UI.Dialogs
                     await bot.SendMessage(user, "Введите имя колоды");
                     return this;
                 }
+
                 deckName = message;
                 state = State.ChooseLearningMethod;
                 await bot.SendMessageWithKeyboard(user, "Выберите метод для запоминания", keyboard);
