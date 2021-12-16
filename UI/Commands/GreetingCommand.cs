@@ -16,7 +16,7 @@ namespace AnkiBot.UI.Commands
 
         public override string Name => "/start";
 
-        public override async Task<IDialog> Execute(User user, string message, Bot bot)
+        public override async Task<IDialog> Execute(User user, string message, IBot bot)
         {
             var greetingMessage = "Привет, я anki бот. Создай колоду и начни учить!";
             await bot.SendMessage(user, greetingMessage);

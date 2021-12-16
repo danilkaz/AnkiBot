@@ -20,7 +20,7 @@ namespace UI.Dialogs
             this.repository = repository;
         }
 
-        public async Task<IDialog> Execute(User user, string message, Bot bot)
+        public async Task<IDialog> Execute(User user, string message, IBot bot)
         {
             switch (state)
             {
@@ -35,16 +35,16 @@ namespace UI.Dialogs
                     }
 
                     deckId = findDeck.Id.ToString();
-                    cards = repository.GetCardsByDeckId(deckId);
+                    cards = repository.GetDeck(deckId).Cards;
                     if (!cards.Any())
                     {
                         await bot.SendMessage(user, "Колода пуста", false);
                         return null;
                     }
 
-                    var cardsKeyboard = cards.Select(c => new[] {c.Front + "\n" + c.Id});
+                    var cardsKeyboard = cards.Select(c => new[] {c.Front + "\n" + c.Id}).ToArray();
                     state = State.ChooseCard;
-                    await bot.SendMessageWithKeyboard(user, "Выберите карту:", cardsKeyboard);
+                    await bot.SendMessageWithKeyboard(user, "Выберите карту:", new KeyboardProvider(cardsKeyboard));
                     return this;
                 }
                 case State.ChooseCard:

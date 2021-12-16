@@ -29,11 +29,11 @@ namespace AnkiBot
         private static StandardKernel CreateContainer()
         {
             var container = new StandardKernel();
-            container.Bind<Bot>().To<TelegramBot>();
-            container.Bind<Bot>().To<VkBot>();
+            
             container.Bind<VkConfig>().ToSelf();
             container.Bind<TelegramConfig>().ToSelf();
-
+            
+            // TODO: ToConstant плохо 
             container.Bind<IDatabase<DbCard>>().ToConstant(new SqLiteDatabase<DbCard>("Data source=cards.db"))
                 .InSingletonScope();
             container.Bind<IDatabase<DbDeck>>().ToConstant(new SqLiteDatabase<DbDeck>("Data source=decks.db"))
@@ -59,6 +59,10 @@ namespace AnkiBot
 
             container.Bind<ILearnMethod>().To<LineLearnMethod>().InSingletonScope();
             container.Bind<ILearnMethod>().To<SuperMemo2LearnMethod>().InSingletonScope();
+            
+            container.Bind<Bot>().ToSelf();
+            container.Bind<IBot>().To<TelegramBot>();
+            container.Bind<IBot>().To<VkBot>();
 
             return container;
         }

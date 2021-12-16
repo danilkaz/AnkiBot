@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AnkiBot.App;
 using AnkiBot.Domain;
@@ -31,7 +33,8 @@ namespace App
 
         public Card GetCard(string cardId)
         {
-            throw new NotImplementedException();
+            var dbCard = cardDatabase.Get(cardId);
+            return ConvertDbCardToCard(dbCard);
         }
 
         public void UpdateCard(Card card)
@@ -53,49 +56,50 @@ namespace App
         public Deck GetDeck(string deckId)
         {
             var dbDeck = deckDatabase.Get(deckId);
-            return ConvertDbDeckToDeck(dbDeck);
+            return ConvertDbDeckToDeck(dbDeck, GetCardsByDeckId(deckId));
         }
 
         public void DeleteDeck(string deckId)
         {
-            foreach (var card in GetCardsByDeckId(deckId))
+            foreach (var card in GetDeck(deckId).Cards)
                 cardDatabase.Delete(card.Id.ToString());
             deckDatabase.Delete(deckId);
+        }
+
+        public IEnumerable<string> GetDecksNamesByUser(User user)
+        {
+            return deckDatabase.GetAll()
+                .Where(d => d.UserId == user.Id)
+                .Select(d => d.Name);
         }
 
         public IEnumerable<Deck> GetDecksByUser(User user)
         {
             return deckDatabase.GetAll()
                 .Where(d => d.UserId == user.Id)
-                .Select(ConvertDbDeckToDeck);
+                .Select(d => ConvertDbDeckToDeck(d, GetCardsByDeckId(d.Id)));
         }
 
-        public IEnumerable<Card> GetCardsByDeckId(string deckId)
-        {
-            return cardDatabase.GetAll()
-                .Where(c => c.DeckId.ToString() == deckId)
-                .Select(ConvertDbCardToDeck);
-        }
-
-        public IEnumerable<Card> GetCardsToLearn(string deckId)
-        {
-            return GetCardsByDeckId(deckId)
-                .Where(c => c.NextLearnTime < DateTime.Now)
-                .OrderBy(c => c.NextLearnTime);
-        }
-
-        private Deck ConvertDbDeckToDeck(DbDeck dbDeck)
+        private Deck ConvertDbDeckToDeck(DbDeck dbDeck, IEnumerable<Card> cards)
         {
             var method = learnMethods.FirstOrDefault(m => m.Name == dbDeck.LearnMethod);
-            return new Deck(Guid.Parse(dbDeck.Id), new User(dbDeck.UserId), dbDeck.Name, method);
+            return new Deck(Guid.Parse(dbDeck.Id), new User(dbDeck.UserId), dbDeck.Name, method, cards);
         }
 
-        private static Card ConvertDbCardToDeck(DbCard dbCard)
+        private static Card ConvertDbCardToCard(DbCard dbCard)
         {
             var parameters = JsonConvert.DeserializeObject<IParameters>(dbCard.Parameters);
             return new Card(Guid.Parse(dbCard.Id), new User(dbCard.UserId), Guid.Parse(dbCard.DeckId), dbCard.Front,
                 dbCard.Back,
-                TimeSpan.Parse(dbCard.TimeBeforeLearn), DateTime.Parse(dbCard.LastLearnTime), parameters);
+                TimeSpan.Parse(dbCard.TimeBeforeLearn),
+                DateTime.Parse(dbCard.LastLearnTime, CultureInfo.InvariantCulture), parameters);
+        }
+
+        private IEnumerable<Card> GetCardsByDeckId(string deckId)
+        {
+            return cardDatabase.GetAll()
+                .Where(c => c.DeckId == deckId)
+                .Select(ConvertDbCardToCard);
         }
     }
 }

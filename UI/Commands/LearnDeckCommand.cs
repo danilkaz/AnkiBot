@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
+using UI;
 using UI.Dialogs;
 
 namespace AnkiBot.UI.Commands
@@ -17,19 +18,19 @@ namespace AnkiBot.UI.Commands
 
         public override string Name => "Учить колоду";
 
-        public override async Task<IDialog> Execute(User user, string message, Bot bot)
+        public override async Task<IDialog> Execute(User user, string message, IBot bot)
         {
-            var decks = repository.GetDecksByUser(user);
-            if (!decks.Any())
+            var decksNames = repository.GetDecksNamesByUser(user);
+            if (!decksNames.Any())
             {
                 await bot.SendMessage(user, "У вас нет ни одной колоды. Сначала создайте ее", false);
                 return null;
             }
 
-            var decksKeyboard = decks
-                .Select(deck => new[] {deck.Name})
+            var decksKeyboard = decksNames
+                .Select(name => new[] {name})
                 .ToArray();
-            await bot.SendMessageWithKeyboard(user, "Выберите колоду:", decksKeyboard);
+            await bot.SendMessageWithKeyboard(user, "Выберите колоду:", new KeyboardProvider(decksKeyboard));
             return new LearnDeckDialog(repository);
         }
     }

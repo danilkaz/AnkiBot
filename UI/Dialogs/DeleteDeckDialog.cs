@@ -15,10 +15,10 @@ namespace UI.Dialogs
             this.repository = repository;
         }
 
-        public async Task<IDialog> Execute(User user, string message, Bot bot)
+        public async Task<IDialog> Execute(User user, string message, IBot bot)
         {
-            var decks = repository.GetDecksByUser(user);
-            var findDeck = decks.FirstOrDefault(deck => deck.Name == message);
+            var decksName = repository.GetDecksByUser(user);
+            var findDeck = decksName.FirstOrDefault(deck => deck.Name == message);
             if (findDeck is null)
             {
                 await bot.SendMessage(user, "Выберите колоду:", false);

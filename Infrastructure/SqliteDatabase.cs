@@ -67,12 +67,7 @@ namespace Infrastructure
             };
             command.ExecuteNonQuery();
         }
-
-        public IEnumerable<T> Where(Func<T, bool> filter)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public IEnumerable<T> GetAll()
         {
             var command = new SqliteCommand

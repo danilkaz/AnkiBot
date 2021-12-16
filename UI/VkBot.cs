@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.UI.Commands;
 using UI.Config;
+using UI.Dialogs;
 using VkNet;
 using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
@@ -13,18 +14,20 @@ using User = AnkiBot.Domain.User;
 
 namespace UI
 {
-    public class VkBot : Bot
+    public class VkBot : IBot
     {
         private readonly VkApi api;
         private readonly VkConfig config;
+        private readonly Bot bot;
 
-        public VkBot(VkConfig config, Command[] commands) : base(commands)
+        public VkBot(VkConfig config, Bot bot)
         {
             this.config = config;
+            this.bot = bot;
             api = new VkApi();
         }
 
-        public override async void Start()
+        public async void Start()
         {
             await api.AuthorizeAsync(new ApiAuthParams {AccessToken = config.Token});
             while (true)
@@ -44,12 +47,12 @@ namespace UI
                     if (userMessage == "")
                         continue;
                     var user = new User(userId.Value.ToString());
-                    await HandleTextMessage(user, userMessage);
+                    await bot.HandleTextMessage(user, userMessage, SendMessageWithKeyboard, this);
                 }
             }
         }
 
-        public override async Task SendMessage(User user, string text, bool clearKeyboard = true)
+        public async Task SendMessage(User user, string text, bool clearKeyboard = true)
         {
             var keyboard = new KeyboardBuilder().Build();
             if (!clearKeyboard)
@@ -63,10 +66,10 @@ namespace UI
             });
         }
 
-        public override async Task SendMessageWithKeyboard(User user, string text,
-            IEnumerable<IEnumerable<string>> labels)
+        public async Task SendMessageWithKeyboard(User user, string text,
+            KeyboardProvider keyboardProvider)
         {
-            var keyboard = MakeKeyboard(labels);
+            var keyboard = MakeKeyboard(keyboardProvider.Keyboard);
             await api.Messages.SendAsync(new MessagesSendParams
             {
                 PeerId = long.Parse(user.Id),

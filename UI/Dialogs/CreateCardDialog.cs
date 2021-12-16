@@ -21,7 +21,7 @@ namespace UI.Dialogs
             this.repository = repository;
         }
 
-        public async Task<IDialog> Execute(User user, string message, Bot bot)
+        public async Task<IDialog> Execute(User user, string message, IBot bot)
         {
             if (message == finishKeyboard[0][0])
                 return null;
@@ -39,14 +39,14 @@ namespace UI.Dialogs
 
                     deck = findDeck;
                     state = State.InputFront;
-                    await bot.SendMessageWithKeyboard(user, "Введите переднюю сторону карточки", finishKeyboard);
+                    await bot.SendMessageWithKeyboard(user, "Введите переднюю сторону карточки", new KeyboardProvider(finishKeyboard));
                     return this;
                 }
                 case State.InputFront:
                 {
                     front = message;
                     state = State.InputBack;
-                    await bot.SendMessageWithKeyboard(user, "Введите заднюю сторону карточки", finishKeyboard);
+                    await bot.SendMessageWithKeyboard(user, "Введите заднюю сторону карточки", new KeyboardProvider(finishKeyboard));
                     return this;
                 }
                 case State.InputBack:
@@ -58,7 +58,7 @@ namespace UI.Dialogs
 
                     state = State.InputFront;
                     await bot.SendMessage(user, "Карточка успешно сохранена");
-                    await bot.SendMessageWithKeyboard(user, "Введите переднюю сторону карточки", finishKeyboard);
+                    await bot.SendMessageWithKeyboard(user, "Введите переднюю сторону карточки", new KeyboardProvider(finishKeyboard));
                     return this;
                 }
                 default: return null;

@@ -18,12 +18,13 @@ namespace Infrastructure
 
         public PostgresDatabase(string connectionString)
         {
+            // TODO: перенести рефлексию в статический конструктор
             this.connectionString = connectionString;
             tableName = typeof(T).GetCustomAttributes<TableAttribute>().FirstOrDefault()?.Name;
             if (tableName is null) throw new ArgumentException("Attribute Table must be "); // TODO поправить
             fields = typeof(T).GetProperties().SelectMany(p => p.GetCustomAttributes<FieldAttribute>());
             propertyInfos = typeof(T).GetProperties().Where(p => p.GetCustomAttributes<FieldAttribute>().Any());
-            CreateTable();
+            CreateTable(); // TODO: Сделать метод
         }
 
 
@@ -72,12 +73,7 @@ namespace Infrastructure
             };
             command.ExecuteNonQuery();
         }
-
-        public IEnumerable<T> Where(Func<T, bool> filter)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public IEnumerable<T> GetAll()
         {
             using var connection = new NpgsqlConnection(connectionString);

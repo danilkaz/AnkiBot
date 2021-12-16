@@ -11,20 +11,23 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using UI.Config;
+using UI.Dialogs;
 using User = AnkiBot.Domain.User;
 
 namespace UI
 {
-    public class TelegramBot : Bot
+    public class TelegramBot : IBot
     {
+        private readonly Bot bot2;
         private readonly TelegramBotClient bot;
 
-        public TelegramBot(TelegramConfig config, Command[] commands) : base(commands)
+        public TelegramBot(TelegramConfig config, Bot bot2)
         {
+            this.bot2 = bot2;
             bot = new TelegramBotClient(config.Token);
         }
 
-        public override void Start()
+        public void Start()
         {
             using var cts = new CancellationTokenSource();
             bot.StartReceiving(new DefaultUpdateHandler(HandleUpdateAsync, HandleErrorAsync), null, cts.Token);
@@ -32,7 +35,7 @@ namespace UI
             cts.Cancel();
         }
 
-        public override async Task SendMessage(User user, string text, bool clearKeyboard = true)
+        public async Task SendMessage(User user, string text, bool clearKeyboard = true)
         {
             ReplyMarkupBase reply = new ReplyKeyboardRemove();
             if (!clearKeyboard)
@@ -40,11 +43,11 @@ namespace UI
             await bot.SendTextMessageAsync(user.Id, text, replyMarkup: reply);
         }
 
-        public override async Task SendMessageWithKeyboard(User user, string text,
-            IEnumerable<IEnumerable<string>> labels)
+        public async Task SendMessageWithKeyboard(User user, string text,
+            KeyboardProvider keyboardProvider)
         {
             var keyboard =
-                labels.Select(x => x.Select(y => new KeyboardButton(y)));
+                keyboardProvider.Keyboard.Select(x => x.Select(y => new KeyboardButton(y)));
             await bot.SendTextMessageAsync(user.Id, text, replyMarkup: new ReplyKeyboardMarkup(keyboard));
         }
 
@@ -58,7 +61,7 @@ namespace UI
                 _ => exception.ToString()
             };
 
-            Console.WriteLine(errorMessage);
+            Console.WriteLine(errorMessage); // TODO: сделать лог
             return Task.CompletedTask;
         }
 
@@ -69,7 +72,7 @@ namespace UI
                 return;
 
             var user = new User(update.Message.Chat.Id.ToString());
-            await HandleTextMessage(user, update.Message.Text);
+            await bot2.HandleTextMessage(user, update.Message.Text, SendMessageWithKeyboard, this);
         }
     }
 }

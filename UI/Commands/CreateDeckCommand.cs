@@ -19,7 +19,7 @@ namespace AnkiBot.UI.Commands
 
         public override string Name => "Создать колоду";
 
-        public override async Task<IDialog> Execute(User user, string message, Bot bot)
+        public override async Task<IDialog> Execute(User user, string message, IBot bot)
         {
             await bot.SendMessage(user, "Введите имя колоды");
             return new CreateDeckDialog(repository, learnMethods);
