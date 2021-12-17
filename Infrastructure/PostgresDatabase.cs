@@ -10,24 +10,20 @@ namespace Infrastructure
 {
     public class PostgresDatabase<T> : IDatabase<T>
     {
-        private readonly string connectionString;
-        private readonly IEnumerable<FieldAttribute> fields;
-        private readonly IEnumerable<PropertyInfo> propertyInfos;
+        private string connectionString;
+        
+        private static readonly IEnumerable<FieldAttribute> fields;
+        private static readonly IEnumerable<PropertyInfo> propertyInfos;
+        private static readonly string tableName;
 
-        private readonly string tableName;
-
-        public PostgresDatabase(string connectionString)
+        static PostgresDatabase()
         {
-            // TODO: перенести рефлексию в статический конструктор
-            this.connectionString = connectionString;
             tableName = typeof(T).GetCustomAttributes<TableAttribute>().FirstOrDefault()?.Name;
             if (tableName is null) throw new ArgumentException("Attribute Table must be "); // TODO поправить
             fields = typeof(T).GetProperties().SelectMany(p => p.GetCustomAttributes<FieldAttribute>());
             propertyInfos = typeof(T).GetProperties().Where(p => p.GetCustomAttributes<FieldAttribute>().Any());
-            CreateTable(); // TODO: Сделать метод
         }
-
-
+        
         public void Save(T item)
         {
             using var connection = new NpgsqlConnection(connectionString);
@@ -93,8 +89,10 @@ namespace Infrastructure
                 yield return (T) constructor.Invoke(fields.Select(f => reader[f.Name]).ToArray());
         }
 
-        private void CreateTable()
+        public void CreateTable(string connectionString)
         {
+            this.connectionString = connectionString;
+            
             using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
             var createFields = fields

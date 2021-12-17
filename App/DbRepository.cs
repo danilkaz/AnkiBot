@@ -19,7 +19,8 @@ namespace App
         private readonly IDatabase<DbDeck> deckDatabase;
         private readonly ILearnMethod[] learnMethods;
 
-        public DbRepository(IDatabase<DbCard> cardDatabase, IDatabase<DbDeck> deckDatabase, ILearnMethod[] learnMethods)
+        public DbRepository(IDatabase<DbCard> cardDatabase, IDatabase<DbDeck> deckDatabase,
+            ILearnMethod[] learnMethods)
         {
             this.cardDatabase = cardDatabase;
             this.deckDatabase = deckDatabase;

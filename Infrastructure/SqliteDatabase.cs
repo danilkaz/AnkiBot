@@ -10,24 +10,20 @@ namespace Infrastructure
 {
     public class SqLiteDatabase<T> : IDatabase<T>
     {
-        private readonly SqliteConnection connection;
-        private readonly IEnumerable<FieldAttribute> fields;
-        private readonly IEnumerable<PropertyInfo> propertyInfos;
-
-        private readonly string tableName;
-
-        public SqLiteDatabase(string connectionString)
+        private SqliteConnection connection;
+        
+        private static readonly IEnumerable<FieldAttribute> fields;
+        private static readonly IEnumerable<PropertyInfo> propertyInfos;
+        private static readonly string tableName;
+        
+        static SqLiteDatabase()
         {
-            connection = new SqliteConnection(connectionString);
-            connection.Open();
             tableName = typeof(T).GetCustomAttributes<TableAttribute>().FirstOrDefault()?.Name;
             if (tableName is null) throw new ArgumentException("Attribute Table must be "); // TODO поправить
             fields = typeof(T).GetProperties().SelectMany(p => p.GetCustomAttributes<FieldAttribute>());
             propertyInfos = typeof(T).GetProperties().Where(p => p.GetCustomAttributes<FieldAttribute>().Any());
-            CreateTable();
         }
-
-
+        
         public void Save(T item)
         {
             var command = new SqliteCommand
@@ -85,8 +81,11 @@ namespace Infrastructure
                 yield return (T) constructor.Invoke(fields.Select(f => reader[f.Name]).ToArray());
         }
 
-        private void CreateTable()
+        public void CreateTable(string connectionString)
         {
+            connection = new SqliteConnection(connectionString);
+            connection.Open();
+
             var createFields = fields
                 .Select(f => f.IsUnique ? $"\"{f.Name}\" TEXT UNIQUE" : $"\"{f.Name}\" TEXT");
             var command = new SqliteCommand

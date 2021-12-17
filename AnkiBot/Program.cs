@@ -21,6 +21,12 @@ namespace AnkiBot
         public static void Main()
         {
             var container = CreateContainer();
+
+            container.Get<IDatabase<DbCard>>().CreateTable("Data source=cards.db");
+            container.Get<IDatabase<DbDeck>>().CreateTable("Data source=decks.db");
+            // container.Get<IDatabase<DbCard>>().CreateTable(PostgresConnectionString);
+            // container.Get<IDatabase<DbDeck>>().CreateTable(PostgresConnectionString);
+
             var bot = container.Get<TelegramBot>();
             bot.Start();
             Console.ReadLine();
@@ -29,21 +35,17 @@ namespace AnkiBot
         private static StandardKernel CreateContainer()
         {
             var container = new StandardKernel();
-            
+
             container.Bind<VkConfig>().ToSelf();
             container.Bind<TelegramConfig>().ToSelf();
             
-            // TODO: ToConstant плохо 
-            container.Bind<IDatabase<DbCard>>().ToConstant(new SqLiteDatabase<DbCard>("Data source=cards.db"))
-                .InSingletonScope();
-            container.Bind<IDatabase<DbDeck>>().ToConstant(new SqLiteDatabase<DbDeck>("Data source=decks.db"))
-                .InSingletonScope();
-            // container.Bind<IDatabase<DbCard>>().ToConstant(new PostgresDatabase<DbCard>(PostgresConnectionString))
-            //     .InSingletonScope();
-            // container.Bind<IDatabase<DbDeck>>().ToConstant(new PostgresDatabase<DbDeck>(PostgresConnectionString))
-            //     .InSingletonScope();
+            container.Bind<IDatabase<DbCard>>().To<SqLiteDatabase<DbCard>>().InSingletonScope();
+            container.Bind<IDatabase<DbDeck>>().To<SqLiteDatabase<DbDeck>>().InSingletonScope();
+            // container.Bind<IDatabase<DbCard>>().To<PostgresDatabase<DbCard>>().InSingletonScope();
+            // container.Bind<IDatabase<DbDeck>>().To<PostgresDatabase<DbDeck>>().InSingletonScope();
+            
             container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
-
+            
             container.Bind<Command>().To<GreetingCommand>();
             container.Bind<Command>().To<CreateDeckCommand>();
             container.Bind<Command>().To<CreateCardCommand>();
@@ -59,7 +61,7 @@ namespace AnkiBot
 
             container.Bind<ILearnMethod>().To<LineLearnMethod>().InSingletonScope();
             container.Bind<ILearnMethod>().To<SuperMemo2LearnMethod>().InSingletonScope();
-            
+
             container.Bind<Bot>().ToSelf();
             container.Bind<IBot>().To<TelegramBot>();
             container.Bind<IBot>().To<VkBot>();
@@ -68,3 +70,5 @@ namespace AnkiBot
         }
     }
 }
+
+// TODO: создать классы для представления в UI
