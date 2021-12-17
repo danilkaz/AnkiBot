@@ -10,12 +10,11 @@ namespace Infrastructure
 {
     public class SqLiteDatabase<T> : IDatabase<T>
     {
-        private SqliteConnection connection;
-        
         private static readonly IEnumerable<FieldAttribute> fields;
         private static readonly IEnumerable<PropertyInfo> propertyInfos;
         private static readonly string tableName;
-        
+        private SqliteConnection connection;
+
         static SqLiteDatabase()
         {
             tableName = typeof(T).GetCustomAttributes<TableAttribute>().FirstOrDefault()?.Name;
@@ -23,7 +22,7 @@ namespace Infrastructure
             fields = typeof(T).GetProperties().SelectMany(p => p.GetCustomAttributes<FieldAttribute>());
             propertyInfos = typeof(T).GetProperties().Where(p => p.GetCustomAttributes<FieldAttribute>().Any());
         }
-        
+
         public void Save(T item)
         {
             var command = new SqliteCommand
@@ -63,7 +62,7 @@ namespace Infrastructure
             };
             command.ExecuteNonQuery();
         }
-        
+
         public IEnumerable<T> GetAll()
         {
             var command = new SqliteCommand

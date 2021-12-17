@@ -17,13 +17,13 @@ namespace UI
     public class VkBot : IBot
     {
         private readonly VkApi api;
+        private readonly BotHandler botHandler;
         private readonly VkConfig config;
-        private readonly Bot bot;
 
-        public VkBot(VkConfig config, Bot bot)
+        public VkBot(VkConfig config, BotHandler botHandler)
         {
             this.config = config;
-            this.bot = bot;
+            this.botHandler = botHandler;
             api = new VkApi();
         }
 
@@ -47,7 +47,7 @@ namespace UI
                     if (userMessage == "")
                         continue;
                     var user = new User(userId.Value.ToString());
-                    await bot.HandleTextMessage(user, userMessage, SendMessageWithKeyboard, this);
+                    await botHandler.HandleTextMessage(user, userMessage, SendMessageWithKeyboard, this);
                 }
             }
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AnkiBot.Domain.LearnMethods;
@@ -31,6 +30,7 @@ namespace AnkiBot.Domain
         public string Name { get; }
         public ILearnMethod LearnMethod { get; }
         public IEnumerable<Card> Cards { get; }
+
         public IEnumerable<Card> GetCardsToLearn()
         {
             return Cards.Where(c => c.NextLearnTime < DateTime.Now).OrderBy(c => c.NextLearnTime);

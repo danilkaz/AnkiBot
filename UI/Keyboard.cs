@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-
 namespace UI
 {
     public class KeyboardProvider
     {
-        public static KeyboardProvider DefaultKeyboard = new KeyboardProvider(new[]
+        public static KeyboardProvider DefaultKeyboard = new(new[]
         {
             new[]
             {
@@ -20,12 +17,12 @@ namespace UI
                 "Учить колоду"
             }
         });
-        
-        public string[][] Keyboard { get; }
 
         public KeyboardProvider(string[][] keyboard)
         {
             Keyboard = keyboard;
         }
+
+        public string[][] Keyboard { get; }
     }
 }

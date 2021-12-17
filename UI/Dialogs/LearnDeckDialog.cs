@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
 using AnkiBot.Domain.LearnMethods;
-using AnkiBot.UI.Commands;
 
 namespace UI.Dialogs
 {
@@ -51,7 +50,8 @@ namespace UI.Dialogs
                     return null;
                 }
 
-                await bot.SendMessageWithKeyboard(user, learnCard.Front, new KeyboardProvider(new[] {new[] {"Показать ответ"}}));
+                await bot.SendMessageWithKeyboard(user, learnCard.Front,
+                    new KeyboardProvider(new[] {new[] {"Показать ответ"}}));
                 return this;
             }
 
@@ -98,7 +98,8 @@ namespace UI.Dialogs
                 }
 
                 state = State.ViewFront;
-                await bot.SendMessageWithKeyboard(user, learnCard.Front, new KeyboardProvider(new[] {new[] {"Показать ответ"}}));
+                await bot.SendMessageWithKeyboard(user, learnCard.Front,
+                    new KeyboardProvider(new[] {new[] {"Показать ответ"}}));
                 return this;
             }
 

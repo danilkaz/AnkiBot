@@ -10,11 +10,10 @@ namespace Infrastructure
 {
     public class PostgresDatabase<T> : IDatabase<T>
     {
-        private string connectionString;
-        
         private static readonly IEnumerable<FieldAttribute> fields;
         private static readonly IEnumerable<PropertyInfo> propertyInfos;
         private static readonly string tableName;
+        private string connectionString;
 
         static PostgresDatabase()
         {
@@ -23,7 +22,7 @@ namespace Infrastructure
             fields = typeof(T).GetProperties().SelectMany(p => p.GetCustomAttributes<FieldAttribute>());
             propertyInfos = typeof(T).GetProperties().Where(p => p.GetCustomAttributes<FieldAttribute>().Any());
         }
-        
+
         public void Save(T item)
         {
             using var connection = new NpgsqlConnection(connectionString);
@@ -69,7 +68,7 @@ namespace Infrastructure
             };
             command.ExecuteNonQuery();
         }
-        
+
         public IEnumerable<T> GetAll()
         {
             using var connection = new NpgsqlConnection(connectionString);
@@ -92,7 +91,7 @@ namespace Infrastructure
         public void CreateTable(string connectionString)
         {
             this.connectionString = connectionString;
-            
+
             using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
             var createFields = fields

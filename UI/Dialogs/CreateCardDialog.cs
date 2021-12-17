@@ -2,17 +2,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
-using AnkiBot.UI.Commands;
 
 namespace UI.Dialogs
 {
     public class CreateCardDialog : IDialog
     {
+        private readonly string[][] finishKeyboard = {new[] {"В главное меню"}};
         private readonly IRepository repository;
         private string back;
 
         private Deck deck;
-        private readonly string[][] finishKeyboard = {new[] {"В главное меню"}};
         private string front;
         private State state = State.ChooseDeck;
 
@@ -39,14 +38,16 @@ namespace UI.Dialogs
 
                     deck = findDeck;
                     state = State.InputFront;
-                    await bot.SendMessageWithKeyboard(user, "Введите переднюю сторону карточки", new KeyboardProvider(finishKeyboard));
+                    await bot.SendMessageWithKeyboard(user, "Введите переднюю сторону карточки",
+                        new KeyboardProvider(finishKeyboard));
                     return this;
                 }
                 case State.InputFront:
                 {
                     front = message;
                     state = State.InputBack;
-                    await bot.SendMessageWithKeyboard(user, "Введите заднюю сторону карточки", new KeyboardProvider(finishKeyboard));
+                    await bot.SendMessageWithKeyboard(user, "Введите заднюю сторону карточки",
+                        new KeyboardProvider(finishKeyboard));
                     return this;
                 }
                 case State.InputBack:
@@ -58,7 +59,8 @@ namespace UI.Dialogs
 
                     state = State.InputFront;
                     await bot.SendMessage(user, "Карточка успешно сохранена");
-                    await bot.SendMessageWithKeyboard(user, "Введите переднюю сторону карточки", new KeyboardProvider(finishKeyboard));
+                    await bot.SendMessageWithKeyboard(user, "Введите переднюю сторону карточки",
+                        new KeyboardProvider(finishKeyboard));
                     return this;
                 }
                 default: return null;

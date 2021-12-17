@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AnkiBot.UI.Commands;
-using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
@@ -19,12 +17,12 @@ namespace UI
 {
     public class TelegramBot : IBot
     {
-        private readonly Bot bot2;
         private readonly TelegramBotClient bot;
+        private readonly BotHandler botHandler;
 
-        public TelegramBot(TelegramConfig config, Bot bot2)
+        public TelegramBot(TelegramConfig config, BotHandler botHandler)
         {
-            this.bot2 = bot2;
+            this.botHandler = botHandler;
             bot = new TelegramBotClient(config.Token);
         }
 
@@ -73,7 +71,7 @@ namespace UI
                 return;
 
             var user = new User(update.Message.Chat.Id.ToString());
-            await bot2.HandleTextMessage(user, update.Message.Text, SendMessageWithKeyboard, this);
+            await botHandler.HandleTextMessage(user, update.Message.Text, SendMessageWithKeyboard, this);
         }
     }
 }

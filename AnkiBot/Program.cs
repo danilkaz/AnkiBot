@@ -7,6 +7,7 @@ using App;
 using App.SerializedClasses;
 using Infrastructure;
 using Ninject;
+using Ninject.Extensions.Conventions;
 using UI;
 using UI.Config;
 using UI.Dialogs;
@@ -38,31 +39,23 @@ namespace AnkiBot
 
             container.Bind<VkConfig>().ToSelf();
             container.Bind<TelegramConfig>().ToSelf();
-            
+
             container.Bind<IDatabase<DbCard>>().To<SqLiteDatabase<DbCard>>().InSingletonScope();
             container.Bind<IDatabase<DbDeck>>().To<SqLiteDatabase<DbDeck>>().InSingletonScope();
             // container.Bind<IDatabase<DbCard>>().To<PostgresDatabase<DbCard>>().InSingletonScope();
             // container.Bind<IDatabase<DbDeck>>().To<PostgresDatabase<DbDeck>>().InSingletonScope();
-            
+
             container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
-            
-            container.Bind<Command>().To<GreetingCommand>();
-            container.Bind<Command>().To<CreateDeckCommand>();
-            container.Bind<Command>().To<CreateCardCommand>();
-            container.Bind<Command>().To<LearnDeckCommand>();
-            container.Bind<Command>().To<DeleteDeckCommand>();
-            container.Bind<Command>().To<DeleteCardCommand>();
 
-            container.Bind<IDialog>().To<CreateDeckDialog>();
-            container.Bind<IDialog>().To<CreateCardDialog>();
-            container.Bind<IDialog>().To<LearnDeckDialog>();
-            container.Bind<IDialog>().To<DeleteDeckDialog>();
-            container.Bind<IDialog>().To<DeleteCardDialog>();
+            container.Bind(c =>
+                c.FromAssemblyContaining<Command>().SelectAllClasses().InheritedFrom<Command>().BindAllBaseClasses());
+            container.Bind(c =>
+                c.FromAssemblyContaining<IDialog>().SelectAllClasses().InheritedFrom<IDialog>().BindAllInterfaces());
+            container.Bind(c =>
+                c.FromAssemblyContaining<ILearnMethod>().SelectAllClasses().InheritedFrom<ILearnMethod>()
+                    .BindAllInterfaces());
 
-            container.Bind<ILearnMethod>().To<LineLearnMethod>().InSingletonScope();
-            container.Bind<ILearnMethod>().To<SuperMemo2LearnMethod>().InSingletonScope();
-
-            container.Bind<Bot>().ToSelf();
+            container.Bind<BotHandler>().ToSelf();
             container.Bind<IBot>().To<TelegramBot>();
             container.Bind<IBot>().To<VkBot>();
 

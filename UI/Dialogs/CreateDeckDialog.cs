@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
 using AnkiBot.Domain.LearnMethods;
-using AnkiBot.UI.Commands;
 
 namespace UI.Dialogs
 {
@@ -15,8 +14,8 @@ namespace UI.Dialogs
         private ILearnMethod deckMethod;
 
         private string deckName;
-        private State state = State.ChooseDeck;
         private IEnumerable<string> decksNames;
+        private State state = State.ChooseDeck;
 
         public CreateDeckDialog(IRepository repository, ILearnMethod[] learnMethods)
         {
@@ -39,7 +38,8 @@ namespace UI.Dialogs
 
                 deckName = message;
                 state = State.ChooseLearningMethod;
-                await bot.SendMessageWithKeyboard(user, "Выберите метод для запоминания", new KeyboardProvider(keyboard));
+                await bot.SendMessageWithKeyboard(user, "Выберите метод для запоминания",
+                    new KeyboardProvider(keyboard));
                 return this;
             }
 
