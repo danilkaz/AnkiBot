@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using AnkiBot.App;
 using AnkiBot.Domain.LearnMethods;
 using AnkiBot.Infrastructure;
@@ -28,8 +29,10 @@ namespace AnkiBot
             // container.Get<IDatabase<DbCard>>().CreateTable(PostgresConnectionString);
             // container.Get<IDatabase<DbDeck>>().CreateTable(PostgresConnectionString);
 
-            var bot = container.Get<TelegramBot>();
-            bot.Start();
+            var vkThread = new Thread(container.Get<VkBot>().Start);
+            var telegramThread = new Thread(container.Get<TelegramBot>().Start);
+            vkThread.Start();
+            telegramThread.Start();
             Console.ReadLine();
         }
 
@@ -56,8 +59,8 @@ namespace AnkiBot
                     .BindAllInterfaces());
 
             container.Bind<BotHandler>().ToSelf();
-            container.Bind<IBot>().To<TelegramBot>();
-            container.Bind<IBot>().To<VkBot>();
+            container.Bind<IBot>().To<TelegramBot>().InSingletonScope();
+            container.Bind<IBot>().To<VkBot>().InSingletonScope();
 
             return container;
         }
