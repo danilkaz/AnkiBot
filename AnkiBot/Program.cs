@@ -29,10 +29,8 @@ namespace AnkiBot
             // container.Get<IDatabase<DbCard>>().CreateTable(PostgresConnectionString);
             // container.Get<IDatabase<DbDeck>>().CreateTable(PostgresConnectionString);
 
-            var vkThread = new Thread(container.Get<VkBot>().Start);
-            var telegramThread = new Thread(container.Get<TelegramBot>().Start);
-            vkThread.Start();
-            telegramThread.Start();
+            new Thread(container.Get<VkBot>().Start).Start();
+            new Thread(container.Get<TelegramBot>().Start).Start();
             Console.ReadLine();
         }
 
@@ -40,8 +38,8 @@ namespace AnkiBot
         {
             var container = new StandardKernel();
 
-            container.Bind<VkConfig>().ToSelf();
-            container.Bind<TelegramConfig>().ToSelf();
+            container.Bind<VkConfig>().ToSelf().InSingletonScope();
+            container.Bind<TelegramConfig>().ToSelf().InSingletonScope();
 
             container.Bind<IDatabase<DbCard>>().To<SqLiteDatabase<DbCard>>().InSingletonScope();
             container.Bind<IDatabase<DbDeck>>().To<SqLiteDatabase<DbDeck>>().InSingletonScope();
