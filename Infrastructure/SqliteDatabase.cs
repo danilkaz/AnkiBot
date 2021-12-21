@@ -10,12 +10,12 @@ using Microsoft.Data.Sqlite;
 
 namespace Infrastructure
 {
-    public class SqLiteDatabase<T> : IDatabase<T>, IDisposable
+    public class SqLiteDatabase<T> : IDatabase<T>
     {
         private static readonly IEnumerable<FieldAttribute> fields;
         private static readonly IEnumerable<PropertyInfo> propertyInfos;
         private static readonly string tableName;
-        private SqliteConnection connection;
+        private string connectionString;
 
         static SqLiteDatabase()
         {
@@ -27,6 +27,8 @@ namespace Infrastructure
 
         public void Save(T item)
         {
+            using var connection = new SqliteConnection(connectionString);
+            connection.Open();
             var command = new SqliteCommand
             {
                 Connection = connection,
@@ -39,6 +41,8 @@ namespace Infrastructure
 
         public T Get(string id)
         {
+            using var connection = new SqliteConnection(connectionString);
+            connection.Open();
             var command = new SqliteCommand
             {
                 Connection = connection,
@@ -57,6 +61,8 @@ namespace Infrastructure
 
         public void Delete(string id)
         {
+            using var connection = new SqliteConnection(connectionString);
+            connection.Open();
             var command = new SqliteCommand
             {
                 Connection = connection,
@@ -67,6 +73,8 @@ namespace Infrastructure
 
         public IEnumerable<T> GetAll(Func<T, bool> filter)
         {
+            using var connection = new SqliteConnection(connectionString);
+            connection.Open();
             var command = new SqliteCommand
             {
                 Connection = connection,
@@ -90,9 +98,10 @@ namespace Infrastructure
 
         public void CreateTable(string connectionString)
         {
-            connection = new SqliteConnection(connectionString);
-            connection.Open();
+            this.connectionString = connectionString;
 
+            using var connection = new SqliteConnection(connectionString);
+            connection.Open();
             var createFields = fields
                 .Select(f => f.IsUnique ? $"\"{f.Name}\" TEXT UNIQUE" : $"\"{f.Name}\" TEXT");
             var command = new SqliteCommand
@@ -102,11 +111,6 @@ namespace Infrastructure
                               $"{string.Join(", ", createFields)})"
             };
             command.ExecuteNonQuery();
-        }
-
-        public void Dispose()
-        {
-            connection?.Dispose();
         }
     }
 }

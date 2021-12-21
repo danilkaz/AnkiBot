@@ -24,8 +24,8 @@ namespace AnkiBot
         {
             using var container = CreateContainer();
 
-            container.Get<IDatabase<DbCard>>().CreateTable("Data source=cards.db");
-            container.Get<IDatabase<DbDeck>>().CreateTable("Data source=decks.db");
+            container.Get<IDatabase<DbCard>>().CreateTable("Data source=db.db");
+            container.Get<IDatabase<DbDeck>>().CreateTable("Data source=db.db");
             // container.Get<IDatabase<DbCard>>().CreateTable(PostgresConnectionString);
             // container.Get<IDatabase<DbDeck>>().CreateTable(PostgresConnectionString);
 
