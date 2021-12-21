@@ -1,7 +1,7 @@
-using AnkiBot.Domain.Parameters;
-using AnkiBot.Domain.Visitors;
+using Domain.Parameters;
+using Domain.Visitors;
 
-namespace AnkiBot.Domain.LearnMethods
+namespace Domain.LearnMethods
 {
     public class SuperMemo2LearnMethod : ILearnMethod
     {

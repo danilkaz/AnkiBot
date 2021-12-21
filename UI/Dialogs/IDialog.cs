@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using AnkiBot.Domain;
+using Domain;
 
 namespace UI.Dialogs
 {

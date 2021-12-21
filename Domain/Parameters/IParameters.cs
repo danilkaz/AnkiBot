@@ -1,8 +1,8 @@
-using AnkiBot.Domain.Visitors;
+using Domain.Visitors;
 using JsonKnownTypes;
 using Newtonsoft.Json;
 
-namespace AnkiBot.Domain.Parameters
+namespace Domain.Parameters
 {
     [JsonConverter(typeof(JsonKnownTypesConverter<IParameters>))]
     public interface IParameters

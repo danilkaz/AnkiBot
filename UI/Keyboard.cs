@@ -2,7 +2,7 @@ namespace UI
 {
     public class KeyboardProvider
     {
-        public static KeyboardProvider DefaultKeyboard = new(new[]
+        public static readonly KeyboardProvider DefaultKeyboard = new(new[]
         {
             new[]
             {

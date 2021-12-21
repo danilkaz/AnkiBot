@@ -1,6 +1,6 @@
-using AnkiBot.Domain.Parameters;
+using Domain.Parameters;
 
-namespace AnkiBot.Domain.LearnMethods
+namespace Domain.LearnMethods
 {
     public interface ILearnMethod
     {

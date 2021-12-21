@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AnkiBot.Infrastructure
+namespace Infrastructure
 {
     public interface IDatabase<T>
     {

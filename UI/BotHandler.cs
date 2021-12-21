@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AnkiBot.Domain;
-using UI;
+using Domain;
+using UI.Commands;
 using UI.Dialogs;
 
-namespace AnkiBot.UI.Commands
+namespace UI
 {
     public class BotHandler
     {

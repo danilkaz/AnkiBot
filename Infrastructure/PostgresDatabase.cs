@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AnkiBot.Infrastructure;
 using Infrastructure.Attributes;
 using Npgsql;
 
@@ -83,7 +82,7 @@ namespace Infrastructure
             {
                 var elem = (T) constructor.Invoke(fields.Select(f => reader[f.Name]).ToArray());
                 if (filter(elem))
-                    result.Append(elem);
+                    result.Add(elem);
             }
 
             return result;

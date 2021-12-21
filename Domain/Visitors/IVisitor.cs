@@ -1,6 +1,6 @@
-using AnkiBot.Domain.Parameters;
+using Domain.Parameters;
 
-namespace AnkiBot.Domain.Visitors
+namespace Domain.Visitors
 {
     public interface IVisitor
     {

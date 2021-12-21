@@ -1,4 +1,4 @@
-namespace AnkiBot.Domain
+namespace Domain
 {
     public record User
     {

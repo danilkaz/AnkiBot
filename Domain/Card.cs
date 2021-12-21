@@ -1,7 +1,7 @@
 ﻿using System;
-using AnkiBot.Domain.Parameters;
+using Domain.Parameters;
 
-namespace AnkiBot.Domain
+namespace Domain
 {
     public class Card
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using AnkiBot.Domain;
 using App.SerializedClasses;
+using Domain;
 
-namespace AnkiBot.App
+namespace App
 {
     public interface IRepository
     {

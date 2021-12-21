@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AnkiBot.Domain.LearnMethods;
+using Domain.LearnMethods;
 
-namespace AnkiBot.Domain
+namespace Domain
 {
     public class Deck
     {

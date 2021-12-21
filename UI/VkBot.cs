@@ -2,15 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AnkiBot.UI.Commands;
 using UI.Config;
-using UI.Dialogs;
 using VkNet;
 using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
 using VkNet.Model.Keyboard;
 using VkNet.Model.RequestParams;
-using User = AnkiBot.Domain.User;
+using User = Domain.User;
 
 namespace UI
 {
@@ -42,6 +40,8 @@ namespace UI
                 {
                     var userMessage = update.Message.Text;
                     var userId = update.Message.FromId;
+                    if (userId is null)
+                        continue;
 
                     await api.Messages.MarkAsReadAsync(userId.Value.ToString());
                     if (userMessage == "")

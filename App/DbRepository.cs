@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AnkiBot.App;
-using AnkiBot.Domain;
-using AnkiBot.Infrastructure;
 using App.SerializedClasses;
+using Domain;
+using Infrastructure;
 
 namespace App
 {

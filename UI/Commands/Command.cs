@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using AnkiBot.Domain;
+using Domain;
 using UI.Dialogs;
 
-namespace AnkiBot.UI.Commands
+namespace UI.Commands
 {
     public abstract class Command
     {

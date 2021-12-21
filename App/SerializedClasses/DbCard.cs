@@ -1,5 +1,5 @@
 using System.Globalization;
-using AnkiBot.Domain;
+using Domain;
 using Infrastructure.Attributes;
 using Newtonsoft.Json;
 

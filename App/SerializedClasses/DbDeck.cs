@@ -1,4 +1,4 @@
-using AnkiBot.Domain;
+using Domain;
 using Infrastructure.Attributes;
 
 namespace App.SerializedClasses

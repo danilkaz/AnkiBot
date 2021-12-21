@@ -1,12 +1,11 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using AnkiBot.App;
-using AnkiBot.Domain;
-using AnkiBot.Domain.LearnMethods;
-using AnkiBot.Domain.Parameters;
 using App.SerializedClasses;
 using App.UIClasses;
+using Domain;
+using Domain.LearnMethods;
+using Domain.Parameters;
 using Newtonsoft.Json;
 
 namespace App

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using AnkiBot.App;
-using AnkiBot.Domain;
+using App;
+using Domain;
 using UI.Dialogs;
 
-namespace AnkiBot.UI.Commands
+namespace UI.Commands
 {
     public class GreetingCommand : Command
     {

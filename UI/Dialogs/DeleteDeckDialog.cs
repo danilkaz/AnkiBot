@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
-using AnkiBot.App;
-using AnkiBot.Domain;
+using App;
+using Domain;
 
 namespace UI.Dialogs
 {

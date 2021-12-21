@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Threading;
-using AnkiBot.App;
-using AnkiBot.Domain.LearnMethods;
-using AnkiBot.Infrastructure;
-using AnkiBot.UI.Commands;
 using App;
 using App.SerializedClasses;
+using Domain.LearnMethods;
 using Infrastructure;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using UI;
+using UI.Commands;
 using UI.Config;
 using UI.Dialogs;
 

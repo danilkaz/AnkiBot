@@ -1,6 +1,6 @@
-using AnkiBot.Domain.Visitors;
+using Domain.Visitors;
 
-namespace AnkiBot.Domain.Parameters
+namespace Domain.Parameters
 {
     public record SuperMemo2Parameters : IParameters
     {
