@@ -10,9 +10,9 @@ namespace UI.Dialogs
 {
     public class CreateDeckDialog : IDialog
     {
+        private readonly Converter converter;
         private readonly ILearnMethod[] learnMethods;
         private readonly IRepository repository;
-        private readonly Converter converter; 
         private ILearnMethod deckMethod;
 
         private string deckName;

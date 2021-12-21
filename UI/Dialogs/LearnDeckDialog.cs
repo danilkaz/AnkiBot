@@ -10,9 +10,9 @@ namespace UI.Dialogs
 {
     public class LearnDeckDialog : IDialog
     {
+        private readonly Converter converter;
         private readonly string[] learnStates;
         private readonly IRepository repository;
-        private readonly Converter converter;
 
         private string deckId;
         private Card learnCard;

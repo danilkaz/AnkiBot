@@ -10,8 +10,8 @@ namespace AnkiBot.UI.Commands
 {
     public class CreateCardCommand : Command
     {
-        private readonly IRepository repository;
         private readonly Converter converter;
+        private readonly IRepository repository;
 
         public CreateCardCommand(IRepository repository, Converter converter)
         {

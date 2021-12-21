@@ -20,12 +20,14 @@ namespace AnkiBot
         private const string PostgresConnectionString = "Host=localhost;Username=postgres;Password=postgres;" +
                                                         "Database=postgres;Port=5433";
 
+        private const string SqliteConnectionString = "Data source=db.db";
+
         public static void Main()
         {
             using var container = CreateContainer();
 
-            container.Get<IDatabase<DbCard>>().CreateTable("Data source=db.db");
-            container.Get<IDatabase<DbDeck>>().CreateTable("Data source=db.db");
+            container.Get<IDatabase<DbCard>>().CreateTable(SqliteConnectionString);
+            container.Get<IDatabase<DbDeck>>().CreateTable(SqliteConnectionString);
             // container.Get<IDatabase<DbCard>>().CreateTable(PostgresConnectionString);
             // container.Get<IDatabase<DbDeck>>().CreateTable(PostgresConnectionString);
 
@@ -49,7 +51,7 @@ namespace AnkiBot
             container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
 
             container.Bind<Converter>().ToSelf().InSingletonScope();
-            
+
             container.Bind(c =>
                 c.FromAssemblyContaining<Command>().SelectAllClasses().InheritedFrom<Command>().BindAllBaseClasses());
             container.Bind(c =>

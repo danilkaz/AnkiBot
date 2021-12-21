@@ -9,9 +9,9 @@ namespace AnkiBot.UI.Commands
 {
     public class CreateDeckCommand : Command
     {
+        private readonly Converter converter;
         private readonly ILearnMethod[] learnMethods;
         private readonly IRepository repository;
-        private readonly Converter converter; 
 
         public CreateDeckCommand(IRepository repository, ILearnMethod[] learnMethods, Converter converter)
         {

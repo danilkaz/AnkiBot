@@ -12,9 +12,10 @@ namespace Infrastructure
     {
         private static readonly IEnumerable<FieldAttribute> fields;
         private static readonly IEnumerable<PropertyInfo> propertyInfos;
-        private NpgsqlConnection connection;
         private static readonly string tableName;
-        private string connectionString;
+
+        private NpgsqlConnection connection;
+
 
         static PostgresDatabase()
         {

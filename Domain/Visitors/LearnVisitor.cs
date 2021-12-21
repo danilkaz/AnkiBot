@@ -5,8 +5,8 @@ namespace AnkiBot.Domain.Visitors
 {
     public class LearnVisitor : IVisitor
     {
-        private Card card;
-        private int answer;
+        private readonly int answer;
+        private readonly Card card;
 
         public LearnVisitor(Card card, int answer)
         {
@@ -29,7 +29,7 @@ namespace AnkiBot.Domain.Visitors
 
             card.TimeBeforeLearn *= parameters.EF;
 
-            parameters.EF += (0.1 - (5 - answer) * (0.08 + (5 - answer) * 0.02));
+            parameters.EF += 0.1 - (5 - answer) * (0.08 + (5 - answer) * 0.02);
             if (parameters.EF < 1.3)
                 parameters.EF = 1.3;
         }

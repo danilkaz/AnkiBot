@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,8 +9,8 @@ namespace UI.Dialogs
 {
     public class DeleteCardDialog : IDialog
     {
-        private readonly IRepository repository;
         private readonly Converter converter;
+        private readonly IRepository repository;
         private IEnumerable<Card> cards;
 
         private string deckId;

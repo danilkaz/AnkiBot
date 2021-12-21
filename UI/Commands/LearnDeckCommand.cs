@@ -10,8 +10,8 @@ namespace AnkiBot.UI.Commands
 {
     public class LearnDeckCommand : Command
     {
-        private readonly IRepository repository;
         private readonly Converter converter;
+        private readonly IRepository repository;
 
         public LearnDeckCommand(IRepository repository, Converter converter)
         {

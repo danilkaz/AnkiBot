@@ -1,4 +1,3 @@
-using System;
 using AnkiBot.Domain.Parameters;
 
 namespace AnkiBot.Domain.LearnMethods

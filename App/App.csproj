@@ -8,10 +8,4 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="6.0.0" />
-      <PackageReference Include="Npgsql" Version="6.0.1" />
-      <PackageReference Include="VkNet" Version="1.67.0" />
-    </ItemGroup>
-
 </Project>

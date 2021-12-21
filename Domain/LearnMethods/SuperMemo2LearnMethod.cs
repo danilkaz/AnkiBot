@@ -1,4 +1,3 @@
-using System;
 using AnkiBot.Domain.Parameters;
 using AnkiBot.Domain.Visitors;
 

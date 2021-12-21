@@ -10,8 +10,8 @@ namespace AnkiBot.UI.Commands
 {
     public class DeleteDeckCommand : Command
     {
-        private readonly IRepository repository;
         private readonly Converter converter;
+        private readonly IRepository repository;
 
         public DeleteDeckCommand(IRepository repository, Converter converter)
         {

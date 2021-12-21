@@ -24,7 +24,7 @@ namespace UI.Dialogs
                 return this;
             }
 
-            repository.DeleteDeck(findDeck.Id.ToString());
+            repository.DeleteDeck(findDeck.Id);
             await bot.SendMessage(user, "Колода успешно удалена!");
             return null;
         }

@@ -8,14 +8,14 @@ namespace UI.Dialogs
 {
     public class CreateCardDialog : IDialog
     {
-        
-        private readonly IRepository repository;
         private readonly Converter converter;
-        
+
         private readonly string[][] finishKeyboard = {new[] {"В главное меню"}};
+
+        private readonly IRepository repository;
+        private string back;
         private Deck deck;
         private string front;
-        private string back;
         private State state = State.ChooseDeck;
 
         public CreateCardDialog(IRepository repository, Converter converter)

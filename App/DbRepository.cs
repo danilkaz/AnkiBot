@@ -2,7 +2,6 @@
 using System.Linq;
 using AnkiBot.App;
 using AnkiBot.Domain;
-using AnkiBot.Domain.LearnMethods;
 using AnkiBot.Infrastructure;
 using App.SerializedClasses;
 
@@ -60,12 +59,6 @@ namespace App
             deckDatabase.Delete(deckId);
         }
 
-        public IEnumerable<string> GetDecksNamesByUser(User user)
-        {
-            return deckDatabase.GetAll(d => d.UserId == user.Id)
-                .Select(d => d.Name);
-        }
-
         public IEnumerable<DbDeck> GetDecksByUser(User user)
         {
             return deckDatabase.GetAll(d => d.UserId == user.Id);
@@ -74,6 +67,12 @@ namespace App
         public IEnumerable<DbCard> GetCardsByDeckId(string deckId)
         {
             return cardDatabase.GetAll(c => c.DeckId == deckId);
+        }
+
+        public IEnumerable<string> GetDecksNamesByUser(User user)
+        {
+            return deckDatabase.GetAll(d => d.UserId == user.Id)
+                .Select(d => d.Name);
         }
 
         // private Deck ConvertDbDeckToDeck(DbDeck dbDeck, IEnumerable<Card> cards)
