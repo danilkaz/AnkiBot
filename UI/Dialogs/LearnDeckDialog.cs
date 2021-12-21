@@ -86,7 +86,7 @@ namespace UI.Dialogs
 
                 var answer = Array.FindIndex(learnStates, s => s == learnState) + 2;
 
-                learnCard.TimeBeforeLearn = learnMethod.GetNextRepetition(learnCard, answer);
+                learnMethod.LearnCard(learnCard, answer);
                 learnCard.LastLearnTime = DateTime.Now;
 
                 repository.UpdateCard(learnCard);

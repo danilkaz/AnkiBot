@@ -68,15 +68,13 @@ namespace App
 
         public IEnumerable<string> GetDecksNamesByUser(User user)
         {
-            return deckDatabase.GetAll()
-                .Where(d => d.UserId == user.Id)
+            return deckDatabase.GetAll(d => d.UserId == user.Id)
                 .Select(d => d.Name);
         }
 
         public IEnumerable<Deck> GetDecksByUser(User user)
         {
-            return deckDatabase.GetAll()
-                .Where(d => d.UserId == user.Id)
+            return deckDatabase.GetAll(d => d.UserId == user.Id)
                 .Select(d => ConvertDbDeckToDeck(d, GetCardsByDeckId(d.Id)));
         }
 
@@ -97,8 +95,7 @@ namespace App
 
         private IEnumerable<Card> GetCardsByDeckId(string deckId)
         {
-            return cardDatabase.GetAll()
-                .Where(c => c.DeckId == deckId)
+            return cardDatabase.GetAll(c => c.DeckId == deckId)
                 .Select(ConvertDbCardToCard);
         }
     }

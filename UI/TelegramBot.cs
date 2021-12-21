@@ -31,7 +31,7 @@ namespace UI
             using var cts = new CancellationTokenSource();
             bot.StartReceiving(new DefaultUpdateHandler(HandleUpdateAsync, HandleErrorAsync), null, cts.Token);
             Console.ReadLine();
-            cts.Cancel();
+            //cts.Cancel();
         }
 
         public async Task SendMessage(User user, string text, bool clearKeyboard = true)

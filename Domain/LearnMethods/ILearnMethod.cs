@@ -9,7 +9,7 @@ namespace AnkiBot.Domain.LearnMethods
 
         string Description { get; }
 
-        TimeSpan GetNextRepetition(Card card, int answer);
+        void LearnCard(Card card, int answer);
 
         IParameters GetParameters();
     }

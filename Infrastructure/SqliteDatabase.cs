@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using AnkiBot.Infrastructure;
 using Infrastructure.Attributes;
@@ -8,7 +10,7 @@ using Microsoft.Data.Sqlite;
 
 namespace Infrastructure
 {
-    public class SqLiteDatabase<T> : IDatabase<T>
+    public class SqLiteDatabase<T> : IDatabase<T>, IDisposable
     {
         private static readonly IEnumerable<FieldAttribute> fields;
         private static readonly IEnumerable<PropertyInfo> propertyInfos;
@@ -63,7 +65,7 @@ namespace Infrastructure
             command.ExecuteNonQuery();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(Func<T, bool> filter)
         {
             var command = new SqliteCommand
             {
@@ -76,8 +78,14 @@ namespace Infrastructure
                 .FirstOrDefault(c => c.GetCustomAttributes<ConstructorAttribute>().Any());
             if (constructor is null)
                 throw new ArgumentException();
+            var result = new List<T>();
             while (reader.Read())
-                yield return (T) constructor.Invoke(fields.Select(f => reader[f.Name]).ToArray());
+            {
+                var elem = (T) constructor.Invoke(fields.Select(f => reader[f.Name]).ToArray());
+                if (filter(elem))
+                    result.Add(elem);
+            }
+            return result;
         }
 
         public void CreateTable(string connectionString)
@@ -94,6 +102,11 @@ namespace Infrastructure
                               $"{string.Join(", ", createFields)})"
             };
             command.ExecuteNonQuery();
+        }
+
+        public void Dispose()
+        {
+            connection?.Dispose();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using AnkiBot.Domain.Parameters;
+using AnkiBot.Domain.Visitors;
 
 namespace AnkiBot.Domain.LearnMethods
 {
@@ -11,10 +12,10 @@ namespace AnkiBot.Domain.LearnMethods
                                      "Самый простой и глупый способ для вычисления интервалов запоминания:\n" +
                                      "при изучении карточки интервал повторения увеличивается в два раза";
 
-        public TimeSpan GetNextRepetition(Card card, int answer)
+        public void LearnCard(Card card, int answer)
         {
-            var currentRepetition = card.TimeBeforeLearn;
-            return currentRepetition * 2;
+            var learnVisitor = new LearnVisitor(card, answer);
+            card.Parameters.Accept(learnVisitor);
         }
 
         public IParameters GetParameters()

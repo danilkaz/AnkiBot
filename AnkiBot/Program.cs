@@ -22,7 +22,7 @@ namespace AnkiBot
 
         public static void Main()
         {
-            var container = CreateContainer();
+            using var container = CreateContainer();
 
             container.Get<IDatabase<DbCard>>().CreateTable("Data source=cards.db");
             container.Get<IDatabase<DbDeck>>().CreateTable("Data source=decks.db");

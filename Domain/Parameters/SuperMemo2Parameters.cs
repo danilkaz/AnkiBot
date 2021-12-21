@@ -1,3 +1,5 @@
+using AnkiBot.Domain.Visitors;
+
 namespace AnkiBot.Domain.Parameters
 {
     public record SuperMemo2Parameters : IParameters
@@ -8,5 +10,10 @@ namespace AnkiBot.Domain.Parameters
         }
 
         public double EF { get; set; }
+
+        public void Accept(IVisitor visitor)
+        {
+            visitor.VisitSuperMemo2Parameters(this);
+        }
     }
 }
