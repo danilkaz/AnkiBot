@@ -49,7 +49,6 @@ namespace App
         {
             var dbDeck = deckDatabase.Get(deckId);
             return dbDeck;
-            // return ConvertDbDeckToDeck(dbDeck, GetCardsByDeckId(deckId));
         }
 
         public void DeleteDeck(string deckId)
@@ -74,20 +73,5 @@ namespace App
             return deckDatabase.GetAll(d => d.UserId == user.Id)
                 .Select(d => d.Name);
         }
-
-        // private Deck ConvertDbDeckToDeck(DbDeck dbDeck, IEnumerable<Card> cards)
-        // {
-        //     var method = learnMethods.FirstOrDefault(m => m.Name == dbDeck.LearnMethod);
-        //     return new Deck(Guid.Parse(dbDeck.Id), new User(dbDeck.UserId), dbDeck.Name, method, cards);
-        // }
-        //
-        // private static Card ConvertDbCardToCard(DbCard dbCard)
-        // {
-        //     var parameters = JsonConvert.DeserializeObject<IParameters>(dbCard.Parameters);
-        //     return new Card(Guid.Parse(dbCard.Id), new User(dbCard.UserId), Guid.Parse(dbCard.DeckId), dbCard.Front,
-        //         dbCard.Back,
-        //         TimeSpan.Parse(dbCard.TimeBeforeLearn),
-        //         DateTime.Parse(dbCard.LastLearnTime, CultureInfo.InvariantCulture), parameters);
-        // }
     }
 }
