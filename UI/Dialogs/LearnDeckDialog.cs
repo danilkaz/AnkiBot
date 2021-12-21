@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
 using AnkiBot.Domain.LearnMethods;
+using App;
 
 namespace UI.Dialogs
 {
@@ -11,15 +12,17 @@ namespace UI.Dialogs
     {
         private readonly string[] learnStates;
         private readonly IRepository repository;
+        private readonly Converter converter;
 
         private string deckId;
         private Card learnCard;
         private ILearnMethod learnMethod;
         private State state = State.ChooseDeck;
 
-        public LearnDeckDialog(IRepository repository)
+        public LearnDeckDialog(IRepository repository, Converter converter)
         {
             this.repository = repository;
+            this.converter = converter;
 
             learnStates = new[]
                 {"🤡\nЗабыл", "😶\nсложно", "😜\nабоба", "👑\nИзи"};
@@ -31,7 +34,7 @@ namespace UI.Dialogs
 
             if (state == State.ChooseDeck)
             {
-                var decks = repository.GetDecksByUser(user);
+                var decks = repository.GetDecksByUser(user).Select(converter.ToDeck);
                 var findDeck = decks.FirstOrDefault(deck => deck.Name == message);
                 if (findDeck is null)
                 {
@@ -90,7 +93,7 @@ namespace UI.Dialogs
                 learnCard.LastLearnTime = DateTime.Now;
 
                 repository.UpdateCard(learnCard);
-                learnCard = repository.GetDeck(deckId).GetCardsToLearn().FirstOrDefault();
+                learnCard = converter.ToDeck(repository.GetDeck(deckId)).GetCardsToLearn().FirstOrDefault();
                 if (learnCard is null)
                 {
                     await bot.SendMessage(user, "Все карточки изучены, молодец!");

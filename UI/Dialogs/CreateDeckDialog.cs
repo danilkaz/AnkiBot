@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
 using AnkiBot.Domain.LearnMethods;
+using App;
 
 namespace UI.Dialogs
 {
@@ -11,21 +12,23 @@ namespace UI.Dialogs
     {
         private readonly ILearnMethod[] learnMethods;
         private readonly IRepository repository;
+        private readonly Converter converter; 
         private ILearnMethod deckMethod;
 
         private string deckName;
         private IEnumerable<string> decksNames;
         private State state = State.ChooseDeck;
 
-        public CreateDeckDialog(IRepository repository, ILearnMethod[] learnMethods)
+        public CreateDeckDialog(IRepository repository, ILearnMethod[] learnMethods, Converter converter)
         {
             this.repository = repository;
             this.learnMethods = learnMethods;
+            this.converter = converter;
         }
 
         public async Task<IDialog> Execute(User user, string message, IBot bot)
         {
-            decksNames ??= repository.GetDecksNamesByUser(user);
+            decksNames ??= repository.GetDecksByUser(user).Select(converter.ToUiDeck).Select(d => d.Name);
             var keyboard = learnMethods.Select(m => new[] {m.Name}).Append(new[] {"Подробности"}).ToArray();
             if (state == State.ChooseDeck)
             {

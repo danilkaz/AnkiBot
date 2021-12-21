@@ -2,22 +2,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
+using App;
 
 namespace UI.Dialogs
 {
     public class CreateCardDialog : IDialog
     {
-        private readonly string[][] finishKeyboard = {new[] {"В главное меню"}};
+        
         private readonly IRepository repository;
-        private string back;
-
+        private readonly Converter converter;
+        
+        private readonly string[][] finishKeyboard = {new[] {"В главное меню"}};
         private Deck deck;
         private string front;
+        private string back;
         private State state = State.ChooseDeck;
 
-        public CreateCardDialog(IRepository repository)
+        public CreateCardDialog(IRepository repository, Converter converter)
         {
             this.repository = repository;
+            this.converter = converter;
         }
 
         public async Task<IDialog> Execute(User user, string message, IBot bot)
@@ -28,7 +32,7 @@ namespace UI.Dialogs
             {
                 case State.ChooseDeck:
                 {
-                    var decks = repository.GetDecksByUser(user);
+                    var decks = repository.GetDecksByUser(user).Select(converter.ToDeck);
                     var findDeck = decks.FirstOrDefault(d => d.Name == message);
                     if (findDeck is null)
                     {

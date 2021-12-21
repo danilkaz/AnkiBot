@@ -1,22 +1,26 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AnkiBot.App;
 using AnkiBot.Domain;
+using App;
 
 namespace UI.Dialogs
 {
     public class DeleteCardDialog : IDialog
     {
         private readonly IRepository repository;
+        private readonly Converter converter;
         private IEnumerable<Card> cards;
 
         private string deckId;
         private State state = State.ChooseDeck;
 
-        public DeleteCardDialog(IRepository repository)
+        public DeleteCardDialog(IRepository repository, Converter converter)
         {
             this.repository = repository;
+            this.converter = converter;
         }
 
         public async Task<IDialog> Execute(User user, string message, IBot bot)
@@ -25,7 +29,7 @@ namespace UI.Dialogs
             {
                 case State.ChooseDeck:
                 {
-                    var decks = repository.GetDecksByUser(user);
+                    var decks = repository.GetDecksByUser(user).Select(converter.ToDeck);
                     var findDeck = decks.FirstOrDefault(deck => deck.Name == message);
                     if (findDeck is null)
                     {
@@ -34,7 +38,7 @@ namespace UI.Dialogs
                     }
 
                     deckId = findDeck.Id.ToString();
-                    cards = repository.GetDeck(deckId).Cards;
+                    cards = findDeck.Cards;
                     if (!cards.Any())
                     {
                         await bot.SendMessage(user, "Колода пуста", false);

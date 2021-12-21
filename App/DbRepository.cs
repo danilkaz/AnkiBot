@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AnkiBot.App;
 using AnkiBot.Domain;
 using AnkiBot.Domain.LearnMethods;
-using AnkiBot.Domain.Parameters;
 using AnkiBot.Infrastructure;
 using App.SerializedClasses;
-using Newtonsoft.Json;
 
 namespace App
 {
@@ -16,14 +12,11 @@ namespace App
     {
         private readonly IDatabase<DbCard> cardDatabase;
         private readonly IDatabase<DbDeck> deckDatabase;
-        private readonly ILearnMethod[] learnMethods;
 
-        public DbRepository(IDatabase<DbCard> cardDatabase, IDatabase<DbDeck> deckDatabase,
-            ILearnMethod[] learnMethods)
+        public DbRepository(IDatabase<DbCard> cardDatabase, IDatabase<DbDeck> deckDatabase)
         {
             this.cardDatabase = cardDatabase;
             this.deckDatabase = deckDatabase;
-            this.learnMethods = learnMethods;
         }
 
         public void SaveCard(Card card)
@@ -31,10 +24,10 @@ namespace App
             cardDatabase.Save(new DbCard(card));
         }
 
-        public Card GetCard(string cardId)
+        public DbCard GetCard(string cardId)
         {
             var dbCard = cardDatabase.Get(cardId);
-            return ConvertDbCardToCard(dbCard);
+            return dbCard;
         }
 
         public void UpdateCard(Card card)
@@ -53,16 +46,17 @@ namespace App
             deckDatabase.Save(new DbDeck(deck));
         }
 
-        public Deck GetDeck(string deckId)
+        public DbDeck GetDeck(string deckId)
         {
             var dbDeck = deckDatabase.Get(deckId);
-            return ConvertDbDeckToDeck(dbDeck, GetCardsByDeckId(deckId));
+            return dbDeck;
+            // return ConvertDbDeckToDeck(dbDeck, GetCardsByDeckId(deckId));
         }
 
         public void DeleteDeck(string deckId)
         {
-            foreach (var card in GetDeck(deckId).Cards)
-                cardDatabase.Delete(card.Id.ToString());
+            foreach (var card in GetCardsByDeckId(deckId))
+                cardDatabase.Delete(card.Id);
             deckDatabase.Delete(deckId);
         }
 
@@ -72,31 +66,29 @@ namespace App
                 .Select(d => d.Name);
         }
 
-        public IEnumerable<Deck> GetDecksByUser(User user)
+        public IEnumerable<DbDeck> GetDecksByUser(User user)
         {
-            return deckDatabase.GetAll(d => d.UserId == user.Id)
-                .Select(d => ConvertDbDeckToDeck(d, GetCardsByDeckId(d.Id)));
+            return deckDatabase.GetAll(d => d.UserId == user.Id);
         }
 
-        private Deck ConvertDbDeckToDeck(DbDeck dbDeck, IEnumerable<Card> cards)
+        public IEnumerable<DbCard> GetCardsByDeckId(string deckId)
         {
-            var method = learnMethods.FirstOrDefault(m => m.Name == dbDeck.LearnMethod);
-            return new Deck(Guid.Parse(dbDeck.Id), new User(dbDeck.UserId), dbDeck.Name, method, cards);
+            return cardDatabase.GetAll(c => c.DeckId == deckId);
         }
 
-        private static Card ConvertDbCardToCard(DbCard dbCard)
-        {
-            var parameters = JsonConvert.DeserializeObject<IParameters>(dbCard.Parameters);
-            return new Card(Guid.Parse(dbCard.Id), new User(dbCard.UserId), Guid.Parse(dbCard.DeckId), dbCard.Front,
-                dbCard.Back,
-                TimeSpan.Parse(dbCard.TimeBeforeLearn),
-                DateTime.Parse(dbCard.LastLearnTime, CultureInfo.InvariantCulture), parameters);
-        }
-
-        private IEnumerable<Card> GetCardsByDeckId(string deckId)
-        {
-            return cardDatabase.GetAll(c => c.DeckId == deckId)
-                .Select(ConvertDbCardToCard);
-        }
+        // private Deck ConvertDbDeckToDeck(DbDeck dbDeck, IEnumerable<Card> cards)
+        // {
+        //     var method = learnMethods.FirstOrDefault(m => m.Name == dbDeck.LearnMethod);
+        //     return new Deck(Guid.Parse(dbDeck.Id), new User(dbDeck.UserId), dbDeck.Name, method, cards);
+        // }
+        //
+        // private static Card ConvertDbCardToCard(DbCard dbCard)
+        // {
+        //     var parameters = JsonConvert.DeserializeObject<IParameters>(dbCard.Parameters);
+        //     return new Card(Guid.Parse(dbCard.Id), new User(dbCard.UserId), Guid.Parse(dbCard.DeckId), dbCard.Front,
+        //         dbCard.Back,
+        //         TimeSpan.Parse(dbCard.TimeBeforeLearn),
+        //         DateTime.Parse(dbCard.LastLearnTime, CultureInfo.InvariantCulture), parameters);
+        // }
     }
 }

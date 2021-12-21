@@ -48,6 +48,8 @@ namespace AnkiBot
 
             container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
 
+            container.Bind<Converter>().ToSelf().InSingletonScope();
+            
             container.Bind(c =>
                 c.FromAssemblyContaining<Command>().SelectAllClasses().InheritedFrom<Command>().BindAllBaseClasses());
             container.Bind(c =>
