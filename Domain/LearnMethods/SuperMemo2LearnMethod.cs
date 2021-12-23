@@ -11,7 +11,6 @@ namespace Domain.LearnMethods
                                      "Один из популярных способов для вычисления интервалов запоминания:" +
                                      "следующий интервал вычисляется на основе предыдущего интервала и ответа пользователя";
 
-        // TODO: избавиться от даун каста
         public void LearnCard(Card card, int answer)
         {
             var visitor = new LearnVisitor(card, answer);

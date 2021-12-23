@@ -26,10 +26,7 @@ namespace UI
 
         public void Start()
         {
-            using var cts = new CancellationTokenSource();
-            bot.StartReceiving(new DefaultUpdateHandler(HandleUpdateAsync, HandleErrorAsync), null, cts.Token);
-            Console.ReadLine();
-            //cts.Cancel();
+            bot.StartReceiving(new DefaultUpdateHandler(HandleUpdateAsync, HandleErrorAsync));
         }
 
         public async Task SendMessage(User user, string text, bool clearKeyboard = true)
@@ -57,8 +54,7 @@ namespace UI
                     $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
                 _ => exception.ToString()
             };
-
-            Console.WriteLine(errorMessage); // TODO: сделать лог
+            Console.WriteLine(errorMessage);
             return Task.CompletedTask;
         }
 

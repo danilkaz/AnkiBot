@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using App.SerializedClasses;
 using Domain;
 using Infrastructure;
@@ -65,12 +64,6 @@ namespace App
         public IEnumerable<DbCard> GetCardsByDeckId(string deckId)
         {
             return cardDatabase.GetAll(c => c.DeckId == deckId);
-        }
-
-        public IEnumerable<string> GetDecksNamesByUser(User user)
-        {
-            return deckDatabase.GetAll(d => d.UserId == user.Id)
-                .Select(d => d.Name);
         }
     }
 }

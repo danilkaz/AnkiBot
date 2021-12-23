@@ -15,11 +15,10 @@ namespace Infrastructure
 
         private NpgsqlConnection connection;
 
-
         static PostgresDatabase()
         {
             tableName = typeof(T).GetCustomAttributes<TableAttribute>().FirstOrDefault()?.Name;
-            if (tableName is null) throw new ArgumentException("Attribute Table must be "); // TODO поправить
+            if (tableName is null) throw new ArgumentException("Attribute Table must be initialized in class");
             fields = typeof(T).GetProperties().SelectMany(p => p.GetCustomAttributes<FieldAttribute>());
             propertyInfos = typeof(T).GetProperties().Where(p => p.GetCustomAttributes<FieldAttribute>().Any());
         }
@@ -48,10 +47,10 @@ namespace Infrastructure
                 .GetConstructors()
                 .FirstOrDefault(c => c.GetCustomAttributes<ConstructorAttribute>().Any());
             if (constructor is null)
-                throw new ArgumentException(); // TODO написать
+                throw new ArgumentException("Constructor Attributes must be initialized in constructor class");
             if (reader.Read())
                 return (T) constructor.Invoke(fields.Select(f => reader[f.Name]).ToArray());
-            throw new ArgumentException();
+            throw new ArgumentException("Can't create element");
         }
 
         public void Delete(string id)
