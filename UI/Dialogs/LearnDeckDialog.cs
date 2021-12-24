@@ -86,9 +86,9 @@ namespace UI.Dialogs
                     return this;
                 }
 
-                var answer = Array.FindIndex(learnStates, s => s == learnState) + 2;
+                var answer = Array.FindIndex(learnStates, s => s == learnState);
 
-                learnMethod.LearnCard(learnCard, answer);
+                learnCard.Parameters.LearnCard(learnCard, answer); // TODO: подумать над этой записью
                 learnCard.LastLearnTime = DateTime.Now;
 
                 repository.UpdateCard(learnCard);

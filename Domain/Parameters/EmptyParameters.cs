@@ -1,12 +1,10 @@
-using Domain.Visitors;
-
 namespace Domain.Parameters
 {
     public class EmptyParameters : IParameters
     {
-        public void Accept(IVisitor visitor)
+        public void LearnCard(Card card, int answer)
         {
-            visitor.VisitEmptyParameters(this);
+            card.TimeBeforeLearn *= 2;
         }
     }
 }

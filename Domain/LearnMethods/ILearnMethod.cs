@@ -8,8 +8,6 @@ namespace Domain.LearnMethods
 
         string Description { get; }
 
-        void LearnCard(Card card, int answer);
-
         IParameters GetParameters();
     }
 }

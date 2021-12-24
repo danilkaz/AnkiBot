@@ -1,4 +1,5 @@
-using Domain.Visitors;
+using System;
+using Newtonsoft.Json;
 
 namespace Domain.Parameters
 {
@@ -9,11 +10,21 @@ namespace Domain.Parameters
             EF = ef;
         }
 
-        public double EF { get; set; }
+        [JsonProperty] private double EF { get; set; }
 
-        public void Accept(IVisitor visitor)
+        public void LearnCard(Card card, int answer)
         {
-            visitor.VisitSuperMemo2Parameters(this);
+            if (answer <= 3)
+            {
+                card.TimeBeforeLearn = new TimeSpan(1, 0, 0, 0);
+                return;
+            }
+
+            card.TimeBeforeLearn *= EF;
+
+            EF += 0.1 - (5 - answer) * (0.08 + (5 - answer) * 0.02);
+            if (EF < 1.3)
+                EF = 1.3;
         }
     }
 }

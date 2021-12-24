@@ -1,5 +1,4 @@
 using Domain.Parameters;
-using Domain.Visitors;
 
 namespace Domain.LearnMethods
 {
@@ -10,12 +9,6 @@ namespace Domain.LearnMethods
         public string Description => "Линейный алгоритм запоминания\n" +
                                      "Самый простой и глупый способ для вычисления интервалов запоминания:\n" +
                                      "при изучении карточки интервал повторения увеличивается в два раза";
-
-        public void LearnCard(Card card, int answer)
-        {
-            var learnVisitor = new LearnVisitor(card, answer);
-            card.Parameters.Accept(learnVisitor);
-        }
 
         public IParameters GetParameters()
         {

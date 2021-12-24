@@ -66,3 +66,8 @@ namespace AnkiBot
         }
     }
 }
+
+//TODO: добавить в env какой database используется
+//TODO: избавиться от Repository, Converter, Domain в UI (Создать CardApi DeckApi)
+//TODO: сделать запись состояний в базу данных
+//TODO: разобраться с контейнером чтобы подать в конструктор DataBase connectionString
