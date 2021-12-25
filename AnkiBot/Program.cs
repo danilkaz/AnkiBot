@@ -15,6 +15,9 @@ namespace AnkiBot
 {
     public static class Program
     {
+        private static readonly string Database =
+            Environment.GetEnvironmentVariable("BOT_DATABASE", EnvironmentVariableTarget.User);
+
         private const string PostgresConnectionString = "Host=localhost;Username=postgres;Password=postgres;" +
                                                         "Database=postgres;Port=5433";
 
@@ -24,10 +27,8 @@ namespace AnkiBot
         {
             using var container = CreateContainer();
 
-            container.Get<IDatabase<DbCard>>().CreateTable(SqliteConnectionString);
-            container.Get<IDatabase<DbDeck>>().CreateTable(SqliteConnectionString);
-            // container.Get<IDatabase<DbCard>>().CreateTable(PostgresConnectionString);
-            // container.Get<IDatabase<DbDeck>>().CreateTable(PostgresConnectionString);
+            container.Get<IDatabase<DbCard>>().CreateTable();
+            container.Get<IDatabase<DbDeck>>().CreateTable();
 
             new Thread(container.Get<VkBot>().Start).Start();
             new Thread(container.Get<TelegramBot>().Start).Start();
@@ -40,14 +41,23 @@ namespace AnkiBot
 
             container.Bind<VkConfig>().ToSelf().InSingletonScope();
             container.Bind<TelegramConfig>().ToSelf().InSingletonScope();
-
-            container.Bind<IDatabase<DbCard>>().To<SqLiteDatabase<DbCard>>().InSingletonScope();
-            container.Bind<IDatabase<DbDeck>>().To<SqLiteDatabase<DbDeck>>().InSingletonScope();
-            // container.Bind<IDatabase<DbCard>>().To<PostgresDatabase<DbCard>>().InSingletonScope();
-            // container.Bind<IDatabase<DbDeck>>().To<PostgresDatabase<DbDeck>>().InSingletonScope();
-
+            
+            if (Database == "Sqlite")
+            {
+                container.Bind<IDatabase<DbCard>>().To<SqLiteDatabase<DbCard>>().InSingletonScope()
+                    .WithConstructorArgument(SqliteConnectionString);
+                container.Bind<IDatabase<DbDeck>>().To<SqLiteDatabase<DbDeck>>().InSingletonScope()
+                    .WithConstructorArgument(SqliteConnectionString);
+            }
+            else
+            {
+                container.Bind<IDatabase<DbCard>>().To<PostgresDatabase<DbCard>>().InSingletonScope()
+                    .WithConstructorArgument(PostgresConnectionString);
+                container.Bind<IDatabase<DbDeck>>().To<PostgresDatabase<DbDeck>>().InSingletonScope()
+                    .WithConstructorArgument(PostgresConnectionString);
+            }
+            
             container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
-
             container.Bind<Converter>().ToSelf().InSingletonScope();
 
             container.Bind(c =>
@@ -58,7 +68,7 @@ namespace AnkiBot
                 c.FromAssemblyContaining<ILearnMethod>().SelectAllClasses().InheritedFrom<ILearnMethod>()
                     .BindAllInterfaces());
 
-            container.Bind<BotHandler>().ToSelf();
+            container.Bind<BotHandler>().ToSelf().InSingletonScope();
             container.Bind<IBot>().To<TelegramBot>().InSingletonScope();
             container.Bind<IBot>().To<VkBot>().InSingletonScope();
 
@@ -67,7 +77,6 @@ namespace AnkiBot
     }
 }
 
-//TODO: добавить в env какой database используется
 //TODO: избавиться от Repository, Converter, Domain в UI (Создать CardApi DeckApi)
 //TODO: сделать запись состояний в базу данных
-//TODO: разобраться с контейнером чтобы подать в конструктор DataBase connectionString
+//TODO: пофиксить карточки (чтобы плохо изученные карточки появлялись вновь)

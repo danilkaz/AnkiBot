@@ -22,6 +22,11 @@ namespace Infrastructure
             propertyInfos = typeof(T).GetProperties().Where(p => p.GetCustomAttributes<FieldAttribute>().Any());
         }
 
+        public SqLiteDatabase(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
         public void Save(T item)
         {
             using var connection = new SqliteConnection(connectionString);
@@ -94,10 +99,8 @@ namespace Infrastructure
             return result;
         }
 
-        public void CreateTable(string connectionString)
+        public void CreateTable()
         {
-            this.connectionString = connectionString;
-
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
             var createFields = fields

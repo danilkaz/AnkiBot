@@ -5,7 +5,7 @@ namespace Infrastructure
 {
     public interface IDatabase<T>
     {
-        void CreateTable(string connectionString);
+        void CreateTable();
         void Save(T item);
         T Get(string id);
         void Delete(string id);

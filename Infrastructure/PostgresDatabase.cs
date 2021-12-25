@@ -87,10 +87,8 @@ namespace Infrastructure
             return result;
         }
 
-        public void CreateTable(string connectionString)
+        public void CreateTable()
         {
-            connection = new NpgsqlConnection(connectionString);
-            connection.Open();
             var createFields = fields
                 .Select(f => f.IsUnique ? $"\"{f.Name}\" TEXT UNIQUE" : $"\"{f.Name}\" TEXT");
             var command = new NpgsqlCommand
