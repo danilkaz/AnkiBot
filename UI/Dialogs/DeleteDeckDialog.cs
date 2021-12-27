@@ -7,16 +7,16 @@ namespace UI.Dialogs
 {
     public class DeleteDeckDialog : IDialog
     {
-        private readonly IRepository repository;
+        private readonly DeckApi deckApi;
 
-        public DeleteDeckDialog(IRepository repository)
+        public DeleteDeckDialog(DeckApi deckApi)
         {
-            this.repository = repository;
+            this.deckApi = deckApi;
         }
 
         public async Task<IDialog> Execute(User user, string message, IBot bot)
         {
-            var decksName = repository.GetDecksByUser(user);
+            var decksName = deckApi.GetDecksByUser(user);
             var findDeck = decksName.FirstOrDefault(deck => deck.Name == message);
             if (findDeck is null)
             {
@@ -24,7 +24,7 @@ namespace UI.Dialogs
                 return this;
             }
 
-            repository.DeleteDeck(findDeck.Id);
+            deckApi.DeleteDeck(findDeck.Id);
             await bot.SendMessage(user, "Колода успешно удалена!");
             return null;
         }

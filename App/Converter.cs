@@ -23,12 +23,12 @@ namespace App
 
         public UIDeck ToUiDeck(DbDeck deck)
         {
-            return new(deck.Id, deck.Name);
+            return new(deck.Id, deck.Name, deck.LearnMethod);
         }
 
         public UICard ToUiCard(DbCard card)
         {
-            return new(card.Id, card.Front, card.Back);
+            return new(card.Id, card.Front, card.Back, card.DeckId);
         }
 
         public Deck ToDeck(DbDeck dbDeck)

@@ -6,11 +6,11 @@ namespace App
 {
     public interface IRepository
     {
-        void SaveCard(Card card);
+        void SaveCard(DbCard card);
         DbCard GetCard(string cardId);
-        void UpdateCard(Card card);
+        void UpdateCard(DbCard card);
         void DeleteCard(string cardId);
-        void SaveDeck(Deck deck);
+        void SaveDeck(DbDeck deck);
         DbDeck GetDeck(string deckId);
         void DeleteDeck(string deckId);
         IEnumerable<DbDeck> GetDecksByUser(User user);

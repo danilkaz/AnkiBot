@@ -16,9 +16,9 @@ namespace App
             this.deckDatabase = deckDatabase;
         }
 
-        public void SaveCard(Card card)
+        public void SaveCard(DbCard card)
         {
-            cardDatabase.Save(new DbCard(card));
+            cardDatabase.Save(card);
         }
 
         public DbCard GetCard(string cardId)
@@ -27,9 +27,9 @@ namespace App
             return dbCard;
         }
 
-        public void UpdateCard(Card card)
+        public void UpdateCard(DbCard card)
         {
-            DeleteCard(card.Id.ToString());
+            DeleteCard(card.Id);
             SaveCard(card);
         }
 
@@ -38,9 +38,9 @@ namespace App
             cardDatabase.Delete(cardId);
         }
 
-        public void SaveDeck(Deck deck)
+        public void SaveDeck(DbDeck deck)
         {
-            deckDatabase.Save(new DbDeck(deck));
+            deckDatabase.Save(deck);
         }
 
         public DbDeck GetDeck(string deckId)

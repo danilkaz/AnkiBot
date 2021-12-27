@@ -9,25 +9,23 @@ namespace UI.Dialogs
 {
     public class CreateDeckDialog : IDialog
     {
-        private readonly Converter converter;
+        private readonly DeckApi deckApi;
         private readonly ILearnMethod[] learnMethods;
-        private readonly IRepository repository;
         private ILearnMethod deckMethod;
 
         private string deckName;
         private IEnumerable<string> decksNames;
         private State state = State.ChooseDeck;
 
-        public CreateDeckDialog(IRepository repository, ILearnMethod[] learnMethods, Converter converter)
+        public CreateDeckDialog(ILearnMethod[] learnMethods, DeckApi deckApi)
         {
-            this.repository = repository;
             this.learnMethods = learnMethods;
-            this.converter = converter;
+            this.deckApi = deckApi;
         }
 
         public async Task<IDialog> Execute(User user, string message, IBot bot)
         {
-            decksNames ??= repository.GetDecksByUser(user).Select(converter.ToUiDeck).Select(d => d.Name);
+            decksNames ??= deckApi.GetDecksByUser(user).Select(d => d.Name);
             var keyboard = learnMethods.Select(m => new[] {m.Name}).Append(new[] {"Подробности"}).ToArray();
             if (state == State.ChooseDeck)
             {
@@ -62,8 +60,7 @@ namespace UI.Dialogs
                 }
             }
 
-            var deck = new Deck(user, deckName, deckMethod, new List<Card>());
-            repository.SaveDeck(deck);
+            deckApi.SaveDeck(user, deckName, deckMethod, new List<Card>());
             await bot.SendMessage(user, "Колода успешно создана!");
             return null;
         }

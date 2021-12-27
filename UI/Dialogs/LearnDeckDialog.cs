@@ -2,26 +2,25 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using App;
+using App.UIClasses;
 using Domain;
-using Domain.LearnMethods;
 
 namespace UI.Dialogs
 {
     public class LearnDeckDialog : IDialog
     {
-        private readonly Converter converter;
+        private readonly CardApi cardApi;
+        private readonly DeckApi deckApi;
         private readonly string[] learnStates;
-        private readonly IRepository repository;
 
         private string deckId;
-        private Card learnCard;
-        private ILearnMethod learnMethod;
+        private UICard learnCard;
         private State state = State.ChooseDeck;
 
-        public LearnDeckDialog(IRepository repository, Converter converter)
+        public LearnDeckDialog(CardApi cardApi, DeckApi deckApi)
         {
-            this.repository = repository;
-            this.converter = converter;
+            this.cardApi = cardApi;
+            this.deckApi = deckApi;
 
             learnStates = new[]
                 {"🤡\nЗабыл", "😶\nсложно", "😜\nабоба", "👑\nИзи"};
@@ -33,7 +32,7 @@ namespace UI.Dialogs
 
             if (state == State.ChooseDeck)
             {
-                var decks = repository.GetDecksByUser(user).Select(converter.ToDeck);
+                var decks = deckApi.GetDecksByUser(user);
                 var findDeck = decks.FirstOrDefault(deck => deck.Name == message);
                 if (findDeck is null)
                 {
@@ -41,11 +40,10 @@ namespace UI.Dialogs
                     return this;
                 }
 
-                learnMethod = findDeck.LearnMethod;
-                deckId = findDeck.Id.ToString();
+                deckId = findDeck.Id;
                 state = State.ViewFront;
 
-                learnCard = findDeck.GetCardsToLearn().FirstOrDefault();
+                learnCard = cardApi.GetCardsToLearn(deckId).FirstOrDefault();
                 if (learnCard is null)
                 {
                     await bot.SendMessage(user, "Все карточки изучены, молодец!");
@@ -88,11 +86,8 @@ namespace UI.Dialogs
 
                 var answer = Array.FindIndex(learnStates, s => s == learnState);
 
-                learnCard.Parameters.LearnCard(learnCard, answer); // TODO: подумать над этой записью
-                learnCard.LastLearnTime = DateTime.Now;
-
-                repository.UpdateCard(learnCard);
-                learnCard = converter.ToDeck(repository.GetDeck(deckId)).GetCardsToLearn().FirstOrDefault();
+                cardApi.LearnCard(learnCard.Id, answer);
+                learnCard = cardApi.GetCardsToLearn(deckId).FirstOrDefault();
                 if (learnCard is null)
                 {
                     await bot.SendMessage(user, "Все карточки изучены, молодец!");

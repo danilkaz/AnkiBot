@@ -8,31 +8,29 @@ namespace UI.Commands
 {
     public class LearnDeckCommand : Command
     {
-        private readonly Converter converter;
-        private readonly IRepository repository;
+        private readonly CardApi cardApi;
+        private readonly DeckApi deckApi;
 
-        public LearnDeckCommand(IRepository repository, Converter converter)
+        public LearnDeckCommand(CardApi cardApi, DeckApi deckApi)
         {
-            this.repository = repository;
-            this.converter = converter;
+            this.cardApi = cardApi;
+            this.deckApi = deckApi;
         }
 
         public override string Name => "Учить колоду";
 
         public override async Task<IDialog> Execute(User user, string message, IBot bot)
         {
-            var decksNames = repository.GetDecksByUser(user).Select(converter.ToUiDeck);
+            var decksNames = deckApi.GetDecksByUser(user).Select(d => d.Name);
             if (!decksNames.Any())
             {
                 await bot.SendMessage(user, "У вас нет ни одной колоды. Сначала создайте ее", false);
                 return null;
             }
 
-            var decksKeyboard = decksNames
-                .Select(d => new[] {d.Name})
-                .ToArray();
+            var decksKeyboard = decksNames.Select(name => new[] {name}).ToArray();
             await bot.SendMessageWithKeyboard(user, "Выберите колоду:", new KeyboardProvider(decksKeyboard));
-            return new LearnDeckDialog(repository, converter);
+            return new LearnDeckDialog(cardApi, deckApi);
         }
     }
 }

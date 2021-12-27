@@ -8,20 +8,18 @@ namespace UI.Commands
 {
     public class DeleteDeckCommand : Command
     {
-        private readonly Converter converter;
-        private readonly IRepository repository;
+        private readonly DeckApi deckApi;
 
-        public DeleteDeckCommand(IRepository repository, Converter converter)
+        public DeleteDeckCommand(DeckApi deckApi)
         {
-            this.repository = repository;
-            this.converter = converter;
+            this.deckApi = deckApi;
         }
 
         public override string Name => "Удалить колоду";
 
         public override async Task<IDialog> Execute(User user, string message, IBot bot)
         {
-            var decksNames = repository.GetDecksByUser(user).Select(converter.ToUiDeck);
+            var decksNames = deckApi.GetDecksByUser(user);
             if (!decksNames.Any())
             {
                 await bot.SendMessage(user, "У вас нет ни одной колоды. Сначала создайте ее", false);
@@ -32,7 +30,7 @@ namespace UI.Commands
                 .Select(d => new[] {d.Name})
                 .ToArray();
             await bot.SendMessageWithKeyboard(user, "Выберите колоду:", new KeyboardProvider(decksKeyboard));
-            return new DeleteDeckDialog(repository);
+            return new DeleteDeckDialog(deckApi);
         }
     }
 }

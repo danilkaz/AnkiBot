@@ -15,13 +15,13 @@ namespace AnkiBot
 {
     public static class Program
     {
-        private static readonly string Database =
-            Environment.GetEnvironmentVariable("BOT_DATABASE", EnvironmentVariableTarget.User);
-
         private const string PostgresConnectionString = "Host=localhost;Username=postgres;Password=postgres;" +
                                                         "Database=postgres;Port=5433";
 
         private const string SqliteConnectionString = "Data source=db.db";
+
+        private static readonly string Database =
+            Environment.GetEnvironmentVariable("BOT_DATABASE", EnvironmentVariableTarget.User);
 
         public static void Main()
         {
@@ -41,7 +41,7 @@ namespace AnkiBot
 
             container.Bind<VkConfig>().ToSelf().InSingletonScope();
             container.Bind<TelegramConfig>().ToSelf().InSingletonScope();
-            
+
             if (Database == "Sqlite")
             {
                 container.Bind<IDatabase<DbCard>>().To<SqLiteDatabase<DbCard>>().InSingletonScope()
@@ -56,9 +56,11 @@ namespace AnkiBot
                 container.Bind<IDatabase<DbDeck>>().To<PostgresDatabase<DbDeck>>().InSingletonScope()
                     .WithConstructorArgument(PostgresConnectionString);
             }
-            
+
             container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
             container.Bind<Converter>().ToSelf().InSingletonScope();
+            container.Bind<CardApi>().ToSelf();
+            container.Bind<DeckApi>().ToSelf();
 
             container.Bind(c =>
                 c.FromAssemblyContaining<Command>().SelectAllClasses().InheritedFrom<Command>().BindAllBaseClasses());

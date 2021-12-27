@@ -2,23 +2,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using App;
+using App.UIClasses;
 using Domain;
 
 namespace UI.Dialogs
 {
     public class DeleteCardDialog : IDialog
     {
-        private readonly Converter converter;
-        private readonly IRepository repository;
-        private IEnumerable<Card> cards;
+        private readonly CardApi cardApi;
+        private readonly DeckApi deckApi;
 
+        private IEnumerable<UICard> cards;
         private string deckId;
         private State state = State.ChooseDeck;
 
-        public DeleteCardDialog(IRepository repository, Converter converter)
+        public DeleteCardDialog(CardApi cardApi, DeckApi deckApi)
         {
-            this.repository = repository;
-            this.converter = converter;
+            this.cardApi = cardApi;
+            this.deckApi = deckApi;
         }
 
         public async Task<IDialog> Execute(User user, string message, IBot bot)
@@ -27,7 +28,7 @@ namespace UI.Dialogs
             {
                 case State.ChooseDeck:
                 {
-                    var decks = repository.GetDecksByUser(user).Select(converter.ToDeck);
+                    var decks = deckApi.GetDecksByUser(user);
                     var findDeck = decks.FirstOrDefault(deck => deck.Name == message);
                     if (findDeck is null)
                     {
@@ -35,8 +36,8 @@ namespace UI.Dialogs
                         return this;
                     }
 
-                    deckId = findDeck.Id.ToString();
-                    cards = findDeck.Cards;
+                    deckId = findDeck.Id;
+                    cards = cardApi.GetCardsByDeckId(deckId);
                     if (!cards.Any())
                     {
                         await bot.SendMessage(user, "Колода пуста", false);
@@ -58,7 +59,7 @@ namespace UI.Dialogs
                         return this;
                     }
 
-                    repository.DeleteCard(card.Id.ToString());
+                    cardApi.DeleteCard(card.Id);
                     await bot.SendMessage(user, "Карта успешно удалена", false);
                     return null;
                 }

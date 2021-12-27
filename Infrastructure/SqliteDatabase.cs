@@ -12,7 +12,7 @@ namespace Infrastructure
         private static readonly IEnumerable<FieldAttribute> fields;
         private static readonly IEnumerable<PropertyInfo> propertyInfos;
         private static readonly string tableName;
-        private string connectionString;
+        private readonly string connectionString;
 
         static SqLiteDatabase()
         {
