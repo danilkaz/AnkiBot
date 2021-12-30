@@ -23,6 +23,11 @@ namespace Infrastructure
             propertyInfos = typeof(T).GetProperties().Where(p => p.GetCustomAttributes<FieldAttribute>().Any());
         }
 
+        public PostgresDatabase(NpgsqlConnection connection)
+        {
+            this.connection = connection;
+        }
+
         public void Save(T item)
         {
             var command = new NpgsqlCommand
