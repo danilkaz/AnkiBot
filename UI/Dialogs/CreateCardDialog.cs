@@ -25,7 +25,7 @@ namespace UI.Dialogs
 
         public async Task<IDialog> Execute(User user, string message, IBot bot)
         {
-            if (message == finishKeyboard[0][0])
+            if (message == finishKeyboard[0][0]) //TODO: разбить каждый case на команды 
                 return null;
             switch (state)
             {

@@ -14,13 +14,17 @@ namespace Infrastructure
         private static readonly string tableName;
 
         private NpgsqlConnection connection;
+        private static readonly Type type = typeof(T);
+
+        private static readonly ConstructorInfo[] ConstructorInfos = type //TODO: ибавиться от повторов в вычислении
+            .GetConstructors();
 
         static PostgresDatabase()
         {
-            tableName = typeof(T).GetCustomAttributes<TableAttribute>().FirstOrDefault()?.Name;
+            tableName = type.GetCustomAttributes<TableAttribute>().FirstOrDefault()?.Name;
             if (tableName is null) throw new ArgumentException("Attribute Table must be initialized in class");
-            fields = typeof(T).GetProperties().SelectMany(p => p.GetCustomAttributes<FieldAttribute>());
-            propertyInfos = typeof(T).GetProperties().Where(p => p.GetCustomAttributes<FieldAttribute>().Any());
+            fields = type.GetProperties().SelectMany(p => p.GetCustomAttributes<FieldAttribute>());
+            propertyInfos = type.GetProperties().Where(p => p.GetCustomAttributes<FieldAttribute>().Any());
         }
 
         public PostgresDatabase(NpgsqlConnection connection)
@@ -48,8 +52,7 @@ namespace Infrastructure
                 CommandText = $"SELECT * FROM {tableName} WHERE id == \"{id}\""
             };
             using var reader = command.ExecuteReader();
-            var constructor = typeof(T)
-                .GetConstructors()
+            var constructor = ConstructorInfos
                 .FirstOrDefault(c => c.GetCustomAttributes<ConstructorAttribute>().Any());
             if (constructor is null)
                 throw new ArgumentException("Constructor Attributes must be initialized in constructor class");
@@ -76,8 +79,7 @@ namespace Infrastructure
                 CommandText = $"SELECT * FROM {tableName}"
             };
             using var reader = command.ExecuteReader();
-            var constructor = typeof(T)
-                .GetConstructors()
+            var constructor = ConstructorInfos
                 .FirstOrDefault(c => c.GetCustomAttributes<ConstructorAttribute>().Any());
             if (constructor is null)
                 throw new ArgumentException();

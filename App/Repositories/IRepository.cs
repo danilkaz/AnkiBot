@@ -13,10 +13,5 @@ namespace App
         void Update(T obj);
         void Delete(string id);
         IEnumerable<T> Search(Func<T, bool> filter);
-        // void SaveDeck(DbDeck deck);
-        // DbDeck GetDeck(string deckId);
-        // void DeleteDeck(string deckId);
-        // IEnumerable<DbDeck> GetDecksByUser(User user);
-        // IEnumerable<DbCard> GetCardsByDeckId(string deckId);
     }
 }

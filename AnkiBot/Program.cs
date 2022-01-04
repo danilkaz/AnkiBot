@@ -31,7 +31,7 @@ namespace AnkiBot
             container.Get<IDatabase<DbDeck>>().CreateTable();
 
             new Thread(container.Get<VkBot>().Start).Start();
-            new Thread(container.Get<TelegramBot>().Start).Start();
+            new Thread(container.Get<TelegramBot>().Start).Start(); //TODO: пройтись по всем реализациям IBot
             Console.ReadLine();
         }
 
@@ -79,6 +79,5 @@ namespace AnkiBot
     }
 }
 
-//TODO: избавиться от Repository, Converter, Domain в UI (Создать CardApi DeckApi)
-//TODO: сделать запись состояний в базу данных
-//TODO: пофиксить карточки (чтобы плохо изученные карточки появлялись вновь)
+//TODO: сделать запись состояний в базу данных (как такое организовать)
+//TODO: пофиксить карточки (чтобы плохо изученные карточки появлялись вновь) (это todo не от Сорокина :))

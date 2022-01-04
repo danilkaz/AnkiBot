@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace UI
 {
     public class KeyboardProvider
@@ -18,11 +20,11 @@ namespace UI
             }
         });
 
-        public KeyboardProvider(string[][] keyboard)
+        public KeyboardProvider(string[][] keyboard) 
         {
             Keyboard = keyboard;
         }
 
-        public string[][] Keyboard { get; }
+        public IReadOnlyList<IReadOnlyList<string>> Keyboard { get; } //TODO: IReadOnlyList<IReadOnlyList<string>>
     }
 }

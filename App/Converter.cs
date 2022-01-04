@@ -12,7 +12,7 @@ namespace App
 {
     public class Converter
     {
-        private readonly ILearnMethod[] learnMethods;
+        private readonly ILearnMethod[] learnMethods; //TODO: разбить на card и deck
         private readonly IRepository repository;
 
         public Converter(IRepository repository, ILearnMethod[] learnMethods)
