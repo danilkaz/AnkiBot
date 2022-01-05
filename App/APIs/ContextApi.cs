@@ -3,7 +3,7 @@ using App.Converters;
 using App.SerializedClasses;
 using Domain;
 
-namespace App
+namespace App.APIs
 {
     public class ContextApi
     {

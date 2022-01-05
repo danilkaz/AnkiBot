@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using App;
+using App.APIs;
 using App.Converters;
 using App.SerializedClasses;
 using App.UIClasses;
@@ -89,5 +90,4 @@ namespace AnkiBot
     }
 }
 
-//TODO: сделать запись состояний в базу данных (как такое организовать)
-//TODO: пофиксить карточки (чтобы плохо изученные карточки появлялись вновь) (это todo не от Сорокина :))
+//TODO: пофиксить карточки (чтобы плохо изученные карточки появлялись вновь)

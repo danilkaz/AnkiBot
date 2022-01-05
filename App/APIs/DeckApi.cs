@@ -6,7 +6,7 @@ using App.UIClasses;
 using Domain;
 using Domain.LearnMethods;
 
-namespace App
+namespace App.APIs
 {
     public class DeckApi
     {

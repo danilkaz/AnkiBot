@@ -6,7 +6,7 @@ using App.SerializedClasses;
 using App.UIClasses;
 using Domain;
 
-namespace App
+namespace App.APIs
 {
     public class CardApi
     {
