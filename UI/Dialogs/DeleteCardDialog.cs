@@ -38,7 +38,6 @@ namespace UI.Dialogs
                     }
 
                     deckId = findDeck.Id;
-                    Console.WriteLine(deckId);
                     cards = cardApi.GetCardsByDeckId(deckId);
                     if (!cards.Any())
                     {

@@ -9,6 +9,7 @@ using Domain.LearnMethods;
 using Infrastructure;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using Npgsql;
 using UI;
 using UI.Commands;
 using UI.Config;
@@ -19,7 +20,7 @@ namespace AnkiBot
     public static class Program
     {
         private const string PostgresConnectionString = "Host=localhost;Username=postgres;Password=postgres;" +
-                                                        "Database=postgres;Port=5433";
+                                                        "Database=postgres;Port=5433"; //TODO: убрать это куда-нибудь (например в env)
 
         private const string SqliteConnectionString = "Data source=db.db";
 
@@ -33,8 +34,8 @@ namespace AnkiBot
             container.Get<IDatabase<DbCard>>().CreateTable();
             container.Get<IDatabase<DbDeck>>().CreateTable();
 
-            new Thread(container.Get<VkBot>().Start).Start();
-            new Thread(container.Get<TelegramBot>().Start).Start(); //TODO: пройтись по всем реализациям IBot
+            foreach (var bot in container.GetAll<IBot>())
+                new Thread(bot.Start).Start();
             Console.ReadLine();
         }
 
@@ -54,10 +55,9 @@ namespace AnkiBot
             }
             else
             {
-                container.Bind<IDatabase<DbCard>>().To<PostgresDatabase<DbCard>>().InSingletonScope()
-                    .WithConstructorArgument(PostgresConnectionString);
-                container.Bind<IDatabase<DbDeck>>().To<PostgresDatabase<DbDeck>>().InSingletonScope()
-                    .WithConstructorArgument(PostgresConnectionString);
+                container.Bind<NpgsqlConnection>().ToSelf().WithConstructorArgument(PostgresConnectionString);
+                container.Bind<IDatabase<DbCard>>().To<PostgresDatabase<DbCard>>().InSingletonScope();
+                container.Bind<IDatabase<DbDeck>>().To<PostgresDatabase<DbDeck>>().InSingletonScope();
             }
 
             container.Bind<IRepository<DbCard>>().To<CardRepository>().InSingletonScope();
