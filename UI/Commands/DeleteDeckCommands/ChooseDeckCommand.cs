@@ -3,30 +3,33 @@ using System.Threading.Tasks;
 using App;
 using Domain;
 
-namespace UI.Dialogs
+namespace UI.Commands.DeleteDeckCommands
 {
-    public class DeleteDeckDialog : IDialog
+    public class ChooseDeckCommand : Command
     {
         private readonly DeckApi deckApi;
 
-        public DeleteDeckDialog(DeckApi deckApi)
+        public ChooseDeckCommand(DeckApi deckApi)
         {
             this.deckApi = deckApi;
         }
 
-        public async Task<IDialog> Execute(User user, string message, IBot bot)
+        public override string Name => "ChooseDeckForDeleteDeck";
+        public override bool isInitial => false;
+
+        public override async Task<Context> Execute(User user, string message, IBot bot, Context context)
         {
             var decksName = deckApi.GetDecksByUser(user);
             var findDeck = decksName.FirstOrDefault(deck => deck.Name == message);
             if (findDeck is null)
             {
                 await bot.SendMessage(user, "Выберите колоду:", false);
-                return this;
+                return context;
             }
 
             deckApi.DeleteDeck(findDeck.Id);
             await bot.SendMessage(user, "Колода успешно удалена!");
-            return null;
+            return new Context();
         }
     }
 }

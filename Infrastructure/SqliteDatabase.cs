@@ -16,7 +16,7 @@ namespace Infrastructure
         private static readonly ConstructorInfo? Constructor;
 
         private readonly string connectionString;
-        
+
 
         static SqLiteDatabase()
         {

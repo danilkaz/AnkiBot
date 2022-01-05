@@ -1,8 +1,8 @@
 namespace App.Converters
 {
-    public interface IConverter<Tdb, Tui, T>
+    public interface IConverter<in TDb, out TUi, out T>
     {
-        Tui ToUi(Tdb db);
-        T ToDomainClass(Tdb db);
+        TUi ToUi(TDb db);
+        T ToDomainClass(TDb db);
     }
 }

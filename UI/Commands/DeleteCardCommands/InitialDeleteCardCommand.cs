@@ -2,24 +2,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using App;
 using Domain;
-using UI.Dialogs;
 
-namespace UI.Commands
+namespace UI.Commands.DeleteCardCommands
 {
-    public class CreateCardCommand : Command
+    public class InitialDeleteCardCommand : Command
     {
         private readonly CardApi cardApi;
         private readonly DeckApi deckApi;
 
-        public CreateCardCommand(DeckApi deckApi, CardApi cardApi)
+        public InitialDeleteCardCommand(DeckApi deckApi, CardApi cardApi)
         {
             this.deckApi = deckApi;
             this.cardApi = cardApi;
         }
 
-        public override string Name => "Добавить карточку";
+        public override string Name => "Удалить карточку";
+        public override bool isInitial => true;
 
-        public override async Task<IDialog> Execute(User user, string message, IBot bot)
+        public override async Task<Context> Execute(User user, string message, IBot bot, Context context)
         {
             var decksNames = deckApi.GetDecksByUser(user);
             if (!decksNames.Any())
@@ -32,7 +32,8 @@ namespace UI.Commands
                 .Select(d => new[] {d.Name})
                 .ToArray();
             await bot.SendMessageWithKeyboard(user, "Выберите колоду:", new KeyboardProvider(decksKeyboard));
-            return new CreateCardDialog(deckApi, cardApi); //TODO: Создание диалогов с помощью фабрик
+            context.CommandName = "ChooseDeckForDeleteCard";
+            return context;
         }
     }
 }

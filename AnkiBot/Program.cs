@@ -13,7 +13,6 @@ using Npgsql;
 using UI;
 using UI.Commands;
 using UI.Config;
-using UI.Dialogs;
 
 namespace AnkiBot
 {
@@ -33,6 +32,7 @@ namespace AnkiBot
 
             container.Get<IDatabase<DbCard>>().CreateTable();
             container.Get<IDatabase<DbDeck>>().CreateTable();
+            container.Get<IDatabase<DbContext>>().CreateTable();
 
             foreach (var bot in container.GetAll<IBot>())
                 new Thread(bot.Start).Start();
@@ -52,6 +52,8 @@ namespace AnkiBot
                     .WithConstructorArgument(SqliteConnectionString);
                 container.Bind<IDatabase<DbDeck>>().To<SqLiteDatabase<DbDeck>>().InSingletonScope()
                     .WithConstructorArgument(SqliteConnectionString);
+                container.Bind<IDatabase<DbContext>>().To<SqLiteDatabase<DbContext>>().InSingletonScope()
+                    .WithConstructorArgument(SqliteConnectionString);
             }
             else
             {
@@ -62,17 +64,18 @@ namespace AnkiBot
 
             container.Bind<IRepository<DbCard>>().To<CardRepository>().InSingletonScope();
             container.Bind<IRepository<DbDeck>>().To<DeckRepository>().InSingletonScope();
+            container.Bind<IRepository<DbContext>>().To<ContextRepository>().InSingletonScope();
 
             container.Bind<IConverter<DbCard, UICard, Card>>().To<CardConverter>().InSingletonScope();
             container.Bind<IConverter<DbDeck, UIDeck, Deck>>().To<DeckConverter>().InSingletonScope();
+            container.Bind<ContextConverter>().ToSelf().InSingletonScope();
 
-            container.Bind<CardApi>().ToSelf();
-            container.Bind<DeckApi>().ToSelf();
+            container.Bind<CardApi>().ToSelf().InSingletonScope();
+            container.Bind<DeckApi>().ToSelf().InSingletonScope();
+            container.Bind<ContextApi>().ToSelf().InSingletonScope();
 
             container.Bind(c =>
                 c.FromAssemblyContaining<Command>().SelectAllClasses().InheritedFrom<Command>().BindAllBaseClasses());
-            container.Bind(c =>
-                c.FromAssemblyContaining<IDialog>().SelectAllClasses().InheritedFrom<IDialog>().BindAllInterfaces());
             container.Bind(c =>
                 c.FromAssemblyContaining<ILearnMethod>().SelectAllClasses().InheritedFrom<ILearnMethod>()
                     .BindAllInterfaces());

@@ -2,27 +2,28 @@ using System.Threading.Tasks;
 using App;
 using Domain;
 using Domain.LearnMethods;
-using UI.Dialogs;
 
-namespace UI.Commands
+namespace UI.Commands.CreateDeckCommands
 {
-    public class CreateDeckCommand : Command
+    public class InitialCreateDeckCommand : Command
     {
         private readonly DeckApi deckApi;
         private readonly ILearnMethod[] learnMethods;
 
-        public CreateDeckCommand(ILearnMethod[] learnMethods, DeckApi deckApi)
+        public InitialCreateDeckCommand(ILearnMethod[] learnMethods, DeckApi deckApi)
         {
             this.learnMethods = learnMethods;
             this.deckApi = deckApi;
         }
 
         public override string Name => "Создать колоду";
+        public override bool isInitial => true;
 
-        public override async Task<IDialog> Execute(User user, string message, IBot bot)
+        public override async Task<Context> Execute(User user, string message, IBot bot, Context context)
         {
             await bot.SendMessage(user, "Введите имя колоды");
-            return new CreateDeckDialog(learnMethods, deckApi);
+            context.CommandName = "InputDeckName";
+            return context;
         }
     }
 }
