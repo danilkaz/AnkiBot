@@ -12,12 +12,12 @@ namespace Infrastructure
         private static readonly IEnumerable<FieldAttribute> fields;
         private static readonly IEnumerable<PropertyInfo> propertyInfos;
         private static readonly string tableName;
-
-        private NpgsqlConnection connection;
         private static readonly Type type = typeof(T);
 
         private static readonly ConstructorInfo[] ConstructorInfos = type //TODO: ибавиться от повторов в вычислении
             .GetConstructors();
+
+        private readonly NpgsqlConnection connection;
 
         static PostgresDatabase()
         {

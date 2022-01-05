@@ -1,7 +1,6 @@
 using System;
 using JetBrains.Annotations;
 
-
 namespace Infrastructure.Attributes
 {
     [MeansImplicitUse]

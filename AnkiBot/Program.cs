@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading;
 using App;
+using App.Converters;
 using App.SerializedClasses;
+using App.UIClasses;
+using Domain;
 using Domain.LearnMethods;
 using Infrastructure;
 using Ninject;
@@ -57,8 +60,12 @@ namespace AnkiBot
                     .WithConstructorArgument(PostgresConnectionString);
             }
 
-            container.Bind<IRepository>().To<DbRepository>().InSingletonScope();
-            container.Bind<Converter>().ToSelf().InSingletonScope();
+            container.Bind<IRepository<DbCard>>().To<CardRepository>().InSingletonScope();
+            container.Bind<IRepository<DbDeck>>().To<DeckRepository>().InSingletonScope();
+
+            container.Bind<IConverter<DbCard, UICard, Card>>().To<CardConverter>().InSingletonScope();
+            container.Bind<IConverter<DbDeck, UIDeck, Deck>>().To<DeckConverter>().InSingletonScope();
+
             container.Bind<CardApi>().ToSelf();
             container.Bind<DeckApi>().ToSelf();
 

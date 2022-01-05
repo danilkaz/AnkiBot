@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +38,7 @@ namespace UI.Dialogs
                     }
 
                     deckId = findDeck.Id;
+                    Console.WriteLine(deckId);
                     cards = cardApi.GetCardsByDeckId(deckId);
                     if (!cards.Any())
                     {

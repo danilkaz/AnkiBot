@@ -20,11 +20,11 @@ namespace UI
             }
         });
 
-        public KeyboardProvider(string[][] keyboard) 
+        public KeyboardProvider(string[][] keyboard)
         {
             Keyboard = keyboard;
         }
 
-        public IReadOnlyList<IReadOnlyList<string>> Keyboard { get; } //TODO: IReadOnlyList<IReadOnlyList<string>>
+        public IReadOnlyList<IReadOnlyList<string>> Keyboard { get; }
     }
 }
