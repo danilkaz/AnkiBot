@@ -1,18 +1,19 @@
 using NUnit.Framework;
 
-namespace Tests;
-
-public class Tests
+namespace Tests
 {
-    [SetUp]
-    public void Setup()
+    public class Tests
     {
-        
-    }
+        [SetUp]
+        public void Setup()
+        {
 
-    [Test]
-    public void Test1()
-    {
-        Assert.True(1 == 2 - 1);
+        }
+
+        [Test]
+        public void Test1()
+        {
+            Assert.True(1 == 2 - 1);
+        }
     }
 }
