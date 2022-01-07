@@ -19,8 +19,8 @@ namespace AnkiBot
 {
     public static class Program
     {
-        private const string PostgresConnectionString = "Host=localhost;Username=postgres;Password=postgres;" +
-                                                        "Database=postgres;Port=5433"; //TODO: убрать это куда-нибудь (например в env)
+        private static readonly string PostgresConnectionString =
+            Environment.GetEnvironmentVariable("POSTGRES_CONNECTION", EnvironmentVariableTarget.User);
 
         private const string SqliteConnectionString = "Data source=db.db";
 
@@ -89,5 +89,7 @@ namespace AnkiBot
         }
     }
 }
+
+
 
 //TODO: пофиксить карточки (чтобы плохо изученные карточки появлялись вновь)
