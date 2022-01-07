@@ -1,5 +1,7 @@
 # Anki Bot
 
+![Tests](https://github.com/danilkaz/AnkiBot/actions/workflows/tests.yml/badge.svg)
+
 Бот для интервального запоминания
 
 В наше время человеку порой сложно запомнить большое количество информации, которая, зачастую, долго в голове не остается. 
