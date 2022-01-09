@@ -25,7 +25,7 @@ namespace AnkiBot
         private const string SqliteConnectionString = "Data source=db.db";
 
         private static readonly string Database =
-            Environment.GetEnvironmentVariable("BOT_DATABASE", EnvironmentVariableTarget.User);
+            Environment.GetEnvironmentVariable("BOT_DATABASE");
 
         public static void Main()
         {
