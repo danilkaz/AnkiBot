@@ -8,10 +8,12 @@ namespace App
     public class DeckRepository : IRepository<DbDeck>
     {
         private readonly IDatabase<DbDeck> deckDatabase;
+        private readonly IDatabase<DbCard> cardDatabase;
 
-        public DeckRepository(IDatabase<DbDeck> deckDatabase)
+        public DeckRepository(IDatabase<DbDeck> deckDatabase, IDatabase<DbCard> cardDatabase)
         {
             this.deckDatabase = deckDatabase;
+            this.cardDatabase = cardDatabase;
         }
 
         public void Save(DbDeck deck)
@@ -33,6 +35,8 @@ namespace App
         public void Delete(string id)
         {
             deckDatabase.Delete(id);
+            foreach (var card in cardDatabase.GetAll(c => c.DeckId == id))
+                cardDatabase.Delete(card.Id);
         }
 
         public IEnumerable<DbDeck> Search(Func<DbDeck, bool> filter)

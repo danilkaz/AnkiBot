@@ -19,8 +19,8 @@ namespace AnkiBot
 {
     public static class Program
     {
-        private const string PostgresConnectionString = "Host=localhost;Username=postgres;Password=postgres;" +
-                                                        "Database=postgres;Port=5433"; //TODO: убрать это куда-нибудь (например в env)
+        private const string PostgresConnectionString = "Host=46.101.155.249;Username=postgres;Password=postgres;" +
+                                                        "Database=postgres;Port=5432"; //TODO: убрать это куда-нибудь (например в env)
 
         private const string SqliteConnectionString = "Data source=db.db";
 
@@ -86,5 +86,4 @@ namespace AnkiBot
     }
 }
 
-//TODO: сделать запись состояний в базу данных (как такое организовать)
 //TODO: пофиксить карточки (чтобы плохо изученные карточки появлялись вновь) (это todo не от Сорокина :))

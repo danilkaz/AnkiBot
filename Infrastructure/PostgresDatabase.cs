@@ -31,6 +31,7 @@ namespace Infrastructure
         public PostgresDatabase(NpgsqlConnection connection)
         {
             this.connection = connection;
+            this.connection.Open();
         }
 
         public void Save(T item)
@@ -38,9 +39,9 @@ namespace Infrastructure
             var command = new NpgsqlCommand
             {
                 Connection = connection,
-                CommandText =
-                    $"INSERT INTO {TableName} VALUES (" +
-                    $"{string.Join(", ", PropertyInfos.Select(p => $"'{p.GetValue(item)}'"))})"
+                CommandText = $"INSERT INTO {TableName} VALUES (" +
+                              $"{string.Join(", ", PropertyInfos.Select(p => $"'{p.GetValue(item)?.ToString()?.Replace("'", "")}'"))})"
+                    
             };
             command.ExecuteNonQuery();
         }
@@ -50,7 +51,7 @@ namespace Infrastructure
             var command = new NpgsqlCommand
             {
                 Connection = connection,
-                CommandText = $"SELECT * FROM {TableName} WHERE id == \"{id}\""
+                CommandText = $"SELECT * FROM {TableName} WHERE id = '{id}'"
             };
             using var reader = command.ExecuteReader();
             if (Constructor is null)
@@ -65,7 +66,7 @@ namespace Infrastructure
             var command = new NpgsqlCommand
             {
                 Connection = connection,
-                CommandText = $"DELETE FROM {TableName} WHERE id == \"{id}\""
+                CommandText = $"DELETE FROM {TableName} WHERE id = '{id}'"
             };
             command.ExecuteNonQuery();
         }
