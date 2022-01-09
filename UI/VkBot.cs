@@ -27,13 +27,13 @@ namespace UI
 
         public async void Start()
         {
-            await api.AuthorizeAsync(new ApiAuthParams {AccessToken = config.Token});
+            await api.AuthorizeAsync(new ApiAuthParams { AccessToken = config.Token });
             while (true)
             {
                 var s = await api.Groups.GetLongPollServerAsync(ulong.Parse(config.GroupId));
                 var poll = await api.Groups.GetBotsLongPollHistoryAsync(
                     new BotsLongPollHistoryParams
-                        {Server = s.Server, Ts = s.Ts, Key = s.Key, Wait = 25});
+                    { Server = s.Server, Ts = s.Ts, Key = s.Key, Wait = 25 });
                 if (poll?.Updates == null)
                     continue;
                 foreach (var update in poll.Updates.Where(u => u.Type == GroupUpdateType.MessageNew))
@@ -92,7 +92,7 @@ namespace UI
                         },
                         Color = KeyboardButtonColor.Primary
                     }));
-            return new MessageKeyboard {Buttons = buttons};
+            return new MessageKeyboard { Buttons = buttons };
         }
     }
 }

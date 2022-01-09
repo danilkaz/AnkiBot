@@ -28,7 +28,7 @@ namespace UI.Commands
                 return null;
             }
 
-            var decksKeyboard = decksNames.Select(name => new[] {name}).ToArray();
+            var decksKeyboard = decksNames.Select(name => new[] { name }).ToArray();
             await bot.SendMessageWithKeyboard(user, "Выберите колоду:", new KeyboardProvider(decksKeyboard));
             return new LearnDeckDialog(cardApi, deckApi);
         }

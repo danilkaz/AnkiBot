@@ -28,42 +28,42 @@ namespace UI.Dialogs
             switch (state)
             {
                 case State.ChooseDeck:
-                {
-                    var decks = deckApi.GetDecksByUser(user);
-                    var findDeck = decks.FirstOrDefault(deck => deck.Name == message);
-                    if (findDeck is null)
                     {
-                        await bot.SendMessage(user, "Выберите колоду:", false);
+                        var decks = deckApi.GetDecksByUser(user);
+                        var findDeck = decks.FirstOrDefault(deck => deck.Name == message);
+                        if (findDeck is null)
+                        {
+                            await bot.SendMessage(user, "Выберите колоду:", false);
+                            return this;
+                        }
+
+                        deckId = findDeck.Id;
+                        cards = cardApi.GetCardsByDeckId(deckId);
+                        if (!cards.Any())
+                        {
+                            await bot.SendMessage(user, "Колода пуста", false);
+                            return null;
+                        }
+
+                        var cardsKeyboard = cards.Select(c => new[] { c.Front + "\n" + c.Id }).ToArray();
+                        state = State.ChooseCard;
+                        await bot.SendMessageWithKeyboard(user, "Выберите карту:", new KeyboardProvider(cardsKeyboard));
                         return this;
                     }
-
-                    deckId = findDeck.Id;
-                    cards = cardApi.GetCardsByDeckId(deckId);
-                    if (!cards.Any())
+                case State.ChooseCard:
                     {
-                        await bot.SendMessage(user, "Колода пуста", false);
+                        var splitMessage = message.Split('\n');
+                        var card = cards.FirstOrDefault(c => c.Id.ToString() == splitMessage.Last());
+                        if (card is null)
+                        {
+                            await bot.SendMessage(user, "Выберите карту:", false);
+                            return this;
+                        }
+
+                        cardApi.DeleteCard(card.Id);
+                        await bot.SendMessage(user, "Карта успешно удалена", false);
                         return null;
                     }
-
-                    var cardsKeyboard = cards.Select(c => new[] {c.Front + "\n" + c.Id}).ToArray();
-                    state = State.ChooseCard;
-                    await bot.SendMessageWithKeyboard(user, "Выберите карту:", new KeyboardProvider(cardsKeyboard));
-                    return this;
-                }
-                case State.ChooseCard:
-                {
-                    var splitMessage = message.Split('\n');
-                    var card = cards.FirstOrDefault(c => c.Id.ToString() == splitMessage.Last());
-                    if (card is null)
-                    {
-                        await bot.SendMessage(user, "Выберите карту:", false);
-                        return this;
-                    }
-
-                    cardApi.DeleteCard(card.Id);
-                    await bot.SendMessage(user, "Карта успешно удалена", false);
-                    return null;
-                }
                 default:
                     return null;
             }

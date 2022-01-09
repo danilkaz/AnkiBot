@@ -33,7 +33,7 @@ namespace UI
                     if (usersStates.ContainsKey(user) && usersStates[user] is null)
                         await sendMessageWithKeyboard(user, "Вот что я умею:", KeyboardProvider.DefaultKeyboard);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     await sendMessageWithKeyboard(user, "Ой! Что-то пошло не так :(", KeyboardProvider.DefaultKeyboard);
                     Console.WriteLine(e);

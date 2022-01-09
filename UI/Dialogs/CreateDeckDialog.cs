@@ -26,7 +26,7 @@ namespace UI.Dialogs
         public async Task<IDialog> Execute(User user, string message, IBot bot)
         {
             decksNames ??= deckApi.GetDecksByUser(user).Select(d => d.Name);
-            var keyboard = learnMethods.Select(m => new[] {m.Name}).Append(new[] {"Подробности"}).ToArray();
+            var keyboard = learnMethods.Select(m => new[] { m.Name }).Append(new[] { "Подробности" }).ToArray();
             if (state == State.ChooseDeck)
             {
                 if (decksNames.FirstOrDefault(name => name == message) is not null)

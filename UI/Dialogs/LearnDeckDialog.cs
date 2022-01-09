@@ -28,7 +28,7 @@ namespace UI.Dialogs
 
         public async Task<IDialog> Execute(User user, string message, IBot bot)
         {
-            var learnKeyboard = new[] {learnStates, new[] {"Закончил учить"}};
+            var learnKeyboard = new[] { learnStates, new[] { "Закончил учить" } };
 
             if (state == State.ChooseDeck)
             {
@@ -51,7 +51,7 @@ namespace UI.Dialogs
                 }
 
                 await bot.SendMessageWithKeyboard(user, learnCard.Front,
-                    new KeyboardProvider(new[] {new[] {"Показать ответ"}}));
+                    new KeyboardProvider(new[] { new[] { "Показать ответ" } }));
                 return this;
             }
 
@@ -65,7 +65,7 @@ namespace UI.Dialogs
                 }
 
                 await bot.SendMessageWithKeyboard(user, "Нажните \"Показать ответ\" когда будете готовы!",
-                    new KeyboardProvider(new[] {new[] {"Показать ответ"}}));
+                    new KeyboardProvider(new[] { new[] { "Показать ответ" } }));
                 return this;
             }
 
@@ -96,7 +96,7 @@ namespace UI.Dialogs
 
                 state = State.ViewFront;
                 await bot.SendMessageWithKeyboard(user, learnCard.Front,
-                    new KeyboardProvider(new[] {new[] {"Показать ответ"}}));
+                    new KeyboardProvider(new[] { new[] { "Показать ответ" } }));
                 return this;
             }
 

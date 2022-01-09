@@ -29,7 +29,7 @@ namespace UI.Commands
             }
 
             var decksKeyboard = decksNames
-                .Select(d => new[] {d.Name})
+                .Select(d => new[] { d.Name })
                 .ToArray();
             await bot.SendMessageWithKeyboard(user, "Выберите колоду:", new KeyboardProvider(decksKeyboard));
             return new CreateCardDialog(deckApi, cardApi); //TODO: Создание диалогов с помощью фабрик
