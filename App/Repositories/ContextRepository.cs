@@ -7,37 +7,37 @@ namespace App
 {
     public class ContextRepository : IRepository<DbContext>
     {
-        private readonly IDatabase<DbContext> stateDatabase;
+        private readonly IDatabase<DbContext> contextDatabase;
 
-        public ContextRepository(IDatabase<DbContext> stateDatabase)
+        public ContextRepository(IDatabase<DbContext> contextDatabase)
         {
-            this.stateDatabase = stateDatabase;
+            this.contextDatabase = contextDatabase;
         }
 
         public void Save(DbContext context)
         {
-            stateDatabase.Save(context);
+            contextDatabase.Save(context);
         }
 
         public DbContext Get(string userId)
         {
-            return stateDatabase.Get(userId);
+            return contextDatabase.Get(userId);
         }
 
         public void Update(DbContext context)
         {
-            stateDatabase.Delete(context.UserId);
-            stateDatabase.Save(context);
+            contextDatabase.Delete(context.UserId);
+            contextDatabase.Save(context);
         }
 
         public void Delete(string userId)
         {
-            stateDatabase.Delete(userId);
+            contextDatabase.Delete(userId);
         }
 
         public IEnumerable<DbContext> Search(Func<DbContext, bool> filter)
         {
-            return stateDatabase.GetAll(filter);
+            return contextDatabase.GetAll(filter);
         }
     }
 }

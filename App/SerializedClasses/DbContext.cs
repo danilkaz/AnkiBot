@@ -6,13 +6,14 @@ namespace App.SerializedClasses
     public class DbContext
     {
         [Constructor]
-        public DbContext(string userId, string context)
+        public DbContext(string userId, string command)
         {
             UserId = userId;
-            Context = context;
+            Command = command;
+
         }
 
         [Field("id", true)] public string UserId { get; }
-        [Field("context")] public string Context { get; }
+        [Field("command")] public string Command { get; }
     }
 }

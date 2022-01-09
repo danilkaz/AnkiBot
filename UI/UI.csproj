@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Ninject" Version="3.3.4" />
       <PackageReference Include="Telegram.Bot" Version="17.0.0" />
       <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.0" />
       <PackageReference Include="VkNet" Version="1.67.0" />

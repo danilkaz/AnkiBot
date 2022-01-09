@@ -40,7 +40,7 @@ namespace Infrastructure
                 Connection = connection,
                 CommandText =
                     $"INSERT INTO {TableName} VALUES (" +
-                    $"{string.Join(", ", PropertyInfos.Select(p => $"'{p.GetValue(item)}'"))})"
+                    $"{string.Join(", ", PropertyInfos.Select(p => $"'{p.GetValue(item)?.ToString()?.Replace("'", "")}'"))})"
             };
             command.ExecuteNonQuery();
         }
@@ -50,7 +50,7 @@ namespace Infrastructure
             var command = new NpgsqlCommand
             {
                 Connection = connection,
-                CommandText = $"SELECT * FROM {TableName} WHERE id == \"{id}\""
+                CommandText = $"SELECT * FROM {TableName} WHERE id == \"{id}\"" //TODO сделать так чтобы использовалась не id а нужное поле 
             };
             using var reader = command.ExecuteReader();
             if (Constructor is null)

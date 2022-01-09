@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading;
 using App;
 using App.APIs;
@@ -7,13 +8,16 @@ using App.SerializedClasses;
 using App.UIClasses;
 using Domain;
 using Domain.LearnMethods;
+using Domain.Parameters;
 using Infrastructure;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using Ninject.Extensions.Factory;
 using Npgsql;
 using UI;
 using UI.Commands;
 using UI.Config;
+using UI.Data;
 
 namespace AnkiBot
 {
@@ -69,27 +73,36 @@ namespace AnkiBot
 
             container.Bind<IConverter<DbCard, UICard, Card>>().To<CardConverter>().InSingletonScope();
             container.Bind<IConverter<DbDeck, UIDeck, Deck>>().To<DeckConverter>().InSingletonScope();
-            container.Bind<ContextConverter>().ToSelf().InSingletonScope();
 
             container.Bind<CardApi>().ToSelf().InSingletonScope();
             container.Bind<DeckApi>().ToSelf().InSingletonScope();
             container.Bind<ContextApi>().ToSelf().InSingletonScope();
 
-            container.Bind(c =>
-                c.FromAssemblyContaining<Command>().SelectAllClasses().InheritedFrom<Command>().BindAllBaseClasses());
+            container.Bind<ICommand>().To<GreetingCommand>();
+            container.Bind<ICommand>().To<StartCommand>();
+            // container.Bind<ICommand>().To<InitialCreateCardCommand>();
+
+            // container.Bind<ICommand, ISavableCommand<EmptyData>>().To<StartCommand>();
+            // container.Bind(c =>
+            //     c.FromAssemblyContaining<ICommand>().SelectAllClasses().InheritedFrom<ICommand>().BindAllBaseClasses());
             container.Bind(c =>
                 c.FromAssemblyContaining<ILearnMethod>().SelectAllClasses().InheritedFrom<ILearnMethod>()
                     .BindAllInterfaces());
+
+            // container.Bind<ICommandFactory<EmptyData, StartCommand>>().To<StartCommandFactory>();
+            // container.Bind<ICommandFactory<ChooseDeckData, ChooseDeckCommand>>().To<ChooseDeckCommandFactory>();
+            // container.Bind<ICommandFactory<InputFrontData, InputFrontCommand>>().To<InputFrontCommandFactory>();
+            // container.Bind<ICommandFactory<InputBackData, InputBackCommand>>().To<InputBackCommandFactory>();
 
             container.Bind<BotHandler>().ToSelf().InSingletonScope();
             container.Bind<IBot>().To<TelegramBot>().InSingletonScope();
             container.Bind<IBot>().To<VkBot>().InSingletonScope();
 
+            container.Bind<StandardKernel>().ToConstant(container);
             return container;
         }
     }
 }
-
 
 
 //TODO: пофиксить карточки (чтобы плохо изученные карточки появлялись вновь)
