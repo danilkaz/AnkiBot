@@ -1,4 +1,4 @@
-# Anki Bot [![Tests](https://github.com/danilkaz/AnkiBot/actions/workflows/tests.yml/badge.svg)](https://github.com/danilkaz/AnkiBot/actions/workflows/tests.yml)
+# Anki Bot [![CI](https://github.com/danilkaz/AnkiBot/actions/workflows/CI.yml/badge.svg)](https://github.com/danilkaz/AnkiBot/actions/workflows/CI.yml)
 
 Бот для интервального запоминания
 
