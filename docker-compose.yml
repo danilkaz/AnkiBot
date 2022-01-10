@@ -1,0 +1,19 @@
+version: '3.5'
+services:
+  bot:
+    build: ./
+    command: ./bin/Debug/net5.0/AnkiBot
+    environment:
+      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+      VK_TOKEN: ${VK_TOKEN}
+      VK_GROUP_ID: ${VK_GROUP_ID}
+      BOT_DATABASE: ${BOT_DATABASE}
+    depends_on:
+      - database
+  database:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
