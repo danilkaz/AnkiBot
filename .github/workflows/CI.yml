@@ -89,7 +89,7 @@ jobs:
           envs: REGISTRY,IMAGE_NAME, CONTAINER_NAME
           script: |
             # Login into Digital Ocean Registry
-            docker login -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} -p ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} $(echo $REGISTRY)
+            docker login -u ${{ secrets.DIGITAL_OCEAN_TOKEN }} -p ${{ secrets.DIGITAL_OCEAN_TOKEN }} $(echo $REGISTRY)
             # Set env variables
             export VK_TOKEN=${{ secrets.VK_TOKEN }}
             export VK_GROUP_ID=${{ secrets.VK_GROUP_ID }}
