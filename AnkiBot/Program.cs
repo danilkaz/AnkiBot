@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Threading;
 using App;
 using App.APIs;
@@ -8,25 +7,28 @@ using App.SerializedClasses;
 using App.UIClasses;
 using Domain;
 using Domain.LearnMethods;
-using Domain.Parameters;
 using Infrastructure;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using Ninject.Extensions.Factory;
 using Npgsql;
 using UI;
 using UI.Commands;
+using UI.Commands.CreateCardCommands;
+using UI.Commands.CreateDeckCommands;
+using UI.Commands.DeleteCardCommands;
+using UI.Commands.DeleteDeckCommands;
+using UI.Commands.LearnDeckCommands;
 using UI.Config;
-using UI.Data;
+using ChooseDeckCommand = UI.Commands.CreateCardCommands.ChooseDeckCommand;
 
 namespace AnkiBot
 {
     public static class Program
     {
+        private const string SqliteConnectionString = "Data source=db.db";
+
         private static readonly string PostgresConnectionString =
             Environment.GetEnvironmentVariable("POSTGRES_CONNECTION", EnvironmentVariableTarget.User);
-
-        private const string SqliteConnectionString = "Data source=db.db";
 
         private static readonly string Database =
             Environment.GetEnvironmentVariable("BOT_DATABASE", EnvironmentVariableTarget.User);
@@ -78,9 +80,37 @@ namespace AnkiBot
             container.Bind<DeckApi>().ToSelf().InSingletonScope();
             container.Bind<ContextApi>().ToSelf().InSingletonScope();
 
-            container.Bind<ICommand>().To<GreetingCommand>();
-            container.Bind<ICommand>().To<StartCommand>();
-            // container.Bind<ICommand>().To<InitialCreateCardCommand>();
+            container.Bind<ICommand>().To<GreetingCommand>().InSingletonScope();
+            container.Bind<ICommand>().To<StartCommand>().InSingletonScope();
+
+            container.Bind<ICommand>().To<InitialCreateCardCommand>().InSingletonScope();
+            container.Bind<ICommand>().To<ChooseDeckCommand>().InSingletonScope();
+
+            container.Bind<ICommand>().To<InitialCreateDeckCommand>().InSingletonScope();
+            container.Bind<ICommand>().To<InputDeckNameCommand>().InSingletonScope();
+
+            container.Bind<ICommand>().To<InitialDeleteCardCommand>().InSingletonScope();
+            container.Bind<ICommand>().To<UI.Commands.DeleteCardCommands.ChooseDeckCommand>().InSingletonScope();
+
+            container.Bind<ICommand>().To<InitialDeleteDeckCommand>().InSingletonScope();
+            container.Bind<ICommand>().To<UI.Commands.DeleteDeckCommands.ChooseDeckCommand>().InSingletonScope();
+
+            container.Bind<ICommand>().To<InitialLearnDeckCommand>().InSingletonScope();
+            container.Bind<ICommand>().To<UI.Commands.LearnDeckCommands.ChooseDeckCommand>().InSingletonScope();
+
+
+            container.Bind<ICommandFactory<InputFrontData, InputFrontCommand>>().To<InputFrontCommandFactory>()
+                .InSingletonScope();
+            container.Bind<ICommandFactory<InputBackData, InputBackCommand>>().To<InputBackCommandFactory>()
+                .InSingletonScope();
+            container.Bind<ICommandFactory<ChooseLearnMethodData, ChooseLearnMethodCommand>>()
+                .To<ChooseLearnMethodCommandFactory>().InSingletonScope();
+            container.Bind<ICommandFactory<ChooseCardData, ChooseCardCommand>>().To<ChooseCardCommandFactory>()
+                .InSingletonScope();
+            container.Bind<ICommandFactory<ViewFrontData, ViewFrontCommand>>().To<ViewFrontCommandFactory>()
+                .InSingletonScope();
+            container.Bind<ICommandFactory<ViewBackData, ViewBackCommand>>().To<ViewBackCommandFactory>()
+                .InSingletonScope();
 
             // container.Bind<ICommand, ISavableCommand<EmptyData>>().To<StartCommand>();
             // container.Bind(c =>
@@ -88,11 +118,6 @@ namespace AnkiBot
             container.Bind(c =>
                 c.FromAssemblyContaining<ILearnMethod>().SelectAllClasses().InheritedFrom<ILearnMethod>()
                     .BindAllInterfaces());
-
-            // container.Bind<ICommandFactory<EmptyData, StartCommand>>().To<StartCommandFactory>();
-            // container.Bind<ICommandFactory<ChooseDeckData, ChooseDeckCommand>>().To<ChooseDeckCommandFactory>();
-            // container.Bind<ICommandFactory<InputFrontData, InputFrontCommand>>().To<InputFrontCommandFactory>();
-            // container.Bind<ICommandFactory<InputBackData, InputBackCommand>>().To<InputBackCommandFactory>();
 
             container.Bind<BotHandler>().ToSelf().InSingletonScope();
             container.Bind<IBot>().To<TelegramBot>().InSingletonScope();

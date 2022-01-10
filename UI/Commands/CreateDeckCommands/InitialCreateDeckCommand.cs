@@ -1,29 +1,17 @@
-// using System.Threading.Tasks;
-// using App.APIs;
-// using Domain;
-// using Domain.LearnMethods;
-//
-// namespace UI.Commands.CreateDeckCommands
-// {
-//     public class InitialCreateDeckCommand : ICommand
-//     {
-//         private readonly DeckApi deckApi;
-//         private readonly ILearnMethod[] learnMethods;
-//
-//         public InitialCreateDeckCommand(ILearnMethod[] learnMethods, DeckApi deckApi)
-//         {
-//             this.learnMethods = learnMethods;
-//             this.deckApi = deckApi;
-//         }
-//
-//         public override string Name => "Создать колоду";
-//         public override bool IsInitial => true;
-//
-//         public override async Task<Context> Execute(User user, string message, IBot bot, Context context)
-//         {
-//             await bot.SendMessage(user, "Введите имя колоды");
-//             context.CommandName = "InputDeckName";
-//             return context;
-//         }
-//     }
-// }
+using System.Threading.Tasks;
+using Domain;
+
+namespace UI.Commands.CreateDeckCommands
+{
+    public class InitialCreateDeckCommand : ICommand
+    {
+        public string Name => "Создать колоду";
+        public bool IsInitial => true;
+
+        public async Task<ICommandInfo> Execute(User user, string message, IBot bot)
+        {
+            await bot.SendMessage(user, "Введите имя колоды");
+            return ICommandInfo.Create<InputDeckNameCommand>();
+        }
+    }
+}

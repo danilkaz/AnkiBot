@@ -18,8 +18,8 @@ namespace App.Converters
         public Card ToDomainClass(DbCard dbCard)
         {
             var parameters = JsonConvert.DeserializeObject<IParameters>(dbCard.Parameters);
-            return new Card(Guid.Parse(dbCard.Id),
-                new User(dbCard.UserId),
+            return new(Guid.Parse(dbCard.Id),
+                new(dbCard.UserId),
                 Guid.Parse(dbCard.DeckId),
                 dbCard.Front,
                 dbCard.Back,

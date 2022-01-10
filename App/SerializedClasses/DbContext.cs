@@ -10,7 +10,6 @@ namespace App.SerializedClasses
         {
             UserId = userId;
             Command = command;
-
         }
 
         [Field("id", true)] public string UserId { get; }

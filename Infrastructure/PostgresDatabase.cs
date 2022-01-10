@@ -50,7 +50,8 @@ namespace Infrastructure
             var command = new NpgsqlCommand
             {
                 Connection = connection,
-                CommandText = $"SELECT * FROM {TableName} WHERE id == \"{id}\"" //TODO сделать так чтобы использовалась не id а нужное поле 
+                CommandText =
+                    $"SELECT * FROM {TableName} WHERE id == \"{id}\"" //TODO сделать так чтобы использовалась не id а нужное поле 
             };
             using var reader = command.ExecuteReader();
             if (Constructor is null)

@@ -1,4 +1,3 @@
-using System;
 using Newtonsoft.Json;
 
 namespace Domain.Parameters
@@ -16,7 +15,7 @@ namespace Domain.Parameters
         {
             if (answer <= 3)
             {
-                card.TimeBeforeLearn = new TimeSpan(1, 0, 0, 0);
+                card.TimeBeforeLearn = new(1, 0, 0, 0);
                 return;
             }
 

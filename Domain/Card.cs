@@ -12,8 +12,8 @@ namespace Domain
             Front = front;
             Back = back;
             Id = Guid.NewGuid();
-            TimeBeforeLearn = new TimeSpan(1, 0, 0, 0, 0);
-            LastLearnTime = new DateTime(0);
+            TimeBeforeLearn = new(1, 0, 0, 0, 0);
+            LastLearnTime = new(0);
             Parameters = parameters;
         }
 

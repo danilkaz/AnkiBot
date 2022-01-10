@@ -27,7 +27,7 @@ namespace App.APIs
         public void SaveDeck(User user, string name, ILearnMethod learnMethod, IEnumerable<Card> cards)
         {
             var deck = new Deck(user, name, learnMethod, cards);
-            deckRepository.Save(new DbDeck(deck));
+            deckRepository.Save(new(deck));
         }
 
         public void DeleteDeck(string deckId)
