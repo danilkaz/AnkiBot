@@ -6,7 +6,7 @@ using App.SerializedClasses;
 using App.UIClasses;
 using Domain;
 
-namespace App
+namespace App.APIs
 {
     public class CardApi
     {
@@ -29,7 +29,7 @@ namespace App
             var deck = deckConverter.ToDomainClass(deckRepository.Get(deckId));
             var card = new Card(user, Guid.Parse(deckId), front, back,
                 deck.LearnMethod.GetParameters());
-            cardRepository.Save(new DbCard(card));
+            cardRepository.Save(new(card));
         }
 
         public void LearnCard(string cardId, int answer)
@@ -37,7 +37,7 @@ namespace App
             var card = cardConverter.ToDomainClass(cardRepository.Get(cardId));
             card.Parameters.LearnCard(card, answer);
             card.LastLearnTime = DateTime.Now;
-            cardRepository.Update(new DbCard(card));
+            cardRepository.Update(new(card));
         }
 
         public IEnumerable<UICard> GetCardsToLearn(string deckId)

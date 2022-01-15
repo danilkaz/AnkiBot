@@ -21,7 +21,7 @@ namespace UI
         public TelegramBot(TelegramConfig config, BotHandler botHandler)
         {
             this.botHandler = botHandler;
-            bot = new TelegramBotClient(config.Token);
+            bot = new(config.Token);
         }
 
         public void Start()

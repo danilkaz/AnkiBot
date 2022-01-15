@@ -6,7 +6,7 @@ using App.UIClasses;
 using Domain;
 using Domain.LearnMethods;
 
-namespace App
+namespace App.APIs
 {
     public class DeckApi
     {
@@ -27,7 +27,7 @@ namespace App
         public void SaveDeck(User user, string name, ILearnMethod learnMethod, IEnumerable<Card> cards)
         {
             var deck = new Deck(user, name, learnMethod, cards);
-            deckRepository.Save(new DbDeck(deck));
+            deckRepository.Save(new(deck));
         }
 
         public void DeleteDeck(string deckId)

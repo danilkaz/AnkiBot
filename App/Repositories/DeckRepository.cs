@@ -7,6 +7,7 @@ namespace App
 {
     public class DeckRepository : IRepository<DbDeck>
     {
+        private readonly IDatabase<DbCard> cardDatabase;
         private readonly IDatabase<DbDeck> deckDatabase;
         private readonly IDatabase<DbCard> cardDatabase;
 

@@ -1,44 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Domain;
+using Ninject;
 using UI.Commands;
-using UI.Dialogs;
 
 namespace UI
 {
     public class BotHandler
     {
-        private readonly Command[] commands;
+        private readonly Dictionary<string, ICommand> commands;
+        private readonly ContextApi contextApi;
+        private readonly GreetingCommand greetingCommand;
+        private readonly StandardKernel standardKernel;
+        private readonly StartCommand startCommand;
 
-        private readonly Dictionary<User, IDialog> usersStates = new();
-
-        public BotHandler(Command[] commands)
+        public BotHandler(ContextApi contextApi, IEnumerable<ICommand> commands, GreetingCommand greetingCommand,
+            StartCommand startCommand, StandardKernel standardKernel)
         {
-            this.commands = commands;
+            this.contextApi = contextApi;
+            this.greetingCommand = greetingCommand;
+            this.startCommand = startCommand;
+            this.standardKernel = standardKernel;
+            this.commands = commands.ToDictionary(c => c.Name);
         }
 
         public async Task HandleTextMessage(User user, string message,
-            Func<User, string, KeyboardProvider, Task> sendMessageWithKeyboard, IBot bot)
+            Func<User, string, KeyboardProvider, Task> sendMessageWithKeyboard,
+            IBot bot)
         {
+            try
             {
-                try
-                {
-                    if (usersStates.ContainsKey(user) && usersStates[user] != null)
-                        usersStates[user] = await usersStates[user].Execute(user, message, bot);
-                    else
-                        foreach (var command in commands)
-                            if (command.Name.Equals(message))
-                                usersStates[user] = await command.Execute(user, message, bot);
-                    if (usersStates.ContainsKey(user) && usersStates[user] is null)
-                        await sendMessageWithKeyboard(user, "Вот что я умею:", KeyboardProvider.DefaultKeyboard);
-                }
-                catch (Exception e)
-                {
-                    await sendMessageWithKeyboard(user, "Ой! Что-то пошло не так :(", KeyboardProvider.DefaultKeyboard);
-                    Console.WriteLine(e);
-                    usersStates[user] = null;
-                }
+                var command =
+                    contextApi.Get(user)?.GetCommand(standardKernel) ?? greetingCommand;
+                var nextCommand = await command.Execute(user, message, bot);
+                contextApi.Update(user, nextCommand);
+            }
+            catch (Exception e)
+            {
+                await sendMessageWithKeyboard(user, "Ой! Что-то пошло не так :(", KeyboardProvider.DefaultKeyboard);
+                Console.WriteLine(e);
+                contextApi.Update(user, ICommandInfo.Create<StartCommand>());
             }
         }
     }

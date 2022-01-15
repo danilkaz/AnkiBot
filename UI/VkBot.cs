@@ -7,7 +7,6 @@ using VkNet;
 using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
 using VkNet.Model.Keyboard;
-using VkNet.Model.RequestParams;
 using User = Domain.User;
 
 namespace UI
@@ -22,7 +21,7 @@ namespace UI
         {
             this.config = config;
             this.botHandler = botHandler;
-            api = new VkApi();
+            api = new();
         }
 
         public async void Start()
@@ -32,8 +31,7 @@ namespace UI
             {
                 var s = await api.Groups.GetLongPollServerAsync(ulong.Parse(config.GroupId));
                 var poll = await api.Groups.GetBotsLongPollHistoryAsync(
-                    new BotsLongPollHistoryParams
-                    { Server = s.Server, Ts = s.Ts, Key = s.Key, Wait = 25 });
+                    new() {Server = s.Server, Ts = s.Ts, Key = s.Key, Wait = 25});
                 if (poll?.Updates == null)
                     continue;
                 foreach (var update in poll.Updates.Where(u => u.Type == GroupUpdateType.MessageNew))
@@ -57,7 +55,7 @@ namespace UI
             var keyboard = new KeyboardBuilder().Build();
             if (!clearKeyboard)
                 keyboard = null;
-            await api.Messages.SendAsync(new MessagesSendParams
+            await api.Messages.SendAsync(new()
             {
                 PeerId = long.Parse(user.Id),
                 Message = text,
@@ -70,7 +68,7 @@ namespace UI
             KeyboardProvider keyboardProvider)
         {
             var keyboard = MakeKeyboard(keyboardProvider.Keyboard);
-            await api.Messages.SendAsync(new MessagesSendParams
+            await api.Messages.SendAsync(new()
             {
                 PeerId = long.Parse(user.Id),
                 Message = text,
@@ -85,14 +83,14 @@ namespace UI
                 b => b.Select(label =>
                     new MessageKeyboardButton
                     {
-                        Action = new MessageKeyboardButtonAction
+                        Action = new()
                         {
                             Type = KeyboardButtonActionType.Text,
                             Label = label
                         },
                         Color = KeyboardButtonColor.Primary
                     }));
-            return new MessageKeyboard { Buttons = buttons };
+            return new() {Buttons = buttons};
         }
     }
 }

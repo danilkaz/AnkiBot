@@ -30,7 +30,7 @@ namespace App.Converters
         {
             var method = learnMethods.FirstOrDefault(m => m.Name == dbDeck.LearnMethod);
             var cards = cardRepository.Search(c => c.DeckId == dbDeck.Id).Select(cardConverter.ToDomainClass);
-            return new Deck(Guid.Parse(dbDeck.Id), new User(dbDeck.UserId), dbDeck.Name, method, cards);
+            return new(Guid.Parse(dbDeck.Id), new(dbDeck.UserId), dbDeck.Name, method, cards);
         }
     }
 }
