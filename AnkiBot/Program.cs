@@ -19,7 +19,7 @@ namespace AnkiBot
 {
     public static class Program
     {
-        private const string PostgresConnectionString = "Host=database;Username=postgres;Password=postgres;" +
+        private const string PostgresConnectionString = "Host=172.17.0.2;Username=postgres;Password=postgres;" +
                                                         "Database=postgres;Port=5432";
 
         private const string SqliteConnectionString = "Data source=db.db";
