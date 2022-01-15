@@ -36,7 +36,8 @@ namespace AnkiBot
 
             foreach (var bot in container.GetAll<IBot>())
                 new Thread(bot.Start).Start();
-            Console.ReadLine();
+            while (true)
+                Console.ReadLine();
         }
 
         private static StandardKernel CreateContainer()
