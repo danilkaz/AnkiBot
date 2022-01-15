@@ -27,11 +27,10 @@ namespace AnkiBot
     {
         private const string SqliteConnectionString = "Data source=db.db";
 
-        private static readonly string PostgresConnectionString =
-            Environment.GetEnvironmentVariable("POSTGRES_CONNECTION", EnvironmentVariableTarget.User);
+        private static readonly string PostgresConnectionString = GetPostgresConnectionString();
 
         private static readonly string Database =
-            Environment.GetEnvironmentVariable("BOT_DATABASE", EnvironmentVariableTarget.User);
+            Environment.GetEnvironmentVariable("BOT_DATABASE");
 
         public static void Main()
         {
@@ -112,9 +111,6 @@ namespace AnkiBot
             container.Bind<ICommandFactory<ViewBackData, ViewBackCommand>>().To<ViewBackCommandFactory>()
                 .InSingletonScope();
 
-            // container.Bind<ICommand, ISavableCommand<EmptyData>>().To<StartCommand>();
-            // container.Bind(c =>
-            //     c.FromAssemblyContaining<ICommand>().SelectAllClasses().InheritedFrom<ICommand>().BindAllBaseClasses());
             container.Bind(c =>
                 c.FromAssemblyContaining<ILearnMethod>().SelectAllClasses().InheritedFrom<ILearnMethod>()
                     .BindAllInterfaces());
@@ -125,6 +121,16 @@ namespace AnkiBot
 
             container.Bind<StandardKernel>().ToConstant(container);
             return container;
+        }
+
+        private static string GetPostgresConnectionString()
+        {
+            var host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+            var username = Environment.GetEnvironmentVariable("POSTGRES_USERNAME");
+            var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+            var database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE");
+            var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+            return $"Host={host};Username={username};Password={password};Database={database};Port={port}";
         }
     }
 }
