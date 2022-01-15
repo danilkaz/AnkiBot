@@ -154,7 +154,7 @@ namespace UI.JsonKnownTypes
 
         public void Dispose()
         {
-            ((IDisposable) writer).Dispose();
+            ((IDisposable)writer).Dispose();
         }
 
         public override Task CloseAsync(CancellationToken cancellationToken = new())

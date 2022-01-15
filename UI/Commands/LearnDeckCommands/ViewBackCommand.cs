@@ -10,13 +10,13 @@ namespace UI.Commands.LearnDeckCommands
     {
         private readonly CardApi cardApi;
         private readonly string[][] learnKeyboard;
-        private readonly string[] learnStates = {"🤡\nЗабыл", "😶\nсложно", "😜\nабоба", "👑\nИзи"};
+        private readonly string[] learnStates = { "🤡\nЗабыл", "😶\nсложно", "😜\nабоба", "👑\nИзи" };
 
         public ViewBackCommand(ViewBackData data, CardApi cardApi)
         {
             Data = data;
             this.cardApi = cardApi;
-            learnKeyboard = new[] {learnStates, new[] {"Закончил учить"}};
+            learnKeyboard = new[] { learnStates, new[] { "Закончил учить" } };
         }
 
         private ViewBackData Data { get; }
@@ -53,7 +53,7 @@ namespace UI.Commands.LearnDeckCommands
 
             var data = new ViewFrontData(Data.DeckId, learnCard.Id, learnCard.Front, learnCard.Back);
 
-            await bot.SendMessageWithKeyboard(user, learnCard.Front, new(new[] {new[] {"Показать ответ"}}));
+            await bot.SendMessageWithKeyboard(user, learnCard.Front, new(new[] { new[] { "Показать ответ" } }));
             return ICommandInfo.Create<ViewFrontData, ViewFrontCommand>(data);
         }
     }

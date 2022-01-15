@@ -39,7 +39,7 @@ namespace UI.Commands.DeleteCardCommands
                 return ICommandInfo.Create<StartCommand>();
             }
 
-            var cardsKeyboard = cards.Select(c => new[] {c.Front + "\n" + c.Id}).ToArray();
+            var cardsKeyboard = cards.Select(c => new[] { c.Front + "\n" + c.Id }).ToArray();
 
             await bot.SendMessageWithKeyboard(user, "Выберите карту:", new(cardsKeyboard));
             return ICommandInfo.Create<ChooseCardData, ChooseCardCommand>(data);

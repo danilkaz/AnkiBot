@@ -26,7 +26,7 @@ namespace UI.Commands.CreateDeckCommands
 
         public async Task<ICommandInfo> Execute(User user, string message, IBot bot)
         {
-            var keyboard = learnMethods.Select(m => new[] {m.Name}).Append(new[] {"Подробности"}).ToArray();
+            var keyboard = learnMethods.Select(m => new[] { m.Name }).Append(new[] { "Подробности" }).ToArray();
             if (message == "Подробности")
             {
                 foreach (var method in learnMethods)

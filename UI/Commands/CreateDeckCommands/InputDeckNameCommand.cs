@@ -32,7 +32,7 @@ namespace UI.Commands.CreateDeckCommands
             }
 
             var data = new ChooseLearnMethodData(message);
-            var keyboard = learnMethods.Select(m => new[] {m.Name}).Append(new[] {"Подробности"}).ToArray();
+            var keyboard = learnMethods.Select(m => new[] { m.Name }).Append(new[] { "Подробности" }).ToArray();
             await bot.SendMessageWithKeyboard(user, "Выберите метод для запоминания",
                 new(keyboard));
             return ICommandInfo.Create<ChooseLearnMethodData, ChooseLearnMethodCommand>(data);

@@ -8,7 +8,7 @@ namespace UI.Commands.CreateCardCommands
     public class ChooseDeckCommand : ICommand
     {
         private readonly DeckApi deckApi;
-        private readonly string[][] finishKeyboard = {new[] {"В главное меню"}};
+        private readonly string[][] finishKeyboard = { new[] { "В главное меню" } };
 
         public ChooseDeckCommand(DeckApi deckApi)
         {

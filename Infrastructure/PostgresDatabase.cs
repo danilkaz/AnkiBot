@@ -56,7 +56,7 @@ namespace Infrastructure
             if (Constructor is null)
                 throw new ArgumentException("Constructor Attributes must be initialized in constructor class");
             if (reader.Read())
-                return (T) Constructor.Invoke(Fields.Select(f => reader[f.Name]).ToArray());
+                return (T)Constructor.Invoke(Fields.Select(f => reader[f.Name]).ToArray());
             throw new ArgumentException("Can't create element");
         }
 
@@ -83,7 +83,7 @@ namespace Infrastructure
             var result = new List<T>();
             while (reader.Read())
             {
-                var elem = (T) Constructor.Invoke(Fields.Select(f => reader[f.Name]).ToArray());
+                var elem = (T)Constructor.Invoke(Fields.Select(f => reader[f.Name]).ToArray());
                 if (filter(elem))
                     result.Add(elem);
             }

@@ -5,7 +5,7 @@ namespace UI.Commands.CreateCardCommands
 {
     public class InputFrontCommand : ICommand
     {
-        private readonly string[][] finishKeyboard = {new[] {"В главное меню"}};
+        private readonly string[][] finishKeyboard = { new[] { "В главное меню" } };
 
 
         public InputFrontCommand(InputFrontData data)

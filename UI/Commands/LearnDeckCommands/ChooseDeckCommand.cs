@@ -39,7 +39,7 @@ namespace UI.Commands.LearnDeckCommands
             var data = new ViewFrontData(findDeck.Id, learnCard.Id, learnCard.Front, learnCard.Back);
 
             await bot.SendMessageWithKeyboard(user, learnCard.Front,
-                new(new[] {new[] {"Показать ответ"}}));
+                new(new[] { new[] { "Показать ответ" } }));
             return ICommandInfo.Create<ViewFrontData, ViewFrontCommand>(data);
         }
     }

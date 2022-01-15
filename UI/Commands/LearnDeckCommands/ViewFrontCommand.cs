@@ -26,7 +26,7 @@ namespace UI.Commands.LearnDeckCommands
             if (message != "Показать ответ")
             {
                 await bot.SendMessageWithKeyboard(user, "Нажмите \"Показать ответ\" когда будете готовы!",
-                    new(new[] {new[] {"Показать ответ"}}));
+                    new(new[] { new[] { "Показать ответ" } }));
                 return ICommandInfo.Create<ViewFrontData, ViewFrontCommand>(Data);
             }
 

@@ -7,7 +7,7 @@ namespace UI.Commands.CreateCardCommands
     public class InputBackCommand : ICommand
     {
         private readonly CardApi cardApi;
-        private readonly string[][] finishKeyboard = {new[] {"В главное меню"}};
+        private readonly string[][] finishKeyboard = { new[] { "В главное меню" } };
 
         public InputBackCommand(InputBackData data, CardApi cardApi)
         {
