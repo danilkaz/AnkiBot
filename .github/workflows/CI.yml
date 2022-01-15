@@ -92,6 +92,12 @@ jobs:
             docker login -u ${{ secrets.DIGITAL_OCEAN_TOKEN }} -p ${{ secrets.DIGITAL_OCEAN_TOKEN }} $(echo $REGISTRY)
             docker stop $(echo $CONTAINER_NAME)
             docker rm $(echo $CONTAINER_NAME)
+            
+            export VK_TOKEN=${{ secrets.VK_TOKEN }}
+            export VK_GROUP_ID=${{ secrets.VK_GROUP_ID }}
+            export TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}
+            export BOT_DATABASE=${{ secrets.BOT_DATABASE }}
+            
             docker run --env-file $(echo $ENV_FILE_PATH) \
             -d \
             --restart always \
