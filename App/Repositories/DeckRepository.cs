@@ -9,7 +9,6 @@ namespace App
     {
         private readonly IDatabase<DbCard> cardDatabase;
         private readonly IDatabase<DbDeck> deckDatabase;
-        private readonly IDatabase<DbCard> cardDatabase;
 
         public DeckRepository(IDatabase<DbDeck> deckDatabase, IDatabase<DbCard> cardDatabase)
         {

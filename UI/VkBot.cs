@@ -26,7 +26,7 @@ namespace UI
 
         public async void Start()
         {
-            await api.AuthorizeAsync(new ApiAuthParams { AccessToken = config.Token });
+            await api.AuthorizeAsync(new ApiAuthParams {AccessToken = config.Token});
             while (true)
             {
                 var s = await api.Groups.GetLongPollServerAsync(ulong.Parse(config.GroupId));

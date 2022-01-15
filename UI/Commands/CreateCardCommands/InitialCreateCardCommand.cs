@@ -27,7 +27,7 @@ namespace UI.Commands.CreateCardCommands
             }
 
             var decksKeyboard = decksNames
-                .Select(d => new[] { d.Name })
+                .Select(d => new[] {d.Name})
                 .ToArray();
             await bot.SendMessageWithKeyboard(user, "Выберите колоду:", new(decksKeyboard));
             return ICommandInfo.Create<ChooseDeckCommand>();
