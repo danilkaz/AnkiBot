@@ -92,5 +92,6 @@ jobs:
             docker login -u ${{ secrets.DIGITAL_OCEAN_TOKEN }} -p ${{ secrets.DIGITAL_OCEAN_TOKEN }} $(echo $REGISTRY)
             docker stop $(echo $CONTAINER_NAME)
             docker rm $(echo $CONTAINER_NAME)
+            ls -la
             docker run --env-file $(echo $ENV_FILE_PATH) -d --restart always \
             --name $(echo $CONTAINER_NAME) $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
