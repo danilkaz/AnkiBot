@@ -27,7 +27,7 @@ namespace Tests
             var excepted = new TimeSpan(1, 0, 0, 0, 0) * 2;
             TestLearnMethod(new LineLearnMethod(), excepted);
         }
-        
+
         [Test]
         public void TestSuperMemo2LearnMethod()
         {
