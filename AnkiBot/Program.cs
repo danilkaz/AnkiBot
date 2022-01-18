@@ -129,9 +129,9 @@ namespace AnkiBot
         private static string GetPostgresConnectionString()
         {
             var host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
-            var username = Environment.GetEnvironmentVariable("POSTGRES_USERNAME");
+            var username = Environment.GetEnvironmentVariable("POSTGRES_USER");
             var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
-            var database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE");
+            var database = Environment.GetEnvironmentVariable("POSTGRES_DB");
             var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
             return $"Host={host};Username={username};Password={password};Database={database};Port={port}";
         }
