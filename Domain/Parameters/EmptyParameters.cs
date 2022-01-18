@@ -1,6 +1,6 @@
 namespace Domain.Parameters
 {
-    public class EmptyParameters : IParameters
+    public record EmptyParameters : IParameters
     {
         public void LearnCard(Card card, int answer)
         {

@@ -2,14 +2,9 @@ using Newtonsoft.Json;
 
 namespace Domain.Parameters
 {
-    public record SuperMemo2Parameters : IParameters
+    public record SuperMemo2Parameters(double EF = 2.5) : IParameters
     {
-        public SuperMemo2Parameters(double ef = 2.5)
-        {
-            EF = ef;
-        }
-
-        [JsonProperty] private double EF { get; set; }
+        [JsonProperty] private double EF { get; set; } = EF;
 
         public void LearnCard(Card card, int answer)
         {
