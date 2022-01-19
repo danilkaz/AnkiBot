@@ -24,11 +24,12 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            cardConverter = new();
-            
+            cardConverter = new CardConverter();
+
             var cardRepository = new Mock<IRepository<DbCard>>();
             cardRepository.Setup(c => c.Search(It.IsAny<Func<DbCard, bool>>())).Returns(new List<DbCard>());
-            deckConverter = new(new ILearnMethod[] { new LineLearnMethod() }, cardRepository.Object, cardConverter);
+            deckConverter = new DeckConverter(new ILearnMethod[] { new LineLearnMethod() }, cardRepository.Object,
+                cardConverter);
         }
 
         [Test]
@@ -43,7 +44,7 @@ namespace Tests
             Assert.IsTrue(uiCard.Back == excepted.Back);
             Assert.IsTrue(uiCard.DeckId == excepted.DeckId);
         }
-        
+
         [Test]
         public void TestCardConverterToDomainClass()
         {
@@ -52,7 +53,8 @@ namespace Tests
             var timeBeforeLearn = new TimeSpan(1, 0, 0, 0, 0);
             var lastLearnTime = DateTime.Now;
             var dbCard = new DbCard(id.ToString(), "front", "back", "1", deckId.ToString(), timeBeforeLearn.ToString(),
-                lastLearnTime.ToString(CultureInfo.InvariantCulture), JsonConvert.SerializeObject(new EmptyParameters()));
+                lastLearnTime.ToString(CultureInfo.InvariantCulture),
+                JsonConvert.SerializeObject(new EmptyParameters()));
             var domainCard = cardConverter.ToDomainClass(dbCard);
             var excepted = new Card(id, new User("1"), deckId, "front", "back", timeBeforeLearn, lastLearnTime,
                 new EmptyParameters());
@@ -76,7 +78,7 @@ namespace Tests
             Assert.IsTrue(uiDeck.Name == excepted.Name);
             Assert.IsTrue(uiDeck.LearnMethod == excepted.LearnMethod);
         }
-        
+
         [Test]
         public void TestDeckConverterToDomainClass()
         {
