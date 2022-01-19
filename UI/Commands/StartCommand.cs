@@ -16,11 +16,11 @@ namespace UI.Commands
         public string Name => "";
         public bool IsInitial => false;
 
-        public async Task<ICommandInfo> Execute(User user, string message, IBot bot) //это GreetingCommand
+        public async Task<ICommandInfo> Execute(User user, string message, IBot bot)
         {
             foreach (var command in commands.Value)
             {
-                if (!command.Name.Equals(message)) continue;
+                if (!command.Name.Equals(message) && command.IsInitial) continue;
                 var nextCommandInfo = await command.Execute(user, message, bot);
                 return nextCommandInfo;
             }
