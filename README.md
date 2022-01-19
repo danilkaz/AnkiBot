@@ -58,6 +58,6 @@
  - Скопировать файл example.env в файл .env 
 ``cp exapmle.env .env``
  - Установить необходимые переменные окружения в файле ``.env``
- - Если выбрана база Postgres запусть базу ``docker-compose -f postgres-compose up ``
+ - Если выбрана база Postgres запусть базу ``docker-compose -f postgres-compose.yml up ``
  - Запустить бота ``docker-compose up``
 
