@@ -53,22 +53,25 @@ namespace AnkiBot
             container.Bind<VkConfig>().ToSelf().InSingletonScope();
             container.Bind<TelegramConfig>().ToSelf().InSingletonScope();
 
-            if (Database == "Sqlite")
-            {
-                container.Bind<IDatabase<DbCard>>().To<SqLiteDatabase<DbCard>>().InSingletonScope()
-                    .WithConstructorArgument(SqliteConnectionString);
-                container.Bind<IDatabase<DbDeck>>().To<SqLiteDatabase<DbDeck>>().InSingletonScope()
-                    .WithConstructorArgument(SqliteConnectionString);
-                container.Bind<IDatabase<DbContext>>().To<SqLiteDatabase<DbContext>>().InSingletonScope()
-                    .WithConstructorArgument(SqliteConnectionString);
-            }
-            else
+            if (Database == "Postgres")
             {
                 container.Bind<NpgsqlConnection>().ToSelf().WithConstructorArgument(PostgresConnectionString);
                 container.Bind<IDatabase<DbCard>>().To<PostgresDatabase<DbCard>>().InSingletonScope();
                 container.Bind<IDatabase<DbDeck>>().To<PostgresDatabase<DbDeck>>().InSingletonScope();
                 container.Bind<IDatabase<DbContext>>().To<PostgresDatabase<DbContext>>().InSingletonScope()
                     .WithConstructorArgument(PostgresConnectionString);
+            }
+            else
+            {
+                container.Bind<IDatabase<DbCard>>()
+                    .To<SqLiteDatabase<DbCard>>().InSingletonScope()
+                    .WithConstructorArgument(SqliteConnectionString);
+                container.Bind<IDatabase<DbDeck>>()
+                    .To<SqLiteDatabase<DbDeck>>().InSingletonScope()
+                    .WithConstructorArgument(SqliteConnectionString);
+                container.Bind<IDatabase<DbContext>>()
+                    .To<SqLiteDatabase<DbContext>>().InSingletonScope()
+                    .WithConstructorArgument(SqliteConnectionString);
             }
 
             container.Bind<IRepository<DbCard>>().To<CardRepository>().InSingletonScope();
@@ -137,6 +140,3 @@ namespace AnkiBot
         }
     }
 }
-
-
-//TODO: пофиксить карточки (чтобы плохо изученные карточки появлялись вновь)
