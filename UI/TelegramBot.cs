@@ -61,7 +61,7 @@ namespace UI
         private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
             CancellationToken cancellationToken)
         {
-            if (update.Type != UpdateType.Message || update.Message.Type != MessageType.Text)
+            if (update.Type != UpdateType.Message || update.Message?.Type != MessageType.Text)
                 return;
 
             var user = new User(update.Message.Chat.Id.ToString());

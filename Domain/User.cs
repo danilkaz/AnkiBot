@@ -1,12 +1,4 @@
 namespace Domain
 {
-    public record User
-    {
-        public User(string id)
-        {
-            Id = id;
-        }
-
-        public string Id { get; }
-    }
+    public record User(string Id);
 }

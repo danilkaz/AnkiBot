@@ -5,7 +5,7 @@ namespace UI.Commands
 {
     public class GreetingCommand : ICommand
     {
-        private const string GreetingMessage = "Привет, я anki бот. Создай колоду и начни учить!";
+        private const string GreetingMessage = "Привет, я AnkiBot. Создай колоду и начни учить!";
 
         public string Name => "/start";
         public bool IsInitial => true;

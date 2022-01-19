@@ -20,7 +20,7 @@ namespace UI
             }
         });
 
-        public KeyboardProvider(string[][] keyboard)
+        public KeyboardProvider(IReadOnlyList<string[]> keyboard)
         {
             Keyboard = keyboard;
         }
