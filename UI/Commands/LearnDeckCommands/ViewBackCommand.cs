@@ -10,7 +10,7 @@ namespace UI.Commands.LearnDeckCommands
     {
         private readonly CardApi cardApi;
         private readonly string[][] learnKeyboard;
-        private readonly string[] learnStates = { "🤡\nЗабыл", "😶\nсложно", "😜\nабоба", "👑\nИзи" };
+        private readonly string[] learnStates = { "🤡\nСнова", "😶\nТрудно", "😜\nХорошо", "👑\nЛегко" };
 
         public ViewBackCommand(ViewBackData data, CardApi cardApi)
         {
