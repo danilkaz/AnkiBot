@@ -20,7 +20,7 @@ namespace UI.Commands
         {
             foreach (var command in commands.Value)
             {
-                if (!command.Name.Equals(message) && command.IsInitial) continue;
+                if (!command.Name.Equals(message) || !command.IsInitial) continue;
                 var nextCommandInfo = await command.Execute(user, message, bot);
                 return nextCommandInfo;
             }
