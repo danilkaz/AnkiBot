@@ -12,7 +12,7 @@ namespace Tests
         {
         }
 
-        public void TestLearnMethod(ILearnMethod method, TimeSpan expected)
+        private void TestLearnMethod(ILearnMethod method, TimeSpan expected)
         {
             var parameters = method.GetParameters();
             var user = new User("1");
